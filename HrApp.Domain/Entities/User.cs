@@ -1,0 +1,24 @@
+﻿namespace HrApp.Domain.Entities;
+
+public class User
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = default!;
+    public string Surname { get; set; } = default!;
+    public string Email { get; set; } = default!;
+    public bool IsEmailConfirmed { get; set; }
+    public DateOnly DateOnly { get; set; }
+    public string? ConfirmationToken { get; set; }
+    public DateTime? ConfirmationTokenExpiration { get; set; }
+    public string? ResetToken { get; set; }
+    public DateTime? ResetTokenExpiration { get; set; }
+    public byte[] PasswordHash { get; set; } = default!;
+    public byte[] PasswordSalt { get; set; } = default!;
+    public List<Role> Roles { get; set; } = default!;
+    public List<Leave> Leaves { get; set; } = default!;
+    public List<EmploymentHistory> EmploymentHistories { get; set; } = default!;
+    public List<WorkLog> WorkLogs { get; set; } = default!;
+    public Guid AuthorizationId { get; set; }
+    public virtual Authorization Authorization { get; set; } = default!;
+    public List<Team> Teams { get; set; } = default!;
+}
