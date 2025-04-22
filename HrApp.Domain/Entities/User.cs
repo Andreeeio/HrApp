@@ -7,7 +7,7 @@ public class User
     public string Surname { get; set; } = default!;
     public string Email { get; set; } = default!;
     public bool IsEmailConfirmed { get; set; }
-    public DateOnly DateOnly { get; set; }
+    public DateOnly DateOfBirth { get; set; }
     public string? ConfirmationToken { get; set; }
     public DateTime? ConfirmationTokenExpiration { get; set; }
     public string? ResetToken { get; set; }
@@ -21,4 +21,8 @@ public class User
     public Guid AuthorizationId { get; set; }
     public virtual Authorization Authorization { get; set; } = default!;
     public List<Team> Teams { get; set; } = default!;
+    public virtual SalaryHistory SalaryHistory { get; set; } = default!;
+    public virtual Departament Departament { get; set; } = default!;
+    public List<WorkedHoursRaport> WorkedHoursRaports { get; set; } = default!;
+    public virtual Paid Paid { get; set; } = default!;
 }
