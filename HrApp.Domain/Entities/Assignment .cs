@@ -1,6 +1,6 @@
 ﻿namespace HrApp.Domain.Entities;
 
-public class Task
+public class Assignment
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
@@ -12,4 +12,5 @@ public class Task
     public int DifficultyLevel { get; set; }
     public Guid? LeaderFeedbackId { get; set; }
     public virtual LeaderFeedback? LeaderFeedback { get; set; }
+    public List<AssignmentNotification> AssignmentNotifications { get; set; } = default!;
 }

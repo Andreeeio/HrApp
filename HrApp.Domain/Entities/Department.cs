@@ -1,6 +1,6 @@
 ﻿namespace HrApp.Domain.Entities;
 
-public class Departament
+public class Department
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;

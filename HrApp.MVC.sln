@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp.MVC", "HrApp.MVC\HrApp.MVC.csproj", "{50FC21F7-46E6-4E29-AF61-8A944D8A9175}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp.Domain", "HrApp.Domain\HrApp.Domain.csproj", "{24339C9C-3B7C-4F71-9F44-C91F62CF5A6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp.Infrastructure", "HrApp.Infrastructure\HrApp.Infrastructure.csproj", "{BF75EE33-467C-467F-AEFF-D429ADB15792}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp.Application", "HrApp.Application\HrApp.Application.csproj", "{199AC77D-2750-40F8-AAB4-24C4821B7DE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{24339C9C-3B7C-4F71-9F44-C91F62CF5A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24339C9C-3B7C-4F71-9F44-C91F62CF5A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24339C9C-3B7C-4F71-9F44-C91F62CF5A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF75EE33-467C-467F-AEFF-D429ADB15792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF75EE33-467C-467F-AEFF-D429ADB15792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF75EE33-467C-467F-AEFF-D429ADB15792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF75EE33-467C-467F-AEFF-D429ADB15792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{199AC77D-2750-40F8-AAB4-24C4821B7DE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{199AC77D-2750-40F8-AAB4-24C4821B7DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{199AC77D-2750-40F8-AAB4-24C4821B7DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{199AC77D-2750-40F8-AAB4-24C4821B7DE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

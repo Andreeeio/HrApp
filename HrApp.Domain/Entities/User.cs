@@ -18,11 +18,10 @@ public class User
     public List<Leave> Leaves { get; set; } = default!;
     public List<EmploymentHistory> EmploymentHistories { get; set; } = default!;
     public List<WorkLog> WorkLogs { get; set; } = default!;
-    public Guid AuthorizationId { get; set; }
     public virtual Authorization Authorization { get; set; } = default!;
     public List<Team> Teams { get; set; } = default!;
     public virtual SalaryHistory SalaryHistory { get; set; } = default!;
-    public virtual Departament Departament { get; set; } = default!;
+    public virtual Department Department { get; set; } = default!;
     public List<WorkedHoursRaport> WorkedHoursRaports { get; set; } = default!;
     public virtual Paid Paid { get; set; } = default!;
     public List<ExellImport> ExellImports { get; set; } = default!;
