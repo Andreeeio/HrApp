@@ -19,10 +19,15 @@ public class User
     public List<EmploymentHistory> EmploymentHistories { get; set; } = default!;
     public List<WorkLog> WorkLogs { get; set; } = default!;
     public virtual Authorization Authorization { get; set; } = default!;
-    public List<Team> Teams { get; set; } = default!;
-    public virtual SalaryHistory SalaryHistory { get; set; } = default!;
+    public Guid? TeamLeaderId { get; set; }  
+    public virtual Team? TeamLeader { get; set; }
+    public Guid? TeamId { get; set; }  
+    public virtual Team? Team { get; set; } = default!;
+    public List<SalaryHistory> SalaryHistory { get; set; } = default!;
     public virtual Department Department { get; set; } = default!;
     public List<WorkedHoursRaport> WorkedHoursRaports { get; set; } = default!;
     public virtual Paid Paid { get; set; } = default!;
     public List<ExellImport> ExellImports { get; set; } = default!;
+    public List<EmployeeRate> EmployeeRates { get; set; } = default!;
+    public virtual EmployeeRate Rater { get; set; } = default!;
 }

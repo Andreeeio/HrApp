@@ -10,7 +10,6 @@ public class Assignment
     public Guid AssignedToTeamId { get; set; }
     public virtual Team AssignedToTeam { get; set; } = default!;
     public int DifficultyLevel { get; set; }
-    public Guid? LeaderFeedbackId { get; set; }
-    public virtual LeaderFeedback? LeaderFeedback { get; set; }
+    public List<LeaderFeedback> LeaderFeedbacks { get; set; } = default!;
     public List<AssignmentNotification> AssignmentNotifications { get; set; } = default!;
 }

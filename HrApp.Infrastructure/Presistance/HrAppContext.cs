@@ -1,5 +1,7 @@
 ﻿using HrApp.Domain.Entities;
+using HrApp.Infrastructure.Presistance.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace HrApp.Infrastructure.Presistance;
 
@@ -31,9 +33,30 @@ public class HrAppContext : DbContext
     public DbSet<WorkedHoursRaport> WorkedHoursRaport { get; set; }
     public DbSet<WorkLog> WorkLog { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
+        base.OnModelCreating(modelBuilder);
 
+        modelBuilder.ApplyConfiguration(new AnonymousFeedbackConfiguration());
+        modelBuilder.ApplyConfiguration(new ApplicationConfiguration());
+        modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
+        modelBuilder.ApplyConfiguration(new AssignmentNotificationConfiguration());
+        modelBuilder.ApplyConfiguration(new AuthorizationConfiguration());
+        modelBuilder.ApplyConfiguration(new CalendarConfiguration()); 
+        modelBuilder.ApplyConfiguration(new CandidateConfiguration());
+        modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeRateConfiguration());
+        modelBuilder.ApplyConfiguration(new EmploymentHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new ExellImportConfiguration()); 
+        modelBuilder.ApplyConfiguration(new LeaderFeedbackConfiguration());
+        modelBuilder.ApplyConfiguration(new LeaveConfiguration());
+        modelBuilder.ApplyConfiguration(new OfferConfiguration());
+        modelBuilder.ApplyConfiguration(new PaidConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new SalaryHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new TeamConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new WorkedHoursRaportConfiguration());
+        modelBuilder.ApplyConfiguration(new WorkLogConfiguration());
     }
 }

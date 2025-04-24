@@ -13,10 +13,10 @@ public class AssignmentConfiguration : IEntityTypeConfiguration<Assignment>
             .HasForeignKey(a => a.AssignedToTeamId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(a => a.LeaderFeedback)
-            .WithOne()  
-            .HasForeignKey<Assignment>(a => a.LeaderFeedbackId)
-            .OnDelete(DeleteBehavior.SetNull);
+        builder.HasMany(a => a.LeaderFeedbacks)
+            .WithOne(l => l.Assignment)  
+            .HasForeignKey(a => a.AssignmentId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(a => a.AssignmentNotifications)
             .WithOne(a => a.Assignment)

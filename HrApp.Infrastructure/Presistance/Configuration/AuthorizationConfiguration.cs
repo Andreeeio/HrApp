@@ -12,11 +12,5 @@ public class AuthorizationConfiguration : IEntityTypeConfiguration<Authorization
             .WithOne(u => u.Authorization)
             .HasForeignKey<Authorization>(a => a.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Property(a => a.VerificationCode)
-            .IsRequired();
-
-        builder.Property(a => a.VerificationCodeExpiration)
-            .IsRequired();
     }
 }
