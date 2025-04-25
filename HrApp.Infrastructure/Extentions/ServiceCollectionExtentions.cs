@@ -1,4 +1,6 @@
-﻿using HrApp.Infrastructure.Presistance;
+﻿using HrApp.Domain.Repositories;
+using HrApp.Infrastructure.Presistance;
+using HrApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,5 +13,7 @@ public static class ServiceCollectionExtentions
     {
         var connectionString = configuration.GetConnectionString("HrApp");
         services.AddDbContext<HrAppContext>(options => options.UseSqlServer(connectionString));
+
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }

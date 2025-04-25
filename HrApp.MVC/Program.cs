@@ -1,3 +1,4 @@
+using HrApp.Application.Extensions;
 using HrApp.Infrastructure.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication(builder.Configuration);
 
 var app = builder.Build();
 
@@ -28,5 +30,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+
+app.MapControllerRoute(
+    name: "user",
+    pattern: "{controller=User}/{action=CreateUser}")
+    .WithStaticAssets();
 
 app.Run();

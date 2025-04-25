@@ -7,5 +7,5 @@ public class Offer
     public float Salary { get; set; }
     public string Descritpion { get; set; } = default!;
     public DateOnly AddDate { get; set; }
-    public List<Application> Applications { get; set; } = default!;
+    public List<JobApplication> JobApplications { get; set; } = default!;
 }

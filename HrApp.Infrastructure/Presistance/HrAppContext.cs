@@ -12,7 +12,7 @@ public class HrAppContext : DbContext
     }
 
     public DbSet<AnonymousFeedback> AnonymousFeedbacks { get; set; } 
-    public DbSet<Application> Application { get; set; } 
+    public DbSet<JobApplication> JobApplication { get; set; } 
     public DbSet<Assignment> Assignment { get; set; } 
     public DbSet<AssignmentNotification> AssignmentNotification { get; set; }
     public DbSet<Authorization> Authorization { get; set; } 
@@ -38,7 +38,7 @@ public class HrAppContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new AnonymousFeedbackConfiguration());
-        modelBuilder.ApplyConfiguration(new ApplicationConfiguration());
+        modelBuilder.ApplyConfiguration(new JobApplicationConfiguration());
         modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
         modelBuilder.ApplyConfiguration(new AssignmentNotificationConfiguration());
         modelBuilder.ApplyConfiguration(new AuthorizationConfiguration());

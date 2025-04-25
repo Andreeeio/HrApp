@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HrApp.Infrastructure.Presistance.Configuration;
 
-public class ApplicationConfiguration : IEntityTypeConfiguration<Application>
+public class JobApplicationConfiguration : IEntityTypeConfiguration<JobApplication>
 {
-    public void Configure(EntityTypeBuilder<Application> builder)
+    public void Configure(EntityTypeBuilder<JobApplication> builder)
     {
         builder.HasOne(a => a.Offer)
-            .WithMany(o => o.Applications)
+            .WithMany(o => o.JobApplications)
             .HasForeignKey(a => a.OfferID)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(a => a.Candidate)
-            .WithOne(c => c.Application)
-            .HasForeignKey<Application>(a => a.CandidateId)
+            .WithOne(c => c.JobApplication)
+            .HasForeignKey<JobApplication>(a => a.CandidateId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(a => a.OfferID);

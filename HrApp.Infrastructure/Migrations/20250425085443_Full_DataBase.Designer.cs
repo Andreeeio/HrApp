@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250424172521_HrDatabase")]
-    partial class HrDatabase
+    [Migration("20250425085443_Full_DataBase")]
+    partial class Full_DataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,35 +52,6 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("AnonymousFeedbacks");
-                });
-
-            modelBuilder.Entity("HrApp.Domain.Entities.Application", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateOnly>("ApplicationDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("CandidateId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CvLink")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OfferID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CandidateId")
-                        .IsUnique();
-
-                    b.HasIndex("OfferID");
-
-                    b.ToTable("Application");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.Assignment", b =>
@@ -359,6 +330,35 @@ namespace HrApp.Infrastructure.Migrations
                     b.ToTable("ExellImports");
                 });
 
+            modelBuilder.Entity("HrApp.Domain.Entities.JobApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("ApplicationDate")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CvLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OfferID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId")
+                        .IsUnique();
+
+                    b.HasIndex("OfferID");
+
+                    b.ToTable("JobApplication");
+                });
+
             modelBuilder.Entity("HrApp.Domain.Entities.LeaderFeedback", b =>
                 {
                     b.Property<Guid>("Id")
@@ -533,10 +533,14 @@ namespace HrApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsEmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -553,10 +557,6 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.Property<DateTime?>("ResetTokenExpiration")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("TeamId")
                         .HasColumnType("uniqueidentifier");
@@ -649,25 +649,6 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("HrApp.Domain.Entities.Application", b =>
-                {
-                    b.HasOne("HrApp.Domain.Entities.Candidate", "Candidate")
-                        .WithOne("Application")
-                        .HasForeignKey("HrApp.Domain.Entities.Application", "CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HrApp.Domain.Entities.Offer", "Offer")
-                        .WithMany("Applications")
-                        .HasForeignKey("OfferID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Candidate");
-
-                    b.Navigation("Offer");
-                });
-
             modelBuilder.Entity("HrApp.Domain.Entities.Assignment", b =>
                 {
                     b.HasOne("HrApp.Domain.Entities.Team", "AssignedToTeam")
@@ -751,6 +732,25 @@ namespace HrApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("HrApp.Domain.Entities.JobApplication", b =>
+                {
+                    b.HasOne("HrApp.Domain.Entities.Candidate", "Candidate")
+                        .WithOne("JobApplication")
+                        .HasForeignKey("HrApp.Domain.Entities.JobApplication", "CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HrApp.Domain.Entities.Offer", "Offer")
+                        .WithMany("JobApplications")
+                        .HasForeignKey("OfferID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("Offer");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.LeaderFeedback", b =>
@@ -879,7 +879,7 @@ namespace HrApp.Infrastructure.Migrations
 
             modelBuilder.Entity("HrApp.Domain.Entities.Candidate", b =>
                 {
-                    b.Navigation("Application")
+                    b.Navigation("JobApplication")
                         .IsRequired();
                 });
 
@@ -890,7 +890,7 @@ namespace HrApp.Infrastructure.Migrations
 
             modelBuilder.Entity("HrApp.Domain.Entities.Offer", b =>
                 {
-                    b.Navigation("Applications");
+                    b.Navigation("JobApplications");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.Team", b =>

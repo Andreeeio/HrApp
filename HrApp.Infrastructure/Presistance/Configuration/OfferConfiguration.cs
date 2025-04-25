@@ -8,7 +8,7 @@ public class OfferConfiguration : IEntityTypeConfiguration<Offer>
 {
     public void Configure(EntityTypeBuilder<Offer> builder)
     {
-        builder.HasMany(o => o.Applications)
+        builder.HasMany(o => o.JobApplications)
             .WithOne(a => a.Offer)
             .HasForeignKey(a => a.OfferID)
             .OnDelete(DeleteBehavior.Cascade);

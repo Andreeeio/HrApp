@@ -8,9 +8,9 @@ public class CandidateConfiguration : IEntityTypeConfiguration<Candidate>
 {
     public void Configure(EntityTypeBuilder<Candidate> builder)
     {
-        builder.HasOne(c => c.Application)
+        builder.HasOne(c => c.JobApplication)
             .WithOne(a => a.Candidate)
-            .HasForeignKey<Application>(a => a.CandidateId)
+            .HasForeignKey<JobApplication>(a => a.CandidateId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(c => c.Name)

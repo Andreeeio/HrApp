@@ -3,8 +3,8 @@
 public class User
 {
     public Guid Id { get; set; }
-    public string Name { get; set; } = default!;
-    public string Surname { get; set; } = default!;
+    public string FirstName { get; set; } = default!;
+    public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public bool IsEmailConfirmed { get; set; }
     public DateOnly DateOfBirth { get; set; }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HrApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class HrDatabase : Migration
+    public partial class Full_DataBase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,7 +72,7 @@ namespace HrApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Application",
+                name: "JobApplication",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -83,15 +83,15 @@ namespace HrApp.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Application", x => x.Id);
+                    table.PrimaryKey("PK_JobApplication", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Application_Candidate_CandidateId",
+                        name: "FK_JobApplication_Candidate_CandidateId",
                         column: x => x.CandidateId,
                         principalTable: "Candidate",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Application_Offer_OfferID",
+                        name: "FK_JobApplication_Offer_OfferID",
                         column: x => x.OfferID,
                         principalTable: "Offer",
                         principalColumn: "Id",
@@ -331,8 +331,8 @@ namespace HrApp.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsEmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
@@ -408,17 +408,6 @@ namespace HrApp.Infrastructure.Migrations
                 column: "TeamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Application_CandidateId",
-                table: "Application",
-                column: "CandidateId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Application_OfferID",
-                table: "Application",
-                column: "OfferID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Assignment_AssignedToTeamId",
                 table: "Assignment",
                 column: "AssignedToTeamId");
@@ -466,6 +455,17 @@ namespace HrApp.Infrastructure.Migrations
                 name: "IX_ExellImports_UploadedById",
                 table: "ExellImports",
                 column: "UploadedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobApplication_CandidateId",
+                table: "JobApplication",
+                column: "CandidateId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobApplication_OfferID",
+                table: "JobApplication",
+                column: "OfferID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LeaderFeedback_AssignmentId",
@@ -648,9 +648,6 @@ namespace HrApp.Infrastructure.Migrations
                 name: "AnonymousFeedbacks");
 
             migrationBuilder.DropTable(
-                name: "Application");
-
-            migrationBuilder.DropTable(
                 name: "AssignmentNotification");
 
             migrationBuilder.DropTable(
@@ -667,6 +664,9 @@ namespace HrApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExellImports");
+
+            migrationBuilder.DropTable(
+                name: "JobApplication");
 
             migrationBuilder.DropTable(
                 name: "LeaderFeedback");
