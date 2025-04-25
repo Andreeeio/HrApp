@@ -33,7 +33,18 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "user",
+    pattern: "{controller=User}/{action=Index}")
+    .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "user",
     pattern: "{controller=User}/{action=CreateUser}")
     .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "user",
+    pattern: "{controller=User}/{action=LoginUser}")
+    .WithStaticAssets();
+
 
 app.Run();

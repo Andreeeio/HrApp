@@ -1,0 +1,23 @@
+﻿@using HrApp.Application.Users.Query.LoginUser
+@model LoginUserQuery
+
+<h1>Log yoursel</h1>
+
+<hr />
+
+<div>
+    <form action="/user/login" method="post">
+        <div>
+            <label asp-for="Email">Email</label>
+            <input type="text" id="Email" asp-for="Email" />
+        </div>
+        <div>
+            <label asp-for="Password">Password</label>
+            <input type="password" id="Password" asp-for="Password" />
+        </div>
+        <button type="submit">Log in</button>
+    </form>
+</div>
+
+@{
+}

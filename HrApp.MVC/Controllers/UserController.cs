@@ -1,8 +1,11 @@
 ﻿using Azure.Core;
 using HrApp.Application.Users.Command.AddUser;
+using HrApp.Application.Users.Query.LoginUser;
 using HrApp.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace HrApp.MVC.Controllers;
@@ -22,7 +25,6 @@ public class UserController : Controller
     [HttpGet("create")]
     public IActionResult CreateUser()
     {
-        _logger.LogInformation("Creating new user with email");
 
         return View();
     }
@@ -31,13 +33,36 @@ public class UserController : Controller
     public async Task<IActionResult> CreateUser(AddUserCommand request)
     {
         if (!ModelState.IsValid)
-        {
             return View(request);
-        }
-        _logger.LogInformation("Creating new user with email {Email}", request.Email);
 
         await _sender.Send(request);
 
-        return RedirectToAction(nameof(Index));
+        return View();
+    }
+
+    [HttpGet("login")]
+    public IActionResult LoginUser()
+    {
+        _logger.LogInformation("User trying to log in");
+        return View();
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginUser(LoginUserQuery request)
+    {
+        if (!ModelState.IsValid)
+            return View(request);
+
+        _logger.LogInformation("User login in");
+        await _sender.Send(request);
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("index")]
+    public IActionResult Index()
+    {
+        _logger.LogInformation("Getting all users");
+        return View();
     }
 }

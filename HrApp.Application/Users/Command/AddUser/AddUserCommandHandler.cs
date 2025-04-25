@@ -36,5 +36,7 @@ public class AddUserCommandHandler(ILogger<AddUserCommandHandler> logger,
         user.ConfirmationToken = Guid.NewGuid().ToString();
 
         await _userRepository.CreateUser(user);
+        _logger.LogInformation("New user created");
+
     }
 }
