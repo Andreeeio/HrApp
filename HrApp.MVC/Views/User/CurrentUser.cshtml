@@ -1,0 +1,29 @@
+﻿@using HrApp.Application.Users.DTO
+@model CurrentUser
+
+<h1>Your currnet data</h1>
+
+@if (Model != null)
+{
+    <div>
+        <p>Email: @Model.email</p>
+        <p>Name: @Model.id</p>
+        <hr />
+        <div>
+            <h2>Roles</h2>
+            <ul>
+                @foreach (var role in Model.roles)
+                {
+                    <li>@role</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+else
+{
+    <p>No user data available.</p>
+}
+
+@{
+}

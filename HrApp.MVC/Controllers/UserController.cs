@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using HrApp.Application.Users.Command.AddUser;
+using HrApp.Application.Users.Query.GetDataFromToken;
 using HrApp.Application.Users.Query.LoginUser;
 using HrApp.Domain.Repositories;
 using MediatR;
@@ -54,9 +55,23 @@ public class UserController : Controller
             return View(request);
 
         _logger.LogInformation("User login in");
-        await _sender.Send(request);
+        var token = await _sender.Send(request);
 
-        return RedirectToAction("Index");
+        Response.Cookies.Append("jwt_token",token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = DateTimeOffset.UtcNow.AddHours(10)
+        });
+
+        return RedirectToAction("CurrentUser");
+    }
+
+    [HttpGet("currentuser")]
+    public async Task<IActionResult> CurrentUser()
+    {
+        return View(await _sender.Send(new GetDataFromTokenQuery()));
     }
 
     [HttpGet("index")]
