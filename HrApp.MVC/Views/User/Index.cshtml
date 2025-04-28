@@ -1,8 +1,26 @@
-﻿<div style="text-align: center">
+﻿<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Create">Create</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="CurrentUser">Current data</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<br />
     <h1>Hi my friend</h1>
     <h2>Welcom in my app</h2>
     <h3>Lof u so mach</h3>
-</div>
 
 @{
 }
