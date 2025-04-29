@@ -2,6 +2,8 @@
 using HrApp.Application.Users.Command.AddUser;
 using HrApp.Application.Users.Query.GetDataFromToken;
 using HrApp.Application.Users.Query.LoginUser;
+using HrApp.Domain.Constants;
+using HrApp.Domain.Entities;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Identity.Data;
@@ -26,7 +28,6 @@ public class UserController : Controller
     [HttpGet("create")]
     public IActionResult CreateUser()
     {
-
         return View();
     }
 
