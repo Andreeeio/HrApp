@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HrApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Full_DataBase : Migration
+    public partial class mg1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,7 +51,7 @@ namespace HrApp.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PositionName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Salary = table.Column<float>(type: "real", nullable: false),
-                    Descritpion = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     AddDate = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
@@ -79,6 +79,7 @@ namespace HrApp.Infrastructure.Migrations
                     OfferID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApplicationDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CvLink = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -210,7 +211,7 @@ namespace HrApp.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RateDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Rate = table.Column<int>(type: "int", nullable: false)
                 },
@@ -444,7 +445,8 @@ namespace HrApp.Infrastructure.Migrations
                 name: "IX_EmployeeRate_RatedById",
                 table: "EmployeeRate",
                 column: "RatedById",
-                unique: true);
+                unique: true,
+                filter: "[RatedById] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmploymentHistory_UserId",
@@ -459,8 +461,7 @@ namespace HrApp.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_JobApplication_CandidateId",
                 table: "JobApplication",
-                column: "CandidateId",
-                unique: true);
+                column: "CandidateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobApplication_OfferID",

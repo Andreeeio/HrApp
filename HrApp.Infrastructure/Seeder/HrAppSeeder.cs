@@ -1,10 +1,12 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 using Bogus;
 using HrApp.Domain.Constants;
 using HrApp.Domain.Entities;
 using HrApp.Infrastructure.Presistance;
+using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Seeder;
 
@@ -13,7 +15,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
     private readonly HrAppContext _dbContext = dbContext;
     private const string Locale = "pl";
 
-    public async Task Seeder()
+    public async Task Seed()
     {
         if (!_dbContext.Role.Any())
         {
@@ -22,7 +24,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             await _dbContext.SaveChangesAsync();
         }
 
-        if(!_dbContext.User.Any())
+        if (!_dbContext.User.Any())
         {
             var users = GetUsers();
 
@@ -36,11 +38,13 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             for (int i = 0; i < users.Count; i++)
             {
                 if (i == 0)
-                    users[i].Roles.Add(role.FirstOrDefault(x => x.Name == Roles.Ceo.ToString())!);
-                else if(i == 1)
-                    users[i].Roles.Add(role.FirstOrDefault(x => x.Name == Roles.TeamLeader.ToString())!);
+                {
+                    users[i].Roles = [role.FirstOrDefault(x => x.Name == Roles.Ceo.ToString())]; 
+                }
+                else if (i == 1)
+                    users[i].Roles = [role.FirstOrDefault(x => x.Name == Roles.TeamLeader.ToString())!];
                 else if (i == 2)
-                    users[i].Roles.Add(role.FirstOrDefault(x => x.Name == Roles.Hr.ToString())!);
+                    users[i].Roles = [role.FirstOrDefault(x => x.Name == Roles.Hr.ToString())!];
                 else
                 {
                     var excludedRoles = new[]
@@ -55,12 +59,13 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
                     users[i].Roles = [otherRoles[roleIndex]];
                 }
 
-                users[i].Leaves.Add(leaves[i]);
-                users[i].EmploymentHistories.Add(empHist[i]);
+                users[i].Leaves = [leaves[i]];
+                empHist[i].Position = users[i].Roles[0].Name;
+                users[i].EmploymentHistories = [empHist[i]];
                 users[i].WorkLogs = workLog;
                 users[i].Paid = paids[i];
                 rates[i].RatedBy = users[0];
-                users[i].EmployeeRates.Add(rates[i]);
+                users[i].EmployeeRates = [rates[i]];
 
                 _dbContext.Leave.AddRange(leaves);
                 _dbContext.EmploymentHistory.AddRange(empHist);
@@ -73,19 +78,64 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
 
         }
 
-        if(!_dbContext.Team.Any())
+        if (!_dbContext.Department.Any())
         {
+            var department = GetDepartment();
+            var users = _dbContext.User.Include(u => u.Roles).ToArray();
+            var anonymousFeedbacks = GetAnonymousFeedbacks();
+            var assignments = GetAssignments();
+            var leaderFeedbacks = GetLeaderFeedbacks();
+            var assignmentNotifications = GetAssignmentNotifications();
+
+            for (int i = 0; i < leaderFeedbacks.Count; i++)
+            {
+                assignments[i].LeaderFeedbacks = [leaderFeedbacks[i]];
+                assignments[i].AssignmentNotifications = [assignmentNotifications[i]];
+            }
 
             Team team = new Team();
+            team.TeamLeader = users.FirstOrDefault(x => x.Roles.Any(y => y.Name == Roles.TeamLeader.ToString()))!;
+            team.Employers = users.Where(x => x.Roles.Any(y => y.Name == Roles.Senior.ToString() || y.Name == Roles.Mid.ToString() || y.Name == Roles.Junior.ToString())).ToList();
+            team.AnonymousFeedbacks = anonymousFeedbacks;
+            team.Assignments = assignments;
+            department.Teams = [team];
+            department.HeadOfDepartment = users.FirstOrDefault(x => x.Roles.Any(y => y.Name == Roles.Ceo.ToString()))!;
+
+            _dbContext.Department.Add(department);
+            _dbContext.AnonymousFeedbacks.AddRange(anonymousFeedbacks);
+            _dbContext.Assignment.AddRange(assignments);
+            _dbContext.LeaderFeedback.AddRange(leaderFeedbacks);
+            _dbContext.AssignmentNotification.AddRange(assignmentNotifications);
+            _dbContext.Team.Add(team);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        if (!_dbContext.Offer.Any())
+        {
+            var offers = GetOffers();
+            var applications = GetApplications();
+            var candidates = GetCandidates();
+
+            for (int i = 0; i < offers.Count; i++)
+            {
+                applications[i].Candidate = candidates[i];
+                offers[i].JobApplications = [applications[i]];
+            }
+
+            _dbContext.Candidate.AddRange(candidates);
+            _dbContext.Offer.AddRange(offers);
+            _dbContext.JobApplication.AddRange(applications);
+            await _dbContext.SaveChangesAsync();
         }
     }
 
     private List<Role> GetRoles()
     {
-        return Enum.GetNames(typeof(Role))
+        return Enum.GetNames(typeof(Roles))
            .Select(name => new Role { Name = name })
            .ToList();
     }
+
 
     private List<User> GetUsers()
     {
@@ -161,5 +211,95 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
         return rates;
     }
 
+    private List<AnonymousFeedback> GetAnonymousFeedbacks()
+    {
+        var feedbacks = new Faker<AnonymousFeedback>(Locale)
+            .RuleFor(x => x.Subject, y => y.Lorem.Sentence(3))
+            .RuleFor(x => x.Message, y => y.Lorem.Sentence(5))
+            .RuleFor(x => x.CreatedAt, y => y.Date.Recent())
+            .Generate(10);
 
+        return feedbacks;
+    }
+
+    private List<Assignment> GetAssignments()
+    {
+        var assignments = new Faker<Assignment>(Locale)
+            .RuleFor(x => x.Name, y => y.Lorem.Sentence(5))
+            .RuleFor(x => x.Description, y => y.Lorem.Sentence(3))
+            .RuleFor(x => x.StartDate, y => y.Date.Past())
+            .RuleFor(x => x.EndDate, y => y.Date.Recent().AddDays(30))
+            .Generate(10);
+
+        return assignments;
+    }
+
+    private List<LeaderFeedback> GetLeaderFeedbacks()
+    {
+        var feedbacks = new Faker<LeaderFeedback>(Locale)
+            .RuleFor(x => x.Feedback, y => y.Lorem.Sentence(2))
+            .RuleFor(x => x.CreatedAt, y => y.Date.Recent())
+            .RuleFor(x => x.Rating, y => y.Random.Int(1, 5))
+            .Generate(10);
+
+        return feedbacks;
+    }
+
+    private List<AssignmentNotification> GetAssignmentNotifications()
+    {
+        var notifications = new Faker<AssignmentNotification>(Locale)
+            .RuleFor(x => x.NotificationMessage, y => y.Lorem.Sentence(5))
+            .RuleFor(x => x.MessageType, y => y.Lorem.Sentence(2))
+            .RuleFor(x => x.SendDate, y => y.Date.Recent())
+            .Generate(10);
+     
+        return notifications;
+    }
+
+    private Department GetDepartment()
+    {
+        var department = new Faker<Department>(Locale)
+            .RuleFor(x => x.Name, y => y.Lorem.Sentence(2))
+            .RuleFor(x => x.TeamTag, y => y.Lorem.Sentence(1))
+            .Generate();
+
+        return department;
+    }
+
+    private List<Offer> GetOffers()
+    {
+        var offers = new Faker<Offer>(Locale)
+            .RuleFor(x => x.PositionName, y => y.Lorem.Sentence(3))
+            .RuleFor(x => x.Salary, y => y.Random.Float(5000, 12000))
+            .RuleFor(x => x.Description, y => y.Lorem.Sentence(5))
+            .RuleFor(x => x.AddDate, y => y.Date.PastDateOnly())
+            .Generate(10);
+
+        return offers;
+    }
+
+    private List<JobApplication> GetApplications()
+    {
+        var applications = new Faker<JobApplication>(Locale)
+            .RuleFor(x => x.ApplicationDate, y => y.Date.PastDateOnly())
+            .RuleFor(x => x.Status, "Received")
+            .RuleFor(x => x.CvLink, y => y.Internet.Url())
+            .Generate(10);
+
+        return applications;
+    }
+
+    private List<Candidate> GetCandidates()
+    {
+        var candidates = new Faker<Candidate>(Locale)
+            .RuleFor(x => x.Name, y => y.Name.FirstName())
+            .RuleFor(x => x.Surname, y => y.Name.LastName())
+            .RuleFor(x => x.Email, y => y.Internet.Email())
+            .RuleFor(x => x.HomeNumber, y => y.Random.Int())
+            .RuleFor(x => x.Street, y => y.Lorem.Sentence(1))
+            .RuleFor(x => x.City, y => y.Lorem.Sentence(1))
+            .Generate(10);
+
+        return candidates;
+    }
 }

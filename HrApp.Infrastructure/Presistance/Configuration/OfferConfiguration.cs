@@ -17,7 +17,7 @@ public class OfferConfiguration : IEntityTypeConfiguration<Offer>
             .IsRequired()
             .HasMaxLength(30);
 
-        builder.Property(o => o.Descritpion)
+        builder.Property(o => o.Description)
             .IsRequired()
             .HasMaxLength(200);
     }

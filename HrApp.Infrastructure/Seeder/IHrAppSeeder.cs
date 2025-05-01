@@ -2,5 +2,5 @@
 
 public interface IHrAppSeeder
 {
-    Task Seeder();
+    Task Seed();
 }

@@ -73,5 +73,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(er => er.Employee)
             .HasForeignKey(er => er.EmployeeId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(u => u.Rater)
+            .WithOne(er => er.RatedBy)
+            .HasForeignKey<EmployeeRate>(u => u.RatedById)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

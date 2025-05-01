@@ -9,5 +9,5 @@ public class Candidate
     public int HomeNumber { get; set; }
     public string Street { get; set; } = default!;
     public string City { get; set; } = default!;
-    public virtual JobApplication JobApplication { get; set; } = default!;
+    public List<JobApplication> JobApplications { get; set; } = default!;
 }

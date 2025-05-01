@@ -16,6 +16,6 @@ public class EmployeeRateConfiguration : IEntityTypeConfiguration<EmployeeRate>
         builder.HasOne(e => e.RatedBy)
             .WithOne(u => u.Rater)
             .HasForeignKey<EmployeeRate>(e => e.RatedById)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

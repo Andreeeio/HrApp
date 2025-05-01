@@ -8,5 +8,6 @@ public class JobApplication
     public Guid CandidateId { get; set; }
     public virtual Candidate Candidate { get; set; } = default!;
     public DateOnly ApplicationDate { get; set; }
+    public string Status { get; set; } = default!;
     public string CvLink { get; set; } = default!;
 }

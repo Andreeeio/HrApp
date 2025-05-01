@@ -15,8 +15,8 @@ public class JobApplicationConfiguration : IEntityTypeConfiguration<JobApplicati
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(a => a.Candidate)
-            .WithOne(c => c.JobApplication)
-            .HasForeignKey<JobApplication>(a => a.CandidateId)
+            .WithMany(c => c.JobApplications)
+            .HasForeignKey(a => a.CandidateId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(a => a.OfferID);

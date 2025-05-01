@@ -1,5 +1,6 @@
 using HrApp.Application.Extensions;
 using HrApp.Infrastructure.Extentions;
+using HrApp.Infrastructure.Seeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +10,17 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
 
 var app = builder.Build();
+var scope = app.Services.CreateScope();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
+    var seeder = scope.ServiceProvider.GetRequiredService<IHrAppSeeder>();
+    await seeder.Seed();
+
     app.UseHsts();
 }
 

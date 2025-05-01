@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250425085443_Full_DataBase")]
-    partial class Full_DataBase
+    [Migration("20250501171206_mg1")]
+    partial class mg1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -267,7 +267,7 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<DateOnly>("RateDate")
                         .HasColumnType("date");
 
-                    b.Property<Guid>("RatedById")
+                    b.Property<Guid?>("RatedById")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -275,7 +275,8 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("RatedById")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[RatedById] IS NOT NULL");
 
                     b.ToTable("EmployeeRate");
                 });
@@ -349,10 +350,13 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<Guid>("OfferID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateId")
-                        .IsUnique();
+                    b.HasIndex("CandidateId");
 
                     b.HasIndex("OfferID");
 
@@ -417,7 +421,7 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<DateOnly>("AddDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("Descritpion")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -704,8 +708,7 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasOne("HrApp.Domain.Entities.User", "RatedBy")
                         .WithOne("Rater")
                         .HasForeignKey("HrApp.Domain.Entities.EmployeeRate", "RatedById")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Employee");
 
@@ -737,8 +740,8 @@ namespace HrApp.Infrastructure.Migrations
             modelBuilder.Entity("HrApp.Domain.Entities.JobApplication", b =>
                 {
                     b.HasOne("HrApp.Domain.Entities.Candidate", "Candidate")
-                        .WithOne("JobApplication")
-                        .HasForeignKey("HrApp.Domain.Entities.JobApplication", "CandidateId")
+                        .WithMany("JobApplications")
+                        .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -879,8 +882,7 @@ namespace HrApp.Infrastructure.Migrations
 
             modelBuilder.Entity("HrApp.Domain.Entities.Candidate", b =>
                 {
-                    b.Navigation("JobApplication")
-                        .IsRequired();
+                    b.Navigation("JobApplications");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.Department", b =>
@@ -921,8 +923,7 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("Paid")
                         .IsRequired();
 
-                    b.Navigation("Rater")
-                        .IsRequired();
+                    b.Navigation("Rater");
 
                     b.Navigation("SalaryHistory");
 

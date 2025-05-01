@@ -29,5 +29,5 @@ public class User
     public virtual Paid Paid { get; set; } = default!;
     public List<ExellImport> ExellImports { get; set; } = default!;
     public List<EmployeeRate> EmployeeRates { get; set; } = default!;
-    public virtual EmployeeRate Rater { get; set; } = default!;
+    public virtual EmployeeRate? Rater { get; set; } = default!;
 }
