@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250501171206_mg1")]
-    partial class mg1
+    [Migration("20250501213051_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

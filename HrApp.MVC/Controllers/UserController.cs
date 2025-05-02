@@ -38,8 +38,7 @@ public class UserController : Controller
             return View(request);
 
         await _sender.Send(request);
-
-        return View();
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet("login")]
@@ -67,6 +66,13 @@ public class UserController : Controller
         });
 
         return RedirectToAction("CurrentUser");
+    }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("jwt_token");
+        return RedirectToAction("LoginUser");
     }
 
     [HttpGet("currentuser")]

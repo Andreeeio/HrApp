@@ -10,10 +10,12 @@
         <div>
             <label asp-for="Email">Email</label>
             <input type="text" id="Email" asp-for="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="Password">Password</label>
             <input type="password" id="Password" asp-for="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <button type="submit">Log in</button>
     </form>
