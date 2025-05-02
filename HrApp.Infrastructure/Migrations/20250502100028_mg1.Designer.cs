@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250501171206_mg1")]
+    [Migration("20250502100028_mg1")]
     partial class mg1
     {
         /// <inheritdoc />
@@ -504,6 +504,10 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TeamLeaderId")
                         .HasColumnType("uniqueidentifier");

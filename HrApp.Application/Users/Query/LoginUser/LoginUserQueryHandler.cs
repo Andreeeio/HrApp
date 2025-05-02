@@ -1,6 +1,8 @@
 ﻿using HrApp.Application.Interfaces;
+using HrApp.Domain.Exceptions;
 using HrApp.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,14 +21,14 @@ public class LoginUserQueryHandler(ILogger<LoginUserQueryHandler> logger,
         _logger.LogInformation("User tring to log in");
 
         var user = await _userRepository.GetUserByEmail(request.Email)
-            ?? throw new Exception("Not git");
+            ?? throw new BadRequestException("Invalid login or password");
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
         var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password));
 
         if (!computeHash.SequenceEqual(user.PasswordHash))
         {
-            throw new Exception("Invalid login or password");
+            throw new BadRequestException("Invalid login or password");
         }
 
         var token = _tokenService.GetToken(user);

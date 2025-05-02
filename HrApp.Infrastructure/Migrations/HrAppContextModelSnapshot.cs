@@ -502,6 +502,10 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("TeamLeaderId")
                         .HasColumnType("uniqueidentifier");
 

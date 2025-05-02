@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HrApp.Domain.Entities;
+using HrApp.Domain.Exceptions;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -19,8 +20,7 @@ public class AddUserCommandHandler(ILogger<AddUserCommandHandler> logger,
     {
         if(_userRepository.IfUserExist(request.Email).Result)
         {
-            _logger.LogError("User with email {Email} already exists", request.Email);
-            throw new Exception("User with this email already exists");
+            throw new BadRequestException("User with this email already exists");
         }
 
         _logger.LogInformation("Creating new user");

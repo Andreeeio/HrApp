@@ -1,5 +1,6 @@
 ﻿using HrApp.Application.Interfaces;
 using HrApp.Application.Users.DTO;
+using HrApp.Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +16,7 @@ public class GetDataFromTokenQueryHandler(ILogger<GetDataFromTokenQueryHandler> 
         _logger.LogInformation("User data");
 
         var currentUser = _userContext.GetCurrentUser()
-            ?? throw new ArgumentNullException(nameof(CurrentUser));
+            ?? throw new UnauthorizedException(nameof(CurrentUser));
 
         var user = await Task.FromResult(currentUser);
 
