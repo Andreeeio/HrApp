@@ -98,6 +98,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             team.Employers = users.Where(x => x.Roles.Any(y => y.Name == Roles.Senior.ToString() || y.Name == Roles.Mid.ToString() || y.Name == Roles.Junior.ToString())).ToList();
             team.AnonymousFeedbacks = anonymousFeedbacks;
             team.Assignments = assignments;
+            team.Name = "Druzyna 1";
             department.Teams = [team];
             department.HeadOfDepartment = users.FirstOrDefault(x => x.Roles.Any(y => y.Name == Roles.Ceo.ToString()))!;
 

@@ -1,14 +1,12 @@
-﻿namespace HrApp.Domain.Entities;
+﻿using HrApp.Domain.Entities;
 
-public class Team
+namespace HrApp.Application.Team.DTO;
+
+public class TeamDTO
 {
-    public Guid Id { get; set; }
     public Guid TeamLeaderId { get; set; }
     public string Name { get; set; } = default!;
-    public virtual User TeamLeader { get; set; } = default!;
     public List<User> Employers { get; set; } = default!;
     public List<Assignment> Assignments { get; set; } = default!;
     public List<AnonymousFeedback> AnonymousFeedbacks { get; set; } = default!;
-    public Guid DepartmentId { get; set; }
-    public virtual Department Department { get; set; } = default!;
 }

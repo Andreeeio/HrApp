@@ -1,6 +1,8 @@
 ﻿using HrApp.Application.Interfaces;
 using HrApp.Application.Users.DTO;
+using HrApp.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Claims;
 
 namespace HrApp.Application.Services;
@@ -11,9 +13,9 @@ public class UserContext(IHttpContextAccessor httpContext) : IUserContext
     public CurrentUser? GetCurrentUser()
     {
         var user = (_httpContext?.HttpContext?.User)
-            ?? throw new ArgumentNullException(nameof(_httpContext.HttpContext.User));
+            ?? throw new BadRequestException(nameof(_httpContext.HttpContext.User));
 
-        if (user.Identity == null)
+        if (user.Identity == null || !user.Identity.IsAuthenticated)
             return null;
 
         var id = user.FindFirst(u => u.Type == ClaimTypes.NameIdentifier)!.Value;

@@ -4,6 +4,7 @@ using HrApp.Application.Users.Query.GetDataFromToken;
 using HrApp.Application.Users.Query.LoginUser;
 using HrApp.Domain.Constants;
 using HrApp.Domain.Entities;
+using HrApp.Domain.Exceptions;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Identity.Data;
@@ -37,7 +38,16 @@ public class UserController : Controller
         if (!ModelState.IsValid)
             return View(request);
 
-        await _sender.Send(request);
+        try
+        {
+            await _sender.Send(request);
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError("User allready exist", ex.Message);
+            return View(request);
+        }
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -55,15 +65,22 @@ public class UserController : Controller
             return View(request);
 
         _logger.LogInformation("User login in");
-        var token = await _sender.Send(request);
-
-        Response.Cookies.Append("jwt_token",token, new CookieOptions
+        try
         {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None,
-            Expires = DateTimeOffset.UtcNow.AddHours(10)
-        });
+            var token = await _sender.Send(request);
+            Response.Cookies.Append("jwt_token", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.UtcNow.AddHours(10)
+            });
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(request);
+        }
 
         return RedirectToAction("CurrentUser");
     }

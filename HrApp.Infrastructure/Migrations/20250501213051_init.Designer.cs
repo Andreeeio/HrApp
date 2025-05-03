@@ -14,6 +14,7 @@ namespace HrApp.Infrastructure.Migrations
     [DbContext(typeof(HrAppContext))]
     [Migration("20250501213051_init")]
     partial class init
+
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -504,6 +505,10 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TeamLeaderId")
                         .HasColumnType("uniqueidentifier");
