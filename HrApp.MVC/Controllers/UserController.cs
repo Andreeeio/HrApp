@@ -38,17 +38,9 @@ public class UserController : Controller
         if (!ModelState.IsValid)
             return View(request);
 
-        try
-        {
-            await _sender.Send(request);
-        }
-        catch (BadRequestException ex)
-        {
-            ModelState.AddModelError("User allready exist", ex.Message);
-            return View(request);
-        }
+        await _sender.Send(request);
 
-        return RedirectToAction(nameof(Index));
+        return View();
     }
 
     [HttpGet("login")]

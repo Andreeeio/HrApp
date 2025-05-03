@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>@ViewData["Title"] - hr</title>
+    <title>@ViewData["Title"] - </title>
     <link href="~/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -60,7 +60,7 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <div class="sb-sidenav-menu-heading">Menu</div>
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                             Home
@@ -69,22 +69,26 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                             Privacy
                         </a>
-                        @*                         <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                            Index
-                        </a> *@
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                                Index
+                                User 
+                            </a>
+                            <a class="nav-link" asp-area="" asp-controller="Teams" asp-action="Index">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Team
+                            </a>
+                            <a class="nav-link" asp-area="" asp-controller="Departments" asp-action="Index">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Department
                             </a>
                         }
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    hr
+                    TODO
                 </div>
             </nav>
         </div>
