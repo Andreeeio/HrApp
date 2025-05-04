@@ -9,6 +9,7 @@ namespace HrApp.Domain.Repositories
 {
     public interface IDepartmentRepository
     {
-        public Task<List<Department>> GetAllDepartments();
+        Task<List<Department>> GetAllDepartments();
+        Task CreateDepartment(Department department);
     }
 }

@@ -17,4 +17,10 @@ public class DepartmentRepository : IDepartmentRepository
     {
         return await dbContext.Department.ToListAsync();
     }
+
+    public async Task CreateDepartment(Department department)
+    {
+        await dbContext.Department.AddAsync(department);
+        await dbContext.SaveChangesAsync();
+    }
 }
