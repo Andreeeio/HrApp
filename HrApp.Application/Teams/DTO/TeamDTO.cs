@@ -1,9 +1,10 @@
 ﻿using HrApp.Domain.Entities;
 
-namespace HrApp.Application.Team.DTO;
+namespace HrApp.Application.Teams.DTO;
 
 public class TeamDTO
 {
+    public Guid Id { get; set; }
     public Guid TeamLeaderId { get; set; }
     public string Name { get; set; } = default!;
     public List<User> Employers { get; set; } = default!;

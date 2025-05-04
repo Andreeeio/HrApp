@@ -34,7 +34,10 @@
                 @Html.DisplayFor(modelItem => item.HeadOfDepartmentId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TeamTag)
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-controller="Team" asp-action="TeamInDept" asp-route-id=@item.Id>Details</a>
             </td>
 @*             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

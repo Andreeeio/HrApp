@@ -12,4 +12,10 @@ public class TeamRepository(HrAppContext dbContext) : ITeamRepository
         return await dbContext.Team.ToListAsync();
     }
 
+    public async Task<List<Team>> GetAllTeamsForDepartment(Guid departmentId)
+    {
+        return await dbContext.Team
+            .Where(t => t.DepartmentId == departmentId)
+            .ToListAsync();
+    }
 }

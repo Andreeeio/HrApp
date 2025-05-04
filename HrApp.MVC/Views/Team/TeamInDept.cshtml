@@ -1,0 +1,29 @@
+﻿@using HrApp.Application.Teams.DTO
+@model List<TeamDTO>
+
+<h1>Drużyny w podanym departamencie</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nazwa drużyny</th>
+        </tr>
+        <tr>
+            <th>Pracownicy</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var team in Model)
+        {
+            <tr>
+                <td>@team.Name</td>
+                <td>
+                    <a asp-controller="Team" asp-action="EmployersInTeam" asp-route-id=@team.Id>pracownicy</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+}

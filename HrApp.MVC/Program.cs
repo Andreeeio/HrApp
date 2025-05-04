@@ -59,5 +59,14 @@ app.MapControllerRoute(
     pattern: "{controller=User}/{action=LoginUser}")
     .WithStaticAssets();
 
+app.MapControllerRoute(
+    name: "team",
+    pattern: "{controller=Team}/{action=TeamInDept}/{id}")
+    .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "team",
+    pattern: "{controller=Team}/action={id}/employers")
+    .WithStaticAssets();
 
 app.Run();
