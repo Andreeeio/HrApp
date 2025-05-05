@@ -22,8 +22,8 @@ if (app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 
-    //var seeder = scope.ServiceProvider.GetRequiredService<IHrAppSeeder>();
-    //await seeder.Seed();
+    var seeder = scope.ServiceProvider.GetRequiredService<IHrAppSeeder>();
+    await seeder.Seed();
 
     app.UseHsts();
 }

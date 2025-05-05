@@ -110,7 +110,6 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             _dbContext.Team.Add(team);
             await _dbContext.SaveChangesAsync();
         }
-        /* nie dziala
         if (!_dbContext.Offer.Any())
         {
             var offers = GetOffers();
@@ -128,7 +127,6 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             _dbContext.JobApplication.AddRange(applications);
             await _dbContext.SaveChangesAsync();
         }
-        */
     }
 
     private List<Role> GetRoles()

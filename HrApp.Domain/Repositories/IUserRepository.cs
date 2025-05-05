@@ -9,5 +9,5 @@ public interface IUserRepository
     public Task CreateUser(User user);
     public Task<List<User>> GetUserInTeamAsync(Guid teamId);
 
-
+    public Task<User?> GetUserById(Guid id);
 }

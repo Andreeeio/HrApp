@@ -37,4 +37,11 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
 
         return users;
     }
+
+    public async Task<User?> GetUserById(Guid id) // Changed parameter type from string to Guid
+    {
+        var user = await dbContext.User.Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Id == id); // No changes needed here as 'u.Id' is of type Guid
+        return user;
+    }
 }

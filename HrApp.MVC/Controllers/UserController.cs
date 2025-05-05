@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using HrApp.Application.Users.Query.GetUserByEmail;
 
 namespace HrApp.MVC.Controllers;
 
@@ -95,5 +96,12 @@ public class UserController : Controller
     {
         _logger.LogInformation("Getting all users");
         return View();
+    }
+
+    [Route("User/{encodedName}/Details")]
+    public async Task<IActionResult> Details(string encodedName)
+    {
+        var dto = await _sender.Send(new GetUserByEmailQuery(encodedName));
+        return View(dto);
     }
 }

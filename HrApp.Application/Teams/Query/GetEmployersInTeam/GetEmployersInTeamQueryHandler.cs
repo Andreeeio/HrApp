@@ -22,8 +22,8 @@ public class GetEmployersInTeamQueryHandler(ILogger<GetEmployersInTeamQueryHandl
     {
         _logger.LogInformation("Getting all employers in team {TeamId}", request.TeamId);
 
-        if (!_teamAuthorizationService.Authorize(ResourceOperation.Read))
-            throw new AccessForbiddenException("User is not authorized");
+        //if (!_teamAuthorizationService.Authorize(ResourceOperation.Read))
+        //    throw new AccessForbiddenException("User is not authorized");
 
         var users = await _userRepository.GetUserInTeamAsync(request.TeamId);
         var usersDTO = _mapper.Map<List<UserDTO>>(users);

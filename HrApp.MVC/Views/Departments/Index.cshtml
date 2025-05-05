@@ -1,7 +1,7 @@
 ﻿@model List<HrApp.Application.Department.DTO.DepartmentDTO>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Departaments";
 }
 
 <h1>Index</h1>
@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.HeadOfDepartmentId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => item.TeamTag)
             </td>
             <td>
                 <a asp-controller="Team" asp-action="TeamInDept" asp-route-id=@item.Id>Details</a>

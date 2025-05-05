@@ -8,5 +8,6 @@ public class TeamProfile : Profile
     public TeamProfile()
     {
         CreateMap<Team, TeamDTO>();
+        CreateMap<TeamDTO, Team>();
     }
 }

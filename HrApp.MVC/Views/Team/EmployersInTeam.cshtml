@@ -1,6 +1,9 @@
 ﻿@using HrApp.Application.Users.DTO
 @model List<UserDTO>
 
+<p>
+    <a asp-action="AddEmployer">Add Employers</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -20,7 +23,7 @@
                 <td>@user.Email</td>
                 <td>@user.DateOfBirth.ToString("dd-MM-yyyy")</td>
                 <td>
-                    <a asp-controller="User" asp-action="Details" asp-route-id="@user.Email">Szczegóły</a> |
+                    <a asp-controller="User" asp-action="Details" asp-route-encodedName="@user.Email">Szczegóły</a> |
                     <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Email">Edytuj</a>
                 </td>
             </tr>

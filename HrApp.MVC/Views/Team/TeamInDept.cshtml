@@ -2,7 +2,9 @@
 @model List<TeamDTO>
 
 <h1>Drużyny w podanym departamencie</h1>
-
+<p>
+    <a asp-action="Create" @* asp-route-id=@ViewBag.IdDept *@>Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>

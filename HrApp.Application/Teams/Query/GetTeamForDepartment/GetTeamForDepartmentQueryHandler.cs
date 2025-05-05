@@ -29,8 +29,8 @@ public class GetTeamForDepartmentQueryHandler(ILogger<GetTeamForDepartmentQueryH
         if (currentUser == null)
             throw new UnauthorizedException("User is not authenticated");
 
-        if (!_teamAuthorizationService.Authorize(ResourceOperation.Read))
-            throw new AccessForbiddenException("User is not authorized");
+        //if (!_teamAuthorizationService.Authorize(ResourceOperation.Read))
+        //    throw new AccessForbiddenException("User is not authorized");
         
         var teams = await _teamRepository.GetAllTeamsForDepartment(request.DepartmentId);
 
