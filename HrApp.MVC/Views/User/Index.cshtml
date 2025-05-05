@@ -1,7 +1,33 @@
-﻿<br />
-    <h1>Hi my friend</h1>
-    <h2>Welcom in my app</h2>
-    <h3>Lof u so mach</h3>
-
-@{
+﻿@{
+    ViewData["Title"] = "User Panel";
 }
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>User Panel</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead text-center">
+                        Welcome to your user panel! Here, you will find:
+                    </p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Your assigned tasks</li>
+                        <li class="list-group-item">The number of hours you have worked</li>
+                        <li class="list-group-item">Your performance statistics</li>
+                        <li class="list-group-item">Upcoming deadlines</li>
+                    </ul>
+                    <p class="mt-4 text-center">
+                        Stay organized and keep track of your progress!
+                    </p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="#" class="btn btn-primary">View Tasks</a>
+                    <a href="#" class="btn btn-secondary">View Work Hours</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

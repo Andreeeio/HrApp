@@ -8,6 +8,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HrApp.Application.Teams.Query.GetAllTeams;
+using HrApp.Domain.Entities;
+using HrApp.Application.Users.Query.GetDataFromToken;
+using HrApp.Application.Teams.Query.GetTeamForUser;
 
 namespace HrApp.MVC.Controllers;
 
@@ -35,7 +38,18 @@ public class TeamController : Controller
         return View(employers);
     }
 
-
+    [Route("Index")]
+    public async Task<IActionResult> Index()
+    {
+        var user = await _sender.Send(new GetDataFromTokenQuery());
+        var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
+        ViewBag.TeamName = team.Name;
+        if (team == null)
+        {
+            return View("NoTeam");
+        }
+        return View(await _sender.Send(new GetEmployersInTeamQuery(team.Id)));
+    }
     public async Task<IActionResult> Create()
     {
         var departments = await _sender.Send(new GetAllDepartmentsQuery());

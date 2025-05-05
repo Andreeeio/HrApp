@@ -26,6 +26,13 @@ public class TeamRepository : ITeamRepository
             .ToListAsync();
     }
 
+    public async Task<Team?> GetTeamForUser(Guid userid)
+    {
+        return await dbContext.Team
+            .Include(t => t.Employers) // Eager loading listy Employers
+            .FirstOrDefaultAsync(t => t.Employers.Any(e => e.Id == userid));
+    }
+
     public async Task CreateTeam(Team team)
     {
         await dbContext.Team.AddAsync(team);
@@ -34,7 +41,9 @@ public class TeamRepository : ITeamRepository
 
     public async Task AddEmployer(Guid teamid, Guid userid)
     {
-        var team = await dbContext.Team.FindAsync(teamid);
+        var team = await dbContext.Team
+            .Include(t => t.Employers) // Eager loading listy Employers
+            .FirstOrDefaultAsync(t => t.Id == teamid);
         var user = await dbContext.User.FindAsync(userid);
         if (team != null && user != null)
         {
@@ -42,4 +51,6 @@ public class TeamRepository : ITeamRepository
             await dbContext.SaveChangesAsync();
         }
     }
+
+
 }

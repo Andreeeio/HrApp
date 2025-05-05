@@ -1,17 +1,15 @@
 ﻿@using HrApp.Application.Teams.DTO
 @model List<TeamDTO>
 
-<h1>Drużyny w podanym departamencie</h1>
+<h1>Teams in the Selected Department</h1>
 <p>
-    <a asp-action="Create" @* asp-route-id=@ViewBag.IdDept *@>Create New</a>
+    <a asp-action="Create" @* asp-route-id="@ViewBag.IdDept" *@ class="btn btn-outline-secondary">Create New Team</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>Nazwa drużyny</th>
-        </tr>
-        <tr>
-            <th>Pracownicy</th>
+            <th>Team Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -20,12 +18,10 @@
             <tr>
                 <td>@team.Name</td>
                 <td>
-                    <a asp-controller="Team" asp-action="EmployersInTeam" asp-route-id=@team.Id>pracownicy</a> |
+                    <a asp-controller="Team" asp-action="EmployersInTeam" asp-route-id="@team.Id">View Employees</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-@{
-}

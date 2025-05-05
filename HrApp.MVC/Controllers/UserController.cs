@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using HrApp.Application.Users.Query.GetUserByEmail;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace HrApp.MVC.Controllers;
 
@@ -41,7 +42,7 @@ public class UserController : Controller
 
         await _sender.Send(request);
 
-        return View();
+        return View("LoginUser");
     }
 
     [HttpGet("login")]
@@ -75,7 +76,7 @@ public class UserController : Controller
             return View(request);
         }
 
-        return RedirectToAction("CurrentUser");
+        return RedirectToAction("Index");
     }
 
     [HttpPost("logout")]

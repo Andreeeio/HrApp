@@ -25,7 +25,6 @@ namespace HrApp.Application.Teams.Command.AddTeam
         public async Task Handle(AddTeamCommand request, CancellationToken cancellationToken)
         {
             var team = _mapper.Map<Domain.Entities.Team>(request);
-            team.Employers = new List<User>();
             team.DepartmentId = Guid.Parse(team.DepartmentId.ToString().ToUpper());
             await _repository.CreateTeam(team);
             _logger.LogInformation($"Added team {team.Name} to department {team.DepartmentId}");
