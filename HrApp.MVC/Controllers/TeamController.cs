@@ -1,10 +1,13 @@
 ﻿using HrApp.Application.Department.Query.GetAllDepartments;
+using HrApp.Application.Teams.Command.AddEmployer;
 using HrApp.Application.Teams.Command.AddTeam;
 using HrApp.Application.Teams.Query.GetEmployersInTeam;
 using HrApp.Application.Teams.Query.GetTeamForDepartment;
+using HrApp.MVC.Views.Team;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using HrApp.Application.Teams.Query.GetAllTeams;
 
 namespace HrApp.MVC.Controllers;
 
@@ -32,6 +35,7 @@ public class TeamController : Controller
         return View(employers);
     }
 
+
     public async Task<IActionResult> Create()
     {
         var departments = await _sender.Send(new GetAllDepartmentsQuery());
@@ -55,6 +59,26 @@ public class TeamController : Controller
 
     [HttpPost]
     public async Task<IActionResult> Create(AddTeamCommand command)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Handle the command to create a team
+            return View(command);
+        }
+        await _sender.Send(command);
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("AddEmployer")]
+    public async Task<IActionResult> AddEmployer()
+    {
+        var teams = await _sender.Send(new GetAllTeamsQuery());
+        ViewBag.teams = new SelectList(teams, "Id", "Name");
+        return View();
+    }
+
+    [HttpPost("AddEmployer")]
+    public async Task<IActionResult> AddEmployer(AddEmployerCommand command)
     {
         if (!ModelState.IsValid)
         {

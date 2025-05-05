@@ -31,4 +31,15 @@ public class TeamRepository : ITeamRepository
         await dbContext.Team.AddAsync(team);
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task AddEmployer(Guid teamid, Guid userid)
+    {
+        var team = await dbContext.Team.FindAsync(teamid);
+        var user = await dbContext.User.FindAsync(userid);
+        if (team != null && user != null)
+        {
+            team.Employers.Add(user);
+            await dbContext.SaveChangesAsync();
+        }
+    }
 }
