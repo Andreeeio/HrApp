@@ -11,6 +11,9 @@ using HrApp.Application.Teams.Query.GetAllTeams;
 using HrApp.Domain.Entities;
 using HrApp.Application.Users.Query.GetDataFromToken;
 using HrApp.Application.Teams.Query.GetTeamForUser;
+using HrApp.Application.Users.Query.GetUserByEmail;
+using HrApp.Application.Teams.Command.DeleteUserFromTeam;
+using HrApp.Application.Teams.Command.DeleteTeam;
 
 namespace HrApp.MVC.Controllers;
 
@@ -35,6 +38,7 @@ public class TeamController : Controller
     public async Task<IActionResult> EmployersInTeam(Guid id)
     {
         var employers = await _sender.Send(new GetEmployersInTeamQuery(id));
+        ViewBag.TeamId = id;
         return View(employers);
     }
 
@@ -43,11 +47,12 @@ public class TeamController : Controller
     {
         var user = await _sender.Send(new GetDataFromTokenQuery());
         var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
-        ViewBag.TeamName = team.Name;
+
         if (team == null)
         {
             return View("NoTeam");
         }
+        ViewBag.TeamName = team.Name;
         return View(await _sender.Send(new GetEmployersInTeamQuery(team.Id)));
     }
     public async Task<IActionResult> Create()
@@ -79,6 +84,8 @@ public class TeamController : Controller
             // Handle the command to create a team
             return View(command);
         }
+        var user = await _sender.Send(new GetUserByEmailQuery(command.TeamLeaderEmail));
+        command.TeamLeaderId = user.Id;
         await _sender.Send(command);
         return RedirectToAction("Index");
     }
@@ -99,6 +106,31 @@ public class TeamController : Controller
             // Handle the command to create a team
             return View(command);
         }
+        var user = await _sender.Send(new GetUserByEmailQuery(command.UserEmail));
+        command.UserId = user.Id;
+        await _sender.Send(command);
+        return RedirectToAction("EmployersInTeam", new { id = command.TeamId });
+    }
+
+    [HttpGet("DeleteUserFromTeam/{UserId}/{TeamId}")]
+    public async Task<IActionResult> DeleteUserFromTeam(Guid UserId, Guid TeamId)
+    {
+        var command = new DeleteUserFromTeamCommand
+        {
+            UserId = UserId,
+            TeamId = TeamId
+        };
+        await _sender.Send(command);
+        return RedirectToAction("EmployersInTeam", new { id = TeamId });
+    }
+
+    [HttpGet("DeleteTeam/{id}")]
+    public async Task<IActionResult> DeleteTeam(Guid id)
+    {
+        var command = new DeleteTeamCommand
+        {
+            TeamId = id
+        };
         await _sender.Send(command);
         return RedirectToAction("Index");
     }

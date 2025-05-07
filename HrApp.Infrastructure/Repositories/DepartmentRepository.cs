@@ -23,4 +23,18 @@ public class DepartmentRepository : IDepartmentRepository
         await dbContext.Department.AddAsync(department);
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task DeleteDepartment(Guid departmentId)
+    {
+        var department = await dbContext.Department
+            .Include(d => d.Teams) // Załaduj powiązane zespoły
+            .ThenInclude(t => t.Employers) // Załaduj powiązanych użytkowników w zespołach
+            .FirstOrDefaultAsync(d => d.Id == departmentId);
+
+        if (department != null)
+        {
+            dbContext.Department.Remove(department); // Usunięcie departamentu
+            await dbContext.SaveChangesAsync();
+        }
+    }
 }

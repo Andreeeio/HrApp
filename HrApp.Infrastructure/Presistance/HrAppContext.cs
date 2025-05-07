@@ -58,5 +58,20 @@ public class HrAppContext : DbContext
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new WorkedHoursRaportConfiguration());
         modelBuilder.ApplyConfiguration(new WorkLogConfiguration());
+        modelBuilder.Entity<Team>()
+            .HasMany(t => t.Employers)
+            .WithOne(u => u.Team)
+            .HasForeignKey(u => u.TeamId)
+            .OnDelete(DeleteBehavior.SetNull);
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.TeamLeader)
+            .WithMany()
+            .HasForeignKey(u => u.TeamLeaderId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Department>()
+            .HasMany(d => d.Teams)
+            .WithOne(t => t.Department)
+            .HasForeignKey(t => t.DepartmentId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -52,5 +52,28 @@ public class TeamRepository : ITeamRepository
         }
     }
 
+    public async Task RemoveEmployer(Guid teamid, Guid userid)
+    {
+        var team = await dbContext.Team
+    .Include(t => t.Employers) // Eager loading listy Employers
+    .FirstOrDefaultAsync(t => t.Id == teamid);
+        var user = await dbContext.User.FindAsync(userid);
+        if (team != null && user != null)
+        {
+            team.Employers.Remove(user);
+            await dbContext.SaveChangesAsync();
+        }
+    }
+    public async Task DeleteTeam(Guid teamId)
+    {
+        var team = await dbContext.Team
+            .Include(t => t.Employers) // Załaduj powiązanych użytkowników
+            .FirstOrDefaultAsync(t => t.Id == teamId);
 
+        if (team != null)
+        {
+            dbContext.Team.Remove(team); // Usunięcie zespołu
+            await dbContext.SaveChangesAsync();
+        }
+    }
 }

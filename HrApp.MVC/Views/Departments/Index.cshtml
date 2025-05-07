@@ -37,7 +37,8 @@
                     @Html.DisplayFor(modelItem => item.TeamTag)
             </td>
             <td>
-                <a asp-controller="Team" asp-action="TeamInDept" asp-route-id=@item.Id>Details</a>
+                <a asp-controller="Team" asp-action="TeamInDept" asp-route-id=@item.Id>Details</a> | 
+                <a asp-controller="Departments" asp-action="DeleteDepartment" asp-route-id=@item.Id>Usuń</a>
             </td>
 @*             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

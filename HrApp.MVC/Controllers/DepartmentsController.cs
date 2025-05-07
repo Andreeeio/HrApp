@@ -3,6 +3,9 @@ using MediatR;
 using HrApp.Application.Department.Query.GetAllDepartments;
 using System.Threading.Tasks;
 using HrApp.Application.Department.Command.AddDepartment;
+using HrApp.Application.Users.Query.GetUserByEmail;
+using HrApp.Application.Teams.Command.DeleteTeam;
+using HrApp.Application.Department.Command.DeleteDepartment;
 
 namespace HrApp.MVC.Controllers;
 
@@ -35,10 +38,20 @@ public class DepartmentsController : Controller
             // Handle the command to create a department
             return View(command);
         }
-
+        var user = await _mediator.Send(new GetUserByEmailQuery(command.HeadOfDepartmentEmail));
+        command.HeadOfDepartmentId = user.Id;
         await _mediator.Send(command);
         return RedirectToAction("Index"); ;
     }
 
-
+    [HttpGet("Departments/Delete/{id}")]
+    public async Task<IActionResult> DeleteDepartment(Guid id)
+    {
+        var command = new DeleteDepartmentCommand
+        {
+            DepartmentId = id
+        };
+        await _mediator.Send(command);
+        return RedirectToAction("Index");
+    }
 }

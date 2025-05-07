@@ -19,6 +19,7 @@
                 <td>@team.Name</td>
                 <td>
                     <a asp-controller="Team" asp-action="EmployersInTeam" asp-route-id="@team.Id">View Employees</a>
+                    <a asp-controller="Team" asp-action="DeleteTeam" asp-route-id="@team.Id">Delete</a>
                 </td>
             </tr>
         }

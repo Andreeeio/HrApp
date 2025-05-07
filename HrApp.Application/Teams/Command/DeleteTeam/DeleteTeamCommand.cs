@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HrApp.Application.Teams.Command.AddEmployer
+namespace HrApp.Application.Teams.Command.DeleteTeam
 {
-    public class AddEmployerCommand : IRequest
+    public class DeleteTeamCommand : IRequest
     {
         public Guid TeamId { get; set; }
-        public Guid UserId { get; set; }
-        public string UserEmail { get; set; }
     }
 }
