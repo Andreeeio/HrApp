@@ -1,8 +1,12 @@
 ﻿@using HrApp.Application.Users.DTO
 @model List<UserDTO>
 
+<h1>@ViewBag.TeamName</h1>
 <p>
     <a asp-action="AddEmployer">Add Employers</a>
+</p>
+<p>
+    <a asp-controller="Assignment" asp-action="Index" asp-route-TeamId="@ViewBag.TeamId">View Assignments</a>
 </p>
 <table class="table">
     <thead>

@@ -34,11 +34,12 @@ public class TeamController : Controller
         return View(teams);
     }
 
-    [HttpGet("{id}/employers")]
-    public async Task<IActionResult> EmployersInTeam(Guid id)
+    [HttpGet("employers/{TeamId}/{TeamName}")]
+    public async Task<IActionResult> EmployersInTeam(Guid Teamid, string TeamName)
     {
-        var employers = await _sender.Send(new GetEmployersInTeamQuery(id));
-        ViewBag.TeamId = id;
+        var employers = await _sender.Send(new GetEmployersInTeamQuery(Teamid));
+        ViewBag.TeamId = Teamid;
+        ViewBag.TeamName = TeamName;
         return View(employers);
     }
 
@@ -52,9 +53,11 @@ public class TeamController : Controller
         {
             return View("NoTeam");
         }
-        ViewBag.TeamName = team.Name;
-        return View(await _sender.Send(new GetEmployersInTeamQuery(team.Id)));
+
+        // Przekierowanie do akcji EmployersInTeam z parametrami TeamId i TeamName
+        return RedirectToAction("EmployersInTeam", new { TeamId = team.Id, TeamName = team.Name });
     }
+
     public async Task<IActionResult> Create()
     {
         var departments = await _sender.Send(new GetAllDepartmentsQuery());

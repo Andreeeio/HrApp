@@ -13,6 +13,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 var app = builder.Build();
 var scope = app.Services.CreateScope();
 
