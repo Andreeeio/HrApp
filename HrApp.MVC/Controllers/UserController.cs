@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using HrApp.Application.Users.Query.GetUserByEmail;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using HrApp.Application.WorkLog.Query.GetWorkLog;
 
 namespace HrApp.MVC.Controllers;
 
@@ -93,10 +94,14 @@ public class UserController : Controller
     }
 
     [HttpGet("index")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        _logger.LogInformation("Getting all users");
-        return View();
+        _logger.LogInformation("Getting current users");
+        var user = await _sender.Send(new GetDataFromTokenQuery());
+        ViewBag.UserId = user.id;
+        var workLogs = await _sender.Send(new GetWorkLogQuery(Guid.Parse(user.id))); // Fetch work logs
+        var todayWorkLog = workLogs.FirstOrDefault(wl => wl.StartTime.Date == DateTime.UtcNow.Date);
+        return View(todayWorkLog); // Pass work logs to the view
     }
 
     [Route("User/{encodedName}/Details")]

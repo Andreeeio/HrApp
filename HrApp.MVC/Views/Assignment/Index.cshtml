@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<HrApp.Application.Assignment.DTO.AssignmentDTO>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Assignments";
 }
 
-<h1>Index</h1>
+<h1>Assignments</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Assignment" asp-action="Create" class="btn btn-primary">Create</a>
 </p>
 <table class="table">
     <thead>

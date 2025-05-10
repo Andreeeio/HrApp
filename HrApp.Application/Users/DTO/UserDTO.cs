@@ -13,7 +13,7 @@ public class UserDTO
     public List<Role> Roles { get; set; } = default!;
     public List<Leave> Leaves { get; set; } = default!;
     public List<EmploymentHistory> EmploymentHistories { get; set; } = default!;
-    public List<WorkLog> WorkLogs { get; set; } = default!;
+    public List<HrApp.Domain.Entities.WorkLog> WorkLogs { get; set; } = default!;
     public virtual Team? TeamLeader { get; set; }
     public virtual Team? Team { get; set; } = default!;
     public List<SalaryHistory> SalaryHistory { get; set; } = default!;

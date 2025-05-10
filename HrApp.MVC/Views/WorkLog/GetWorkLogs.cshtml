@@ -1,0 +1,48 @@
+﻿@model IEnumerable<HrApp.Application.WorkLog.DTO.WorkLogDTO>
+
+@{
+    ViewData["Title"] = "Work Logs for ";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Work Logs for @ViewBag.UserEmail</h2>
+    <table class="table table-striped mt-4">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Log ID</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Worked Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var log in Model)
+                {
+                    <tr>
+                        <td>@log.Id</td>
+                        <td>@log.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>
+                            @if (log.EndTime.HasValue)
+                            {
+                                @log.EndTime.Value.ToString("yyyy-MM-dd HH:mm")
+                            }
+                            else
+                            {
+                                <span class="text-warning">In Progress</span>
+                            }
+                        </td>
+                        <td>@log.Hours</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No work logs available.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

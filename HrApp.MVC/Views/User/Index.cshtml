@@ -1,7 +1,9 @@
-﻿@{
+﻿@using HrApp.Domain.Entities
+@model HrApp.Application.WorkLog.DTO.WorkLogDTO
+
+@{
     ViewData["Title"] = "User Panel";
 }
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -25,7 +27,27 @@
                 </div>
                 <div class="card-footer text-center">
                     <a href="#" class="btn btn-primary">View Tasks</a>
-                    <a href="#" class="btn btn-secondary">View Work Hours</a>
+                    <a asp-controller="worklog" asp-action="GetWorkLogs" asp-route-UserId="@ViewBag.UserId" class="btn btn-secondary">View Work Hours</a>
+                </div>
+                <div class="text-center">
+                    @if (Model == null)
+                    {
+                        <form asp-controller="WorkLog" asp-action="StartWorkLog" method="post">
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                            <button type="submit" class="btn btn-success">Rozpocznij pracę</button>
+                        </form>
+                    }
+                    else if (Model.EndTime == null)
+                    {
+                        <form asp-controller="WorkLog" asp-action="EndWorkLog" method="post">
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                            <button type="submit" class="btn btn-danger">Zakończ pracę</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>Praca zakończona. Przepracowane godziny: @Model.Hours</p>
+                    }
                 </div>
             </div>
         </div>

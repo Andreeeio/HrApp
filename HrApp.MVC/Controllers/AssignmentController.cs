@@ -27,7 +27,7 @@ namespace HrApp.MVC.Controllers
         }
 
         // GET: Assignment
-        [HttpGet("Assignment/{TeamId}")]
+        [HttpGet("{TeamId}/Assignment")]
         public async Task<IActionResult> Index(Guid TeamId)
         {
             var assignments = await _sender.Send(new GetAssignmentForTeamQuery(TeamId));
@@ -54,6 +54,7 @@ namespace HrApp.MVC.Controllers
         //    return View(assignment);
         //}
 
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var teams = await _sender.Send(new GetAllTeamsQuery());
