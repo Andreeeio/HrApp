@@ -1,0 +1,27 @@
+﻿@model HrApp.Application.Authorizations.Command.Add2FA.Add2FARequest
+@{
+    ViewData["Title"] = "Enable Two-Factor Authentication";
+}
+
+<h2>Enable 2FA</h2>
+
+<form asp-action="AddVerf2FA" method="post">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Send 2FA Code</button>
+</form>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["Success"]</div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

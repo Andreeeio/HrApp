@@ -33,7 +33,7 @@ public static class ServiceCollectionExtentions
             {
                 OnMessageReceived = context =>
                 {
-                    var token = context.Request.Cookies["jwt_token"]; // <- tutaj poprawione
+                    var token = context.Request.Cookies["jwt_token"];
                     if (!string.IsNullOrEmpty(token))
                     {
                         context.Token = token;
@@ -49,5 +49,6 @@ public static class ServiceCollectionExtentions
         services.AddAutoMapper(typeof(ServiceCollectionExtentions).Assembly);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtentions).Assembly));
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtentions).Assembly).AddFluentValidationAutoValidation();
+        services.AddTransient<IEmailSender, EmailSender>();
     }
 }

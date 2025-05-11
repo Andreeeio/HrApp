@@ -1,3 +1,4 @@
+using DotNetEnv;
 using HrApp.Application.Extensions;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Extentions;
@@ -15,6 +16,8 @@ builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 var app = builder.Build();
 var scope = app.Services.CreateScope();
+
+Env.Load();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

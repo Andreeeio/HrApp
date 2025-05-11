@@ -21,6 +21,7 @@ public static class ServiceCollectionExtentions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+        services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
 
         services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
         services.AddScoped<ITeamAuthorizationService, TeamAuthorizationService>();

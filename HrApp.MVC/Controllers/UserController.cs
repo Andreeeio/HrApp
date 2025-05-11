@@ -62,13 +62,23 @@ public class UserController : Controller
         try
         {
             var token = await _sender.Send(request);
-            Response.Cookies.Append("jwt_token", token, new CookieOptions
+
+            Response.Cookies.Append("jwt_token", token.Item1, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
                 Expires = DateTimeOffset.UtcNow.AddHours(10)
             });
+
+            if(token.Item2 == 1)
+            {
+                return RedirectToAction("verf", "Authorization");
+            }
+            else if(token.Item2 == 2)
+            {
+                return RedirectToAction("addverf", "Authorization");
+            }
         }
         catch (BadRequestException ex)
         {
