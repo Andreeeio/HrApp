@@ -15,6 +15,7 @@ builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IWorkLogRepository, WorkLogRepository>();
+builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 var app = builder.Build();
 var scope = app.Services.CreateScope();
 

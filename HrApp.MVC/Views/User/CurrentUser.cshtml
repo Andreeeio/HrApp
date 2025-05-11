@@ -2,7 +2,7 @@
 @model CurrentUser
 
 <h1>Your currnet data</h1>
-
+<a asp-controller="User" asp-action="DeleteUser" asp-route-UserId="@Model.id" class="btn btn-danger">Delete</a>
 @if (Model != null)
 {
     <div>

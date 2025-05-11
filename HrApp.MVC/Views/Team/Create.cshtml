@@ -34,7 +34,7 @@
 </div>
 
 <div>
-    <a asp-action="TeamInDept">Back to List</a>
+    <a asp-controller="Team" asp-action="TeamInDept" asp-route-id="@ViewBag.DeptId">Back to List</a>
 </div>
 
 @section Scripts {

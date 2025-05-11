@@ -11,4 +11,6 @@ public class Team
     public List<AnonymousFeedback> AnonymousFeedbacks { get; set; } = new List<AnonymousFeedback>();
     public Guid DepartmentId { get; set; }
     public virtual Department Department { get; set; } = default!;
+    public List<Offer> Offers { get; set; } = new List<Offer>(); // Dodano listę Offer
 }
+

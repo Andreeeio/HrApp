@@ -14,6 +14,8 @@ using HrApp.Application.Department.Query.GetAllDepartments;
 using HrApp.Application.Users.Query.GetUserByEmail;
 using HrApp.Application.Teams.Query.GetAllTeams;
 using HrApp.Application.Assignment.Command.AddAssignment;
+using HrApp.Application.Teams.Query.GetTeamForUser;
+using HrApp.Application.Users.Query.GetDataFromToken;
 
 namespace HrApp.MVC.Controllers
 {
@@ -71,7 +73,10 @@ namespace HrApp.MVC.Controllers
                 return View(command);
             }
             await _sender.Send(command);
-            return RedirectToAction("Index");
+            var user = await _sender.Send(new GetDataFromTokenQuery());
+            var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
+
+            return RedirectToAction("EmployersInTeam","Team", new { TeamId = team.Id, TeamName = team.Name });
         }
 
 

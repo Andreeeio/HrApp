@@ -1,0 +1,26 @@
+﻿@model List<HrApp.Application.Offer.DTO.OfferDTO>
+
+<h2>Offer list</h2>
+<a asp-action="Create">Create Offer</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Salary</th>
+            <th>Description</th>
+            <th>Add Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var offer in Model)
+        {
+            <tr>
+                <td>@offer.PositionName</td>
+                <td>@offer.Salary</td>
+                <td>@offer.Description</td>
+                <td>@offer.AddDate</td>
+                <td><a asp-action="Apply">Apply for job</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

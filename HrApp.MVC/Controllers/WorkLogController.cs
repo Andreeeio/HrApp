@@ -2,6 +2,7 @@
 using HrApp.Application.WorkLog.Command.AddWorkLog;
 using HrApp.Application.WorkLog.Command.UpdateWorkLog;
 using HrApp.Application.WorkLog.Query.GetWorkLog;
+using HrApp.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ public class WorkLogController : Controller
         var workLogs = await _sender.Send(new GetWorkLogQuery(UserId));
         var user = await _sender.Send(new GetDataFromTokenQuery());
         ViewBag.UserEmail = user.email;
+        ViewBag.UserId = Guid.Parse(user.id);
         return View(workLogs);
     }
 
@@ -72,11 +74,25 @@ public class WorkLogController : Controller
         await _sender.Send(command);
         return RedirectToAction("Index", "User");
     }
+    [HttpGet("{UserId}/report")]
+    public async Task<IActionResult> GenerateReport(Guid UserId)
+    {
+        // Pobierz dane WorkLog dla użytkownika
+        var workLogs = await _sender.Send(new GetWorkLogQuery(UserId));
 
-    //[HttpGet("report")]
-    //public async Task<IActionResult> GenerateReport(Guid userId)
-    //{
-    //    var report = await _sender.Send(new GenerateWorkedHoursReportQuery(userId));
-    //    return View(report);
-    //}
+        // Grupuj dane według miesiąca i roku, sumując godziny
+        var report = workLogs
+            .GroupBy(wl => new { wl.StartTime.Year, wl.StartTime.Month })
+            .Select(g => new WorkedHoursRaport
+            {
+                Id = Guid.NewGuid(),
+                UserId = UserId,
+                WorkedHours = g.Sum(wl => wl.Hours),
+                MonthNYear = new DateOnly(g.Key.Year, g.Key.Month, 1)
+            })
+            .ToList();
+
+        // Przekaż dane do widoku
+        return View(report);
+    }
 }
