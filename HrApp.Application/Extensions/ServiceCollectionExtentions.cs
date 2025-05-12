@@ -2,11 +2,9 @@
 using FluentValidation.AspNetCore;
 using HrApp.Application.Interfaces;
 using HrApp.Application.Services;
-using HrApp.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 

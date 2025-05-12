@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using HrApp.Application.Teams.Query.GetAllTeams;
 using HrApp.Application.Offer.Query;
 using HrApp.Application.Offer.Command.CreateOffer;
+using HrApp.Application.Offer.Query.GetAllOffers;
 
 namespace HrApp.MVC.Controllers;
 

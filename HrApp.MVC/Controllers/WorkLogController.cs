@@ -6,6 +6,8 @@ using HrApp.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
+namespace HrApp.MVC.Controllers;
+
 [Route("worklog")]
 public class WorkLogController : Controller
 {

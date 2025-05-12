@@ -10,10 +10,12 @@ namespace HrApp.MVC.Controllers;
 [Route("authorization")]
 public class AuthorizationController : Controller
 {
+    private readonly ILogger<AuthorizationController> _logger;
     private readonly ISender _sender;
-    public AuthorizationController(ISender sender)
+    public AuthorizationController(ISender sender, ILogger<AuthorizationController> logger)
     {
         _sender = sender;
+        _logger = logger;
     }
 
     [HttpGet("verf")]
@@ -49,10 +51,12 @@ public class AuthorizationController : Controller
         }
         catch (No2FAException ex)
         {
+         _logger.LogError(ex.ToString());
             return RedirectToAction("addverf", "Authorization");
         }
         catch (BadRequestException ex)
         {
+            _logger.LogError(ex.ToString());
             ModelState.AddModelError(string.Empty, "Niepoprawny kod weryfikacyjny.");
         }
 

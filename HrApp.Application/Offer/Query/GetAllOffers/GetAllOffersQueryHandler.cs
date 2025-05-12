@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using HrApp.Application.Offer.DTO;
-using HrApp.Application.Offer.Query;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HrApp.Application.Offers.Query.GetAllOffers;
+namespace HrApp.Application.Offer.Query.GetAllOffers;
 
 public class GetAllOffersQueryHandler(
     ILogger<GetAllOffersQueryHandler> logger,

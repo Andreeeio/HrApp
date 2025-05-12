@@ -1,17 +1,11 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Application.Mappings
+namespace HrApp.Application.Mappings;
+
+public class AddAssignmentCommand : Profile
 {
-    public class AddAssignmentCommand : Profile
+    public AddAssignmentCommand()
     {
-        public AddAssignmentCommand()
-        {
-            CreateMap<AddAssignmentCommand,  Domain.Entities.Assignment> ();
-        }
+        CreateMap<AddAssignmentCommand,  Domain.Entities.Assignment> ();
     }
 }

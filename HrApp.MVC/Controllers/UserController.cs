@@ -1,20 +1,11 @@
-﻿using Azure.Core;
-using HrApp.Application.Users.Command.AddUser;
+﻿using HrApp.Application.Users.Command.AddUser;
 using HrApp.Application.Users.Query.GetDataFromToken;
 using HrApp.Application.Users.Query.LoginUser;
-using HrApp.Domain.Constants;
-using HrApp.Domain.Entities;
 using HrApp.Domain.Exceptions;
-using HrApp.Domain.Repositories;
 using MediatR;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using HrApp.Application.Users.Query.GetUserByEmail;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using HrApp.Application.WorkLog.Query.GetWorkLog;
-using HrApp.Application.Teams.Command.DeleteTeam;
 using HrApp.Application.Users.Command.DeleteUser;
 
 namespace HrApp.MVC.Controllers;

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HrApp.Application.Interfaces;
 using HrApp.Application.Teams.DTO;
-using HrApp.Domain.Constants;
 using HrApp.Domain.Exceptions;
 using HrApp.Domain.Interfaces;
 using HrApp.Domain.Repositories;

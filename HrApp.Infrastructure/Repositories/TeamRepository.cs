@@ -29,7 +29,7 @@ public class TeamRepository : ITeamRepository
     public async Task<Team?> GetTeamForUser(Guid userid)
     {
         return await dbContext.Team
-            .Include(t => t.Employers) // Eager loading listy Employers
+            .Include(t => t.Employers)
             .FirstOrDefaultAsync(t => t.Employers.Any(e => e.Id == userid));
     }
 

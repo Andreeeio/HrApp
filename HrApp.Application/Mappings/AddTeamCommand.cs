@@ -1,17 +1,11 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Application.Mappings
+namespace HrApp.Application.Mappings;
+
+public class AddTeamCommand : Profile
 {
-    public class AddTeamCommand : Profile
+    public AddTeamCommand()
     {
-        public AddTeamCommand()
-        {
-            CreateMap<AddTeamCommand, Domain.Entities.Team>();
-        }
+        CreateMap<AddTeamCommand, Domain.Entities.Team>();
     }
 }

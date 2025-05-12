@@ -7,6 +7,6 @@ public class OfferMappingProfile : Profile
 {
     public OfferMappingProfile()
     {
-        CreateMap<HrApp.Domain.Entities.Offer, OfferDTO>();
+        CreateMap<Domain.Entities.Offer, OfferDTO>();
     }
 }

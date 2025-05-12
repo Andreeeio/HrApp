@@ -3,7 +3,6 @@ using HrApp.Domain.Constants;
 using HrApp.Domain.Exceptions;
 using HrApp.Domain.Repositories;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.Text;
