@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250505064555_init")]
+    [Migration("20250511205503_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -434,7 +434,12 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<float>("Salary")
                         .HasColumnType("real");
 
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Offer");
                 });
@@ -782,6 +787,17 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HrApp.Domain.Entities.Offer", b =>
+                {
+                    b.HasOne("HrApp.Domain.Entities.Team", "Team")
+                        .WithMany("Offers")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("HrApp.Domain.Entities.Paid", b =>
                 {
                     b.HasOne("HrApp.Domain.Entities.User", "User")
@@ -828,12 +844,12 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasOne("HrApp.Domain.Entities.Team", "Team")
                         .WithMany("Employers")
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("HrApp.Domain.Entities.Team", "TeamLeader")
                         .WithMany()
                         .HasForeignKey("TeamLeaderId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Team");
 
@@ -906,6 +922,8 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("Assignments");
 
                     b.Navigation("Employers");
+
+                    b.Navigation("Offers");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.User", b =>

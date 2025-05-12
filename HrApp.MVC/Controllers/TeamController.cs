@@ -34,11 +34,12 @@ public class TeamController : Controller
         return View(teams);
     }
 
-    [HttpGet("{id}/employers")]
-    public async Task<IActionResult> EmployersInTeam(Guid id)
+    [HttpGet("employers/{TeamId}/{TeamName}")]
+    public async Task<IActionResult> EmployersInTeam(Guid Teamid, string TeamName)
     {
-        var employers = await _sender.Send(new GetEmployersInTeamQuery(id));
-        ViewBag.TeamId = id;
+        var employers = await _sender.Send(new GetEmployersInTeamQuery(Teamid));
+        ViewBag.TeamId = Teamid;
+        ViewBag.TeamName = TeamName;
         return View(employers);
     }
 
@@ -52,31 +53,21 @@ public class TeamController : Controller
         {
             return View("NoTeam");
         }
-        ViewBag.TeamName = team.Name;
-        return View(await _sender.Send(new GetEmployersInTeamQuery(team.Id)));
+
+        // Przekierowanie do akcji EmployersInTeam z parametrami TeamId i TeamName
+        return RedirectToAction("EmployersInTeam", new { TeamId = team.Id, TeamName = team.Name });
     }
-    public async Task<IActionResult> Create()
+
+    [HttpGet("{id}/Create")]
+    public async Task<IActionResult> Create(Guid id)
     {
         var departments = await _sender.Send(new GetAllDepartmentsQuery());
         ViewBag.Departments = new SelectList(departments, "Id", "Name");
+        ViewBag.DeptID = id;
         return View();
     }
-    //[HttpGet("{id}/Create")]
-    //public async Task<IActionResult> Create(Guid id)
-    //{
-    //    var departments = await _sender.Send(new GetAllDepartmentsQuery());
-    //    ViewBag.Departments = new SelectList(departments, "Id", "Name");
 
-    //    // Set the default DepartmentId
-    //    var model = new AddTeamCommand
-    //    {
-    //        DepartmentId = id // Replace with your desired default ID
-    //    };
-
-    //    return View(model);
-    //}
-
-    [HttpPost]
+    [HttpPost("{id}/Create")]
     public async Task<IActionResult> Create(AddTeamCommand command)
     {
         if (!ModelState.IsValid)
@@ -87,7 +78,7 @@ public class TeamController : Controller
         var user = await _sender.Send(new GetUserByEmailQuery(command.TeamLeaderEmail));
         command.TeamLeaderId = user.Id;
         await _sender.Send(command);
-        return RedirectToAction("Index");
+        return RedirectToAction("Index","Departments");
     }
 
     [HttpGet("AddEmployer")]
@@ -109,7 +100,7 @@ public class TeamController : Controller
         var user = await _sender.Send(new GetUserByEmailQuery(command.UserEmail));
         command.UserId = user.Id;
         await _sender.Send(command);
-        return RedirectToAction("EmployersInTeam", new { id = command.TeamId });
+        return RedirectToAction("Index", "Departments");
     }
 
     [HttpGet("DeleteUserFromTeam/{UserId}/{TeamId}")]
@@ -121,7 +112,7 @@ public class TeamController : Controller
             TeamId = TeamId
         };
         await _sender.Send(command);
-        return RedirectToAction("EmployersInTeam", new { id = TeamId });
+        return RedirectToAction("Index", "Departments");
     }
 
     [HttpGet("DeleteTeam/{id}")]
@@ -132,6 +123,6 @@ public class TeamController : Controller
             TeamId = id
         };
         await _sender.Send(command);
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "Departments");
     }
 }

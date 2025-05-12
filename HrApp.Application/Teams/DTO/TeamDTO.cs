@@ -8,7 +8,7 @@ public class TeamDTO
     public Guid TeamLeaderId { get; set; }
     public string Name { get; set; } = default!;
     public List<User> Employers { get; set; } = new List<User>();
-    public List<Assignment> Assignments { get; set; } = new List<Assignment>();
+    public List<HrApp.Domain.Entities.Assignment> Assignments { get; set; } = new List<HrApp.Domain.Entities.Assignment>();
     public List<AnonymousFeedback> AnonymousFeedbacks { get; set; } = new List<AnonymousFeedback>();
     public Guid DepartmentId { get; set; }
 }

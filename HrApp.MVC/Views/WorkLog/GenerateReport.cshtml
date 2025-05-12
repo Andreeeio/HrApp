@@ -1,0 +1,24 @@
+﻿@model List<HrApp.Domain.Entities.WorkedHoursRaport>
+
+<div class="container mt-5">
+    <h2 class="text-center">Worked Hours Report</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Month and Year</th>
+                <th>Worked Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in Model)
+            {
+                <tr>
+                    <td>@report.Id</td>
+                    <td>@report.MonthNYear.ToString("MMMM yyyy")</td>
+                    <td>@report.WorkedHours</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

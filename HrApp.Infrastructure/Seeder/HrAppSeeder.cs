@@ -115,11 +115,18 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             var offers = GetOffers();
             var applications = GetApplications();
             var candidates = GetCandidates();
+            var teams = _dbContext.Team.ToList(); // Pobierz istniejące zespoły
 
             for (int i = 0; i < offers.Count; i++)
             {
-                applications[i].Candidate = candidates[i];
-                offers[i].JobApplications = [applications[i]];
+                var team = teams[i % teams.Count];
+                offers[i].Team = team;
+
+                var application = applications[i];
+                application.Candidate = candidates[i];
+
+                // przypisz aplikację do oferty
+                offers[i].JobApplications = new List<JobApplication> { application };
             }
 
             _dbContext.Candidate.AddRange(candidates);
@@ -127,6 +134,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             _dbContext.JobApplication.AddRange(applications);
             await _dbContext.SaveChangesAsync();
         }
+
     }
 
     private List<Role> GetRoles()

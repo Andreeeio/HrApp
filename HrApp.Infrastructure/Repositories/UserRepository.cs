@@ -44,4 +44,12 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
             .FirstOrDefaultAsync(u => u.Id == id); // No changes needed here as 'u.Id' is of type Guid
         return user;
     }
+
+    public async Task DeleteUser(Guid id)
+    {
+        await dbContext.User
+            .Where(u => u.Id == id)
+            .ExecuteDeleteAsync();
+        return;
+    }
 }

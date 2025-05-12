@@ -45,21 +45,6 @@ namespace HrApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Offer",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PositionName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Salary = table.Column<float>(type: "real", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    AddDate = table.Column<DateOnly>(type: "date", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Offer", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
                 {
@@ -69,34 +54,6 @@ namespace HrApp.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "JobApplication",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OfferID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApplicationDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CvLink = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JobApplication", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_JobApplication_Candidate_CandidateId",
-                        column: x => x.CandidateId,
-                        principalTable: "Candidate",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_JobApplication_Offer_OfferID",
-                        column: x => x.OfferID,
-                        principalTable: "Offer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,6 +207,28 @@ namespace HrApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "JobApplication",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OfferID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CvLink = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobApplication", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_JobApplication_Candidate_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidate",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Leave",
                 columns: table => new
                 {
@@ -261,6 +240,22 @@ namespace HrApp.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Leave", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Offer",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PositionName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Salary = table.Column<float>(type: "real", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    AddDate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offer", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -355,12 +350,13 @@ namespace HrApp.Infrastructure.Migrations
                         column: x => x.TeamId,
                         principalTable: "Team",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_User_Team_TeamLeaderId",
                         column: x => x.TeamLeaderId,
                         principalTable: "Team",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -480,6 +476,11 @@ namespace HrApp.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Offer_TeamId",
+                table: "Offer",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Paid_UserId",
                 table: "Paid",
                 column: "UserId",
@@ -595,10 +596,26 @@ namespace HrApp.Infrastructure.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_JobApplication_Offer_OfferID",
+                table: "JobApplication",
+                column: "OfferID",
+                principalTable: "Offer",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Leave_User_UserId",
                 table: "Leave",
                 column: "UserId",
                 principalTable: "User",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Offer_Team_TeamId",
+                table: "Offer",
+                column: "TeamId",
+                principalTable: "Team",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 

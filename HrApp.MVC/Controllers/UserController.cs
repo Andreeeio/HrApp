@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using HrApp.Application.Users.Query.GetUserByEmail;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using HrApp.Application.WorkLog.Query.GetWorkLog;
+using HrApp.Application.Teams.Command.DeleteTeam;
+using HrApp.Application.Users.Command.DeleteUser;
 
 namespace HrApp.MVC.Controllers;
 
@@ -95,6 +98,11 @@ public class UserController : Controller
         Response.Cookies.Delete("jwt_token");
         return RedirectToAction("LoginUser");
     }
+    [HttpGet("logout")]
+    public IActionResult LogoutGet()
+    {
+        return Logout();
+    }
 
     [HttpGet("currentuser")]
     public async Task<IActionResult> CurrentUser()
@@ -103,10 +111,14 @@ public class UserController : Controller
     }
 
     [HttpGet("index")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        _logger.LogInformation("Getting all users");
-        return View();
+        _logger.LogInformation("Getting current users");
+        var user = await _sender.Send(new GetDataFromTokenQuery());
+        ViewBag.UserId = user.id;
+        var workLogs = await _sender.Send(new GetWorkLogQuery(Guid.Parse(user.id))); // Fetch work logs
+        var todayWorkLog = workLogs.FirstOrDefault(wl => wl.StartTime.Date == DateTime.UtcNow.Date);
+        return View(todayWorkLog); // Pass work logs to the view
     }
 
     [Route("User/{encodedName}/Details")]
@@ -114,5 +126,16 @@ public class UserController : Controller
     {
         var dto = await _sender.Send(new GetUserByEmailQuery(encodedName));
         return View(dto);
+    }
+
+    [HttpGet("{UserId}/DeleteUser")]
+    public async Task<IActionResult> DeleteUser(Guid UserId)
+    {
+        var command = new DeleteUserCommand
+        {
+            UserId = UserId
+        };
+        await _sender.Send(command);
+        return RedirectToAction("Logout");
     }
 }
