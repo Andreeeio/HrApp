@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using HrApp.Application.Interfaces;
 using HrApp.Application.Services;
+using HrApp.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,5 +50,6 @@ public static class ServiceCollectionExtentions
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtentions).Assembly));
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtentions).Assembly).AddFluentValidationAutoValidation();
         services.AddTransient<IEmailSender, EmailSender>();
+        services.AddTransient<IDeadlineChecker, DeadlineChecker>();
     }
 }

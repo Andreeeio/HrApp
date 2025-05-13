@@ -115,7 +115,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             var offers = GetOffers();
             var applications = GetApplications();
             var candidates = GetCandidates();
-            var teams = _dbContext.Team.ToList(); // Pobierz istniejące zespoły
+            var teams = _dbContext.Team.ToList(); 
 
             for (int i = 0; i < offers.Count; i++)
             {
@@ -125,7 +125,6 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
                 var application = applications[i];
                 application.Candidate = candidates[i];
 
-                // przypisz aplikację do oferty
                 offers[i].JobApplications = new List<JobApplication> { application };
             }
 
@@ -237,6 +236,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             .RuleFor(x => x.Description, y => y.Lorem.Sentence(3))
             .RuleFor(x => x.StartDate, y => y.Date.Past())
             .RuleFor(x => x.EndDate, y => y.Date.Recent().AddDays(30))
+            .RuleFor(x => x.IsEnded, y => y.Random.Bool())
             .Generate(10);
 
         return assignments;
@@ -277,7 +277,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
     private List<Offer> GetOffers()
     {
         var offers = new Faker<Offer>(Locale)
-            .RuleFor(x => x.PositionName, y => y.Lorem.Sentence(3))
+            .RuleFor(x => x.PositionName, y => y.Random.Word())
             .RuleFor(x => x.Salary, y => y.Random.Float(5000, 12000))
             .RuleFor(x => x.Description, y => y.Lorem.Sentence(5))
             .RuleFor(x => x.AddDate, y => y.Date.PastDateOnly())

@@ -12,24 +12,32 @@ namespace HrApp.Infrastructure.Repositories
 {
     public class AssignmentRepository : IAssignmentRepository
     {
-        private readonly HrAppContext dbContext;
+        private readonly HrAppContext _dbContext;
 
         public AssignmentRepository(HrAppContext dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public async Task AddAssignment(Assignment assignment)
         {
-            await dbContext.Assignment.AddAsync(assignment);
-            await dbContext.SaveChangesAsync();
+            await _dbContext.Assignment.AddAsync(assignment);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<Assignment>> GetAllAssignmentsForTeam(Guid TeamId)
         {
-            return await dbContext.Assignment
+            return await _dbContext.Assignment
                 .Where(t => t.AssignedToTeamId == TeamId)
                 .ToListAsync();
         }
+
+        public async Task<List<Assignment>> GetActiveAssignments()
+        {
+            return await _dbContext.Assignment
+                .Where(a => a.EndDate > DateTime.UtcNow && a.EndDate <= DateTime.UtcNow.AddDays(1) && a.IsEnded == false)
+                .ToListAsync();
+        }
+
     }
 }

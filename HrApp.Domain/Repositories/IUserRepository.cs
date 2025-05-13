@@ -8,7 +8,6 @@ public interface IUserRepository
     public Task<bool> IfUserExist(string email);
     public Task CreateUser(User user);
     public Task<List<User>> GetUserInTeamAsync(Guid teamId);
-
     public Task<User?> GetUserById(Guid id);
     public Task DeleteUser(Guid id);
 }
