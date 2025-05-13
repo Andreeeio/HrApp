@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250511205503_init")]
+    [Migration("20250513163404_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -73,6 +73,9 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsEnded")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -2,6 +2,7 @@ using DotNetEnv;
 using Hangfire;
 using HrApp.Application.Extensions;
 using HrApp.Application.Interfaces;
+using HrApp.Application.Mappings;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Extentions;
 using HrApp.Infrastructure.Repositories;
@@ -17,20 +18,19 @@ builder.Services.AddApplication(builder.Configuration);
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
+//var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+//var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
 
-var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+//recurringJobs.AddOrUpdate<IDeadlineChecker>(
+//    "check-deadlines",
+//    x => x.Check(),
+//    "0 7 * * *",
+//    new RecurringJobOptions
+//    {
+//        TimeZone = timezone
+//    });
 
-recurringJobs.AddOrUpdate<IDeadlineChecker>(
-    "check-deadlines",
-    x => x.Check(),
-    "0 7 * * *",
-    new RecurringJobOptions
-    {
-        TimeZone = timezone
-    });
-
-Env.Load();
+//Env.Load();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

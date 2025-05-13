@@ -23,4 +23,25 @@ public class OfferRepository : IOfferRepository
         await dbContext.Offer.AddAsync(offer);
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task CreateCandidate(Candidate candidate)
+    {
+        await dbContext.Candidate.AddAsync(candidate);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task CreateJobApplication(JobApplication jobApplication)
+    {
+        await dbContext.JobApplication.AddAsync(jobApplication);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task<Offer?> GetOfferWithApplications(Guid offerId)
+    {
+        return await dbContext.Offer
+            .Include(o => o.JobApplications)
+                .ThenInclude(a => a.Candidate)
+            .FirstOrDefaultAsync(o => o.Id == offerId);
+    }
+
 }

@@ -80,6 +80,7 @@ namespace HrApp.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsEnded = table.Column<bool>(type: "bit", nullable: false),
                     AssignedToTeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DifficultyLevel = table.Column<int>(type: "int", nullable: false)
                 },

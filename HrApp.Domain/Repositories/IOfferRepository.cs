@@ -11,5 +11,8 @@ namespace HrApp.Domain.Repositories
     {
         Task<List<Offer>> GetAllOffers();
         Task CreateOffer(Offer offer);
+        Task CreateCandidate(Candidate candidate);
+        Task CreateJobApplication(JobApplication jobApplication);
+        Task<Offer?> GetOfferWithApplications(Guid offerId);
     }
 }

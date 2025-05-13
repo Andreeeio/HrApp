@@ -20,10 +20,10 @@ public static class ServiceCollectionExtentions
         var connectionString = configuration.GetConnectionString("HrApp");
         services.AddDbContext<HrAppContext>(options => options.UseSqlServer(connectionString));
 
-        services.AddHangfire(config =>
-            config.UseRedisStorage("localhost:6379"));
+        //services.AddHangfire(config =>
+        //    config.UseRedisStorage("localhost:6379"));
 
-        services.AddHangfireServer();
+        //services.AddHangfireServer();
 
         services.AddScoped<IHrAppSeeder, HrAppSeeder>();
         services.AddScoped<IUserRepository, UserRepository>();
