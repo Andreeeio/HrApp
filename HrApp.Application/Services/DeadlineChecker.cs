@@ -17,6 +17,9 @@ public class DeadlineChecker(IEmailSender emailSender,
         List<User> users;
         foreach (var assignment in assignments)
         {
+            if (assignment.AssignedToTeamId is null)
+                continue;
+
             users = await _userRepository.GetUserInTeamAsync(assignment.AssignedToTeamId);
             foreach(var user in users)
             {

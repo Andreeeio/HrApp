@@ -38,6 +38,21 @@ namespace HrApp.Infrastructure.Repositories
                 .Where(a => a.EndDate > DateTime.UtcNow && a.EndDate <= DateTime.UtcNow.AddDays(1) && a.IsEnded == false)
                 .ToListAsync();
         }
+        public async Task<List<Assignment>> GetFreeAssignments()
+        {
+            return await _dbContext.Assignment
+                .Where(a => a.EndDate > DateTime.UtcNow && a.IsEnded == false && a.AssignedToTeamId == null)
+                .ToListAsync();
+        }
+        public async Task<Assignment> GetAssignmentByIdAsync(Guid id)
+        {
+            return await _dbContext.Assignment.FindAsync(id);
+        }
 
+        public async Task UpdateAsync(Assignment assignment)
+        {
+            _dbContext.Assignment.Update(assignment);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

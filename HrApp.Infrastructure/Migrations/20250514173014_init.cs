@@ -81,7 +81,7 @@ namespace HrApp.Infrastructure.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsEnded = table.Column<bool>(type: "bit", nullable: false),
-                    AssignedToTeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssignedToTeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DifficultyLevel = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

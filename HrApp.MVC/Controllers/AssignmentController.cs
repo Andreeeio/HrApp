@@ -6,6 +6,11 @@ using HrApp.Application.Teams.Query.GetAllTeams;
 using HrApp.Application.Assignment.Command.AddAssignment;
 using HrApp.Application.Teams.Query.GetTeamForUser;
 using HrApp.Application.Users.Query.GetDataFromToken;
+using HrApp.Domain.Entities;
+using HrApp.Application.Assignment.Query.GetActiveAssignments;
+using Microsoft.EntityFrameworkCore;
+using HrApp.Application.Assignment.Query.GetFreeAssignments;
+using HrApp.Application.Assignment.Command.AddAssignmentToTeam;
 
 namespace HrApp.MVC.Controllers;
 
@@ -27,6 +32,89 @@ public class AssignmentController : Controller
         return View(assignments);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        var teams = await _sender.Send(new GetAllTeamsQuery());
+        //ViewBag.teams = new SelectList(teams, "Id", "Name");
+        var teamList = teams.Select(t => new SelectListItem
+        {
+            Value = t.Id.ToString(),
+            Text = t.Name
+        }).ToList();
+
+        // Dodaj opcję pustą (null)
+        teamList.Insert(0, new SelectListItem
+        {
+            Value = "", // pusty string = null po stronie modelu
+            Text = "-- Brak zespołu --",
+            Selected = true
+        });
+
+        ViewBag.teams = teamList;
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(AddAssignmentCommand command)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Handle the command to create an assignment
+            return View(command);
+        }
+        await _sender.Send(command);
+        var user = await _sender.Send(new GetDataFromTokenQuery());
+        var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
+        if (team == null)
+        {
+            return RedirectToAction("ShowFreeAssignments");
+        }
+        return RedirectToAction("EmployersInTeam", "Team", new { TeamId = team.Id, TeamName = team.Name });
+    }
+
+    [HttpGet("ShowFreeAssignments")]
+    public async Task<IActionResult> ShowFreeAssignments()
+    {
+        var assignments = await _sender.Send(new GetFreeAssignmentsQuery());
+        return View("Index", assignments);
+    }
+
+    [HttpGet("AddAssignmentToTeam/{id}")]
+    public async Task<IActionResult> AddAssignmentToTeam(Guid id)
+    {
+        var teams = await _sender.Send(new GetAllTeamsQuery());
+        ViewBag.teams = teams
+            .Select(t => new SelectListItem
+            {
+                Value = t.Id.ToString(),
+                Text = t.Name
+            })
+            .ToList();
+        ViewBag.AssignmentId = id;
+        return View();
+    }
+    [HttpPost("AddAssignmentToTeam/{id}")]
+    public async Task<IActionResult> AddAssignmentToTeam(AddAssignmentToTeamCommand command)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Jeśli potrzebujesz znowu listy zespołów (np. po błędzie), załaduj ją ponownie
+            var teams = await _sender.Send(new GetAllTeamsQuery());
+            ViewBag.teams = teams
+                .Select(t => new SelectListItem
+                {
+                    Value = t.Id.ToString(),
+                    Text = t.Name
+                })
+                .ToList();
+            ViewBag.AssignmentId = command.AssignmentId;
+            return View(command);
+        }
+
+        await _sender.Send(command);
+        return RedirectToAction("Index", "Departments");
+    }
     //// GET: Assignment/Details/5
     //public async Task<IActionResult> Details(Guid? id)
     //{
@@ -45,31 +133,6 @@ public class AssignmentController : Controller
 
     //    return View(assignment);
     //}
-
-    [HttpGet]
-    public async Task<IActionResult> Create()
-    {
-        var teams = await _sender.Send(new GetAllTeamsQuery());
-        ViewBag.teams = new SelectList(teams, "Id", "Name");
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(AddAssignmentCommand command)
-    {
-        if (!ModelState.IsValid)
-        {
-            // Handle the command to create an assignment
-            return View(command);
-        }
-        await _sender.Send(command);
-        var user = await _sender.Send(new GetDataFromTokenQuery());
-        var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
-
-        return RedirectToAction("EmployersInTeam","Team", new { TeamId = team.Id, TeamName = team.Name });
-    }
-
-
 
     //// GET: Assignment/Edit/5
     //public async Task<IActionResult> Edit(Guid? id)

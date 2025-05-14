@@ -34,7 +34,7 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<User>> GetUserInTeamAsync(Guid teamId)
+    public async Task<List<User>> GetUserInTeamAsync(Guid? teamId)
     {
         var users = await dbContext.User
             .Include(u => u.Roles)

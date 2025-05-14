@@ -57,7 +57,7 @@ namespace HrApp.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssignedToTeamId")
+                    b.Property<Guid?>("AssignedToTeamId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -667,8 +667,7 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasOne("HrApp.Domain.Entities.Team", "AssignedToTeam")
                         .WithMany("Assignments")
                         .HasForeignKey("AssignedToTeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("AssignedToTeam");
                 });

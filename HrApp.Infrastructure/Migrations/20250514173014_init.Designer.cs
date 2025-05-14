@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250513163404_init")]
+    [Migration("20250514173014_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -60,7 +60,7 @@ namespace HrApp.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssignedToTeamId")
+                    b.Property<Guid?>("AssignedToTeamId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -670,8 +670,7 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasOne("HrApp.Domain.Entities.Team", "AssignedToTeam")
                         .WithMany("Assignments")
                         .HasForeignKey("AssignedToTeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("AssignedToTeam");
                 });
