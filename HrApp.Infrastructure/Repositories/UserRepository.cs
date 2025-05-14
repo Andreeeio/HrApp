@@ -20,6 +20,12 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
         return user != null;
     }
 
+    public async Task<bool> IfUserExist(Guid id)
+    {
+        var user = await dbContext.User.FirstOrDefaultAsync(u => u.Id == id);
+        return user != null;
+    }
+
     public async Task CreateUser(User user)
     {
         var role = await dbContext.Role.FirstOrDefaultAsync(x => x.Name == "user");
@@ -52,4 +58,34 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
             .ExecuteDeleteAsync();
         return;
     }
+
+    public async Task<List<Role>> GetUserRoles(string email)
+    {
+        var user = await dbContext.User
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+            return new List<Role>();
+        
+        return user.Roles;
+    }
+
+    public async Task AddRolesForUser(string email, List<string> roleNames)
+    {
+        var user = await dbContext.User
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        var rolesToAdd = await dbContext.Role
+            .Where(r => roleNames.Contains(r.Name)) 
+            .ToListAsync();
+
+        user.Roles.Clear();
+
+        user.Roles.AddRange(rolesToAdd);
+
+        await dbContext.SaveChangesAsync();
+    }
+
+
 }

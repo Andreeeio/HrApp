@@ -18,7 +18,7 @@ public class AddUserCommandHandler(ILogger<AddUserCommandHandler> logger,
     private readonly IMapper _mapper = mapper;
     public async Task Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        if(_userRepository.IfUserExist(request.Email).Result)
+        if(!await _userRepository.IfUserExist(request.Email))
         {
             throw new BadRequestException("User with this email already exists");
         }

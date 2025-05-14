@@ -18,6 +18,7 @@ builder.Services.AddApplication(builder.Configuration);
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
+
 //var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
 //var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
 

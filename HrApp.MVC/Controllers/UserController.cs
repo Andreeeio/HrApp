@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using HrApp.Application.Users.Query.GetUserByEmail;
 using HrApp.Application.WorkLog.Query.GetWorkLog;
 using HrApp.Application.Users.Command.DeleteUser;
+using HrApp.Application.Users.Query.GetRoleForUser;
+using HrApp.Application.Users.Command.ChangeRoles;
 
 namespace HrApp.MVC.Controllers;
 
@@ -128,5 +130,36 @@ public class UserController : Controller
         };
         await _sender.Send(command);
         return RedirectToAction("Logout");
+    }
+
+    [HttpGet("{email}/EditRole")]
+    public async Task<IActionResult> EditRole(string email)
+    {
+        var dto = await _sender.Send(new GetRoleForUserCommand(email));
+        List<string> all = new()
+        {
+            "User", "Junior", "Mid", "Senior", "TeamLeader", "Hr"
+        };
+
+        ViewBag.AllRoles = all;
+
+        return View(dto);
+    }
+
+    [HttpPost("{email}/EditRole")]
+    public async Task<IActionResult> EditRole(string email, List<string> selectedRoles)
+    {
+        if (selectedRoles == null)
+        {
+            selectedRoles = new List<string>();
+            selectedRoles.Add("User");
+        }
+
+        await _sender.Send(new ChangeRolesCommand(email)
+        {
+            SelectedRoles = selectedRoles
+        });
+
+        return RedirectToAction("Details", new { email }); 
     }
 }
