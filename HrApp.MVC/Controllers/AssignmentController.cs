@@ -11,9 +11,14 @@ using HrApp.Application.Assignment.Query.GetActiveAssignments;
 using Microsoft.EntityFrameworkCore;
 using HrApp.Application.Assignment.Query.GetFreeAssignments;
 using HrApp.Application.Assignment.Command.AddAssignmentToTeam;
+using HrApp.Application.Assignment.Query.GetAssignmentById;
+using HrApp.Application.Assignment.Command.EditAssignment;
+using HrApp.Application.Assignment.DTO;
+using HrApp.Domain.Exceptions;
 
 namespace HrApp.MVC.Controllers;
 
+[Route("Assigment")]
 public class AssignmentController : Controller
 {
     public readonly ISender _sender;
@@ -29,6 +34,7 @@ public class AssignmentController : Controller
     {
         var assignments = await _sender.Send(new GetAssignmentForTeamQuery(TeamId));
         ViewBag.TeamId = TeamId;
+        ViewBag.Title = "Assignments for Team";
         return View(assignments);
     }
 
@@ -73,13 +79,6 @@ public class AssignmentController : Controller
         return RedirectToAction("EmployersInTeam", "Team", new { TeamId = team.Id, TeamName = team.Name });
     }
 
-    [HttpGet("ShowFreeAssignments")]
-    public async Task<IActionResult> ShowFreeAssignments()
-    {
-        var assignments = await _sender.Send(new GetFreeAssignmentsQuery());
-        return View("Index", assignments);
-    }
-
     [HttpGet("AddAssignmentToTeam/{id}")]
     public async Task<IActionResult> AddAssignmentToTeam(Guid id)
     {
@@ -115,6 +114,63 @@ public class AssignmentController : Controller
         await _sender.Send(command);
         return RedirectToAction("Index", "Departments");
     }
+
+    [HttpGet("AllAssignments")]
+    public IActionResult AllAssignments()
+    {
+        return View();
+    }
+
+    [HttpGet("ShowFreeAssignments")]
+    public async Task<IActionResult> ShowFreeAssignments()
+    {
+        var assignments = await _sender.Send(new GetFreeAssignmentsQuery());
+        ViewBag.Title = "Free Assignments";
+        return View("Index", assignments);
+    }
+
+    [HttpGet("ShowNotFreeAssignments")]
+    public async Task<IActionResult> ShowNotFreeAssignments()
+    {
+        var assignments = await _sender.Send(new GetActiveAssignmentsQuery());
+        ViewBag.Title = "All Assignments";
+        return View("Index", assignments);
+    }
+
+    [HttpGet("Edit/{assignmentId}")]
+    public async Task<IActionResult> Edit(Guid assignmentId)
+    {
+        var assignment = await _sender.Send(new GetAssignmentByIdQuery(assignmentId));
+        return View(assignment);
+    }
+
+    [HttpPost("Edit/{assignmentId}")]
+    public async Task<IActionResult> Edit(Guid assignmentId, EditAssignmentCommand command)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+
+        try
+        {
+            await _sender.Send(command);
+
+            return RedirectToAction("ShowNotFreeAssignments");
+        }
+        catch (UnauthorizedException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View();
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View();
+        }
+    }
+
+
     //// GET: Assignment/Details/5
     //public async Task<IActionResult> Details(Guid? id)
     //{

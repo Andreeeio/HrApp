@@ -23,9 +23,7 @@ namespace HrApp.Application.Assignment.Command.AddAssignmentToTeam
 
             assignment.AssignedToTeamId = request.TeamId;
 
-            await _repository.UpdateAsync(assignment);
-
-            return;
+            await _repository.SaveChangesAsync();
         }
     }
 

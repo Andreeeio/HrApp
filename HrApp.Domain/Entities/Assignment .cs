@@ -9,7 +9,7 @@ public class Assignment
     public DateTime EndDate { get; set; }
     public bool IsEnded { get; set; }
     public Guid? AssignedToTeamId { get; set; }
-    public virtual Team AssignedToTeam { get; set; } = default!;
+    public virtual Team? AssignedToTeam { get; set; } = default!;
     public int DifficultyLevel { get; set; }
     public List<LeaderFeedback> LeaderFeedbacks { get; set; } = default!;
     public List<AssignmentNotification> AssignmentNotifications { get; set; } = default!;
