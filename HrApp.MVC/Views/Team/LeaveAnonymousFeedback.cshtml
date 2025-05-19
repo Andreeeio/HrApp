@@ -1,0 +1,16 @@
+﻿@model HrApp.Application.Feedback.Command.AddAnonymousFeedbackCommand
+
+<h2>Leave Anonymous Feedback</h2>
+
+<form asp-action="LeaveAnonymousFeedback" method="post">
+    <input type="hidden" asp-for="TeamId" />
+    <div class="form-group">
+        <label asp-for="Subject"></label>
+        <input asp-for="Subject" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Message"></label>
+        <textarea asp-for="Message" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>

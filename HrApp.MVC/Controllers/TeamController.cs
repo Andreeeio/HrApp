@@ -14,6 +14,8 @@ using HrApp.Application.Teams.Query.GetTeamForUser;
 using HrApp.Application.Users.Query.GetUserByEmail;
 using HrApp.Application.Teams.Command.DeleteUserFromTeam;
 using HrApp.Application.Teams.Command.DeleteTeam;
+using HrApp.Application.Feedback.Command;
+using HrApp.Application.Feedback.Query;
 
 namespace HrApp.MVC.Controllers;
 
@@ -124,5 +126,27 @@ public class TeamController : Controller
         };
         await _sender.Send(command);
         return RedirectToAction("Index", "Departments");
+    }
+
+    [HttpGet("LeaveAnonymousFeedback/{teamId}")]
+    public IActionResult LeaveAnonymousFeedback(Guid teamId)
+    {
+        var model = new AddAnonymousFeedbackCommand { TeamId = teamId };
+        return View(model);
+    }
+
+    [HttpPost("LeaveAnonymousFeedback/{teamId}")]
+    public async Task<IActionResult> LeaveAnonymousFeedback(AddAnonymousFeedbackCommand command)
+    {
+        await _sender.Send(command);
+        TempData["SuccessMessage"] = "Your feedback has been submitted anonymously.";
+        return RedirectToAction("Index");
+    }
+    [HttpGet("Feedbacks/{teamId}")]
+    public async Task<IActionResult> ViewAnonymousFeedbacks(Guid teamId)
+    {
+        var feedbacks = await _sender.Send(new GetAnonymousFeedbacksForTeamQuery(teamId));
+        ViewBag.TeamId = teamId;
+        return View(feedbacks);
     }
 }
