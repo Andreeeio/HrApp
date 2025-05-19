@@ -1,0 +1,33 @@
+﻿@model List<HrApp.Application.Feedback.DTO.AnonymousFeedbackDTO>
+@{
+    ViewData["Title"] = "Anonymous Feedback";
+}
+
+<h2>Anonymous Feedback</h2>
+
+@if (!Model.Any())
+{
+    <p>No feedback has been submitted yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Subject</td>
+                    <td>@item.Message</td>
+                    <td>@item.CreatedAt.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
