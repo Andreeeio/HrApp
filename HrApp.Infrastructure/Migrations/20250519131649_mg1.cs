@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HrApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class mg1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -442,9 +442,7 @@ namespace HrApp.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeRate_RatedById",
                 table: "EmployeeRate",
-                column: "RatedById",
-                unique: true,
-                filter: "[RatedById] IS NOT NULL");
+                column: "RatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmploymentHistory_UserId",

@@ -9,6 +9,7 @@ public interface IAssignmentRepository
     public Task<List<Assignment>> GetFreeAssignments();
     public Task<List<Assignment>> GetNotFreeAssignments();
     public Task AddAssignment(Assignment assignment);
-    Task<Assignment> GetAssignmentByIdAsync(Guid id);
-    Task SaveChangesAsync();
+    public Task<Assignment?> GetAssignmentByIdAsync(Guid id);
+    public void Update(Assignment assignment);
+    public Task SaveChangesAsync();
 }

@@ -23,7 +23,7 @@ public class AssignmentRepository : IAssignmentRepository
     public async Task<List<Assignment>> GetAllAssignmentsForTeam(Guid TeamId)
     {
         return await _dbContext.Assignment
-            .Where(t => t.AssignedToTeamId == TeamId)
+            .Where(t => t.AssignedToTeamId == TeamId && t.IsEnded == false)
             .ToListAsync();
     }
 
@@ -47,13 +47,18 @@ public class AssignmentRepository : IAssignmentRepository
             .ToListAsync();
     }
 
-    public async Task<Assignment> GetAssignmentByIdAsync(Guid id)
+    public async Task<Assignment?> GetAssignmentByIdAsync(Guid id)
     {
         return await _dbContext.Assignment.FindAsync(id);
     }
-
+    public void Update(Assignment assignment)
+    {
+        _dbContext.Assignment.Update(assignment);
+    }
     public async Task SaveChangesAsync()
     {
+
         await _dbContext.SaveChangesAsync();
+
     }
 }

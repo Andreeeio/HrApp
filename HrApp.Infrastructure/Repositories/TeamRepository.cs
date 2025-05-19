@@ -26,11 +26,11 @@ public class TeamRepository : ITeamRepository
             .ToListAsync();
     }
 
-    public async Task<Team?> GetTeamForUser(Guid userid)
+    public async Task<Team?> GetTeamForUser(Guid userId)
     {
         return await dbContext.Team
             .Include(t => t.Employers)
-            .FirstOrDefaultAsync(t => t.Employers.Any(e => e.Id == userid));
+            .FirstOrDefaultAsync(t => t.Employers.Any(e => e.Id == userId) || t.TeamLeaderId == userId);
     }
 
     public async Task CreateTeam(Team team)

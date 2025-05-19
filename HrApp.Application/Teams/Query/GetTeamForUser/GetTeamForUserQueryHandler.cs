@@ -18,6 +18,7 @@ public class GetTeamForUserQueryHandler : IRequestHandler<GetTeamForUserQuery, T
         _repository = repository;
         _mapper = mapper;
     }
+
     public async Task<TeamDTO> Handle(GetTeamForUserQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting team for user");

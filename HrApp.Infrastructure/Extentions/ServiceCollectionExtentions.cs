@@ -34,8 +34,10 @@ public static class ServiceCollectionExtentions
         services.AddScoped<IAssignmentRepository, AssignmentRepository>();
         services.AddScoped<IWorkLogRepository, WorkLogRepository>();
         services.AddScoped<IOfferRepository, OfferRepository>();
+        services.AddScoped<IEmployeeRateRepository, EmployeeRateRepository>();
 
         services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
         services.AddScoped<ITeamAuthorizationService, TeamAuthorizationService>();
+        services.AddScoped<IAssignmentAuthorizationService, AssignmentAuthorizationService>();
     }
 }

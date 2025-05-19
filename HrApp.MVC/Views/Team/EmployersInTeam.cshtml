@@ -28,7 +28,7 @@
                 <td>@user.DateOfBirth.ToString("dd-MM-yyyy")</td>
                 <td>
                     <a asp-controller="User" asp-action="Details" asp-route-encodedName="@user.Email">Szczegóły</a> |
-                    <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Email">Edytuj</a> |
+                    <a asp-controller="User" asp-action="EditRole" asp-route-email="@user.Email">Edytuj</a> |
                     <a asp-controller="Team" asp-action="DeleteUserFromTeam" asp-route-UserId="@user.Id" asp-route-TeamId="@ViewBag.TeamId">Delete</a>
                 </td>
             </tr>

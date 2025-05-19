@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250515150517_repairAss")]
-    partial class repairAss
+    [Migration("20250519131649_mg1")]
+    partial class mg1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -277,9 +277,7 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("RatedById")
-                        .IsUnique()
-                        .HasFilter("[RatedById] IS NOT NULL");
+                    b.HasIndex("RatedById");
 
                     b.ToTable("EmployeeRate");
                 });
@@ -717,8 +715,8 @@ namespace HrApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("HrApp.Domain.Entities.User", "RatedBy")
-                        .WithOne("Rater")
-                        .HasForeignKey("HrApp.Domain.Entities.EmployeeRate", "RatedById")
+                        .WithMany("Rater")
+                        .HasForeignKey("RatedById")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Employee");

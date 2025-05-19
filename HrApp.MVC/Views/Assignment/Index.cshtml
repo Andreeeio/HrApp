@@ -43,7 +43,17 @@
                     <a asp-action="Edit" asp-route-assignmentId="@item.Id">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-action="AddAssignmentToTeam" asp-route-id="@item.Id">Assign to Team</a>
+                    @if(User.IsInRole("Ceo") || User.IsInRole("Hr"))
+                    {
+                        <a asp-action="AddAssignmentToTeam" asp-route-id="@item.Id">Assign to Team</a>
+                    }
+                    else if(User.IsInRole("TeamLeader"))
+                    {
+                        <a asp-route-TeamId="@item.AssignedToTeamId"
+                           asp-action="Complete"
+                           asp-route-AssignmentId="@item.Id">End task</a>
+
+                    }
                 </td>
             </tr>
         }

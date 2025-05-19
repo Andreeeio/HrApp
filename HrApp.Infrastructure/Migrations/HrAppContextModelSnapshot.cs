@@ -274,9 +274,7 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("RatedById")
-                        .IsUnique()
-                        .HasFilter("[RatedById] IS NOT NULL");
+                    b.HasIndex("RatedById");
 
                     b.ToTable("EmployeeRate");
                 });
@@ -714,8 +712,8 @@ namespace HrApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("HrApp.Domain.Entities.User", "RatedBy")
-                        .WithOne("Rater")
-                        .HasForeignKey("HrApp.Domain.Entities.EmployeeRate", "RatedById")
+                        .WithMany("Rater")
+                        .HasForeignKey("RatedById")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Employee");

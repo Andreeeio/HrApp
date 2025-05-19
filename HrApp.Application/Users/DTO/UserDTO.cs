@@ -20,6 +20,6 @@ public class UserDTO
     public List<WorkedHoursRaport> WorkedHoursRaports { get; set; } = default!;
     public virtual Paid Paid { get; set; } = default!;
     public List<ExellImport> ExellImports { get; set; } = default!;
-    public List<EmployeeRate> EmployeeRates { get; set; } = default!;
-    public virtual EmployeeRate? Rater { get; set; } = default!;
+    public List<Domain.Entities.EmployeeRate> EmployeeRates { get; set; } = default!;
+    public virtual Domain.Entities.EmployeeRate? Rater { get; set; } = default!;
 }

@@ -15,6 +15,7 @@ using HrApp.Application.Assignment.Query.GetAssignmentById;
 using HrApp.Application.Assignment.Command.EditAssignment;
 using HrApp.Application.Assignment.DTO;
 using HrApp.Domain.Exceptions;
+using HrApp.Application.Assignment.Command.CompleteAssignment;
 
 namespace HrApp.MVC.Controllers;
 
@@ -22,14 +23,16 @@ namespace HrApp.MVC.Controllers;
 public class AssignmentController : Controller
 {
     public readonly ISender _sender;
+    public readonly ILogger logger;
 
-    public AssignmentController(ISender sender)
+    public AssignmentController(ISender sender, ILogger<AssignmentController> logger)
     {
         _sender = sender;
+        this.logger = logger;
     }
 
     // GET: Assignment
-    [HttpGet("{TeamId}/Assignment")]
+    [HttpGet("{TeamId}/Assignments")]
     public async Task<IActionResult> Index(Guid TeamId)
     {
         var assignments = await _sender.Send(new GetAssignmentForTeamQuery(TeamId));
@@ -169,6 +172,35 @@ public class AssignmentController : Controller
             return View();
         }
     }
+
+    [HttpGet("{TeamId}/Complete/{AssignmentId}")]
+    public async Task<IActionResult> Complete(Guid TeamId, Guid AssignmentId)
+    {
+        logger.LogInformation($"Complete assignment {AssignmentId} for team {TeamId}");
+        return await CompleteTask(TeamId,AssignmentId);
+    }
+
+    [HttpPost("{TeamId}/Complete/{AssignmentId}")]
+    public async Task<IActionResult> CompleteTask(Guid TeamId, Guid AssignmentId)
+    {
+        try
+        {
+            await _sender.Send(new CompleteAssignmentCommand(AssignmentId));
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction("Index", new { TeamId });
+        }
+
+        return RedirectToAction(
+            actionName: "AddTaskRate",
+            controllerName: "EmployeeRate",
+            routeValues: new { TeamId });
+    }
+
+    
+
 
 
     //// GET: Assignment/Details/5
