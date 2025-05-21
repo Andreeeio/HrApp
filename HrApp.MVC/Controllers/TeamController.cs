@@ -16,6 +16,7 @@ using HrApp.Application.Teams.Command.DeleteUserFromTeam;
 using HrApp.Application.Teams.Command.DeleteTeam;
 using HrApp.Application.Feedback.Command;
 using HrApp.Application.Feedback.Query;
+using HrApp.Application.Salary.Query.GetByUserId;
 
 namespace HrApp.MVC.Controllers;
 

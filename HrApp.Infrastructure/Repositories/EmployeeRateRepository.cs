@@ -1,6 +1,7 @@
 ﻿using HrApp.Domain.Entities;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Presistance;
+using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Repositories;
 
@@ -15,6 +16,10 @@ public class EmployeeRateRepository : IEmployeeRateRepository
     {
         _dbContext.EmployeeRate.AddRange(rates);
         await _dbContext.SaveChangesAsync();
+    }
+    public Task<IEnumerable<EmployeeRate>> GetEmployeeRatesByUserId(Guid userid)
+    {
+        return Task.FromResult(_dbContext.EmployeeRate.Where(x => x.EmployeeId == userid).AsEnumerable());
     }
 
 }

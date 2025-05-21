@@ -1,5 +1,8 @@
 ﻿@using HrApp.Application.Users.DTO
 @model List<UserDTO>
+@{
+    var paidStatuses = ViewBag.PaidStatuses as Dictionary<Guid, bool>;
+}
 
 <h1>@ViewBag.TeamName</h1>
 <p>
@@ -35,12 +38,11 @@
                 <td>
                     <a asp-controller="User" asp-action="Details" asp-route-encodedName="@user.Email">Szczegóły</a> |
                     <a asp-controller="User" asp-action="EditRole" asp-route-email="@user.Email">Edytuj</a> |
+                    <a asp-controller="Salary" asp-action="AddPaid" asp-route-email="@user.Email">Add Paid</a> |
+                    <a asp-controller="Salary" asp-action="EditPaid" asp-route-id="@user.Email">Edit Paid</a>
                     <a asp-controller="Team" asp-action="DeleteUserFromTeam" asp-route-UserId="@user.Id" asp-route-TeamId="@ViewBag.TeamId">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-@{
-}
