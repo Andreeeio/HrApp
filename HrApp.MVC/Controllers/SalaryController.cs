@@ -56,7 +56,7 @@ public class SalaryController : Controller
         return View("EditPaid", command);
     }
 
-    [HttpPost("editpaid/{userid}")]
+    [HttpPost("editpaid/{useremail}")]
     public async Task<IActionResult> EditPaid(UpdatePaidCommand command)
     {
         var user = await _sender.Send(new GetUserByEmailQuery(command.Email));

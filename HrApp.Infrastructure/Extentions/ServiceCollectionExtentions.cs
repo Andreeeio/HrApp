@@ -35,6 +35,7 @@ public static class ServiceCollectionExtentions
         services.AddScoped<IWorkLogRepository, WorkLogRepository>();
         services.AddScoped<IOfferRepository, OfferRepository>();
         services.AddScoped<IEmployeeRateRepository, EmployeeRateRepository>();
+        services.AddScoped<ISalaryHistoryRepository, SalaryHistoryRepository>();
 
         services.AddScoped<IFeedbackRepository, FeedbackRepository>();
         services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
