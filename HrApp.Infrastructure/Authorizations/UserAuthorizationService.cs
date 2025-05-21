@@ -23,6 +23,13 @@ public class UserAuthorizationService(IUserContext userContext) : IUserAuthoriza
 
             return true;
         }
+        if (operation == ResourceOperation.Read)
+        {
+            if (twoFA == "false")
+                return false;
+         
+            return true;
+        }
 
         return false;
     }

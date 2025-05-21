@@ -25,13 +25,13 @@ var scope = app.Services.CreateScope();
 //recurringJobs.AddOrUpdate<IDeadlineChecker>(
 //    "check-deadlines",
 //    x => x.Check(),
-//    "0 7 * * *",
+//    "28 15 * * *",
 //    new RecurringJobOptions
 //    {
 //        TimeZone = timezone
 //    });
 
-//Env.Load();
+Env.Load();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

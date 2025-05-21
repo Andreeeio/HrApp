@@ -1,0 +1,40 @@
+﻿@using HrApp.Application.SalaryHistories.DTO
+@model List<SalaryHistoryDTO>
+
+@{
+    ViewData["Title"] = "Historia wynagrodzeń";
+    var userId = ViewContext.RouteData.Values["userId"]?.ToString();
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="get" asp-controller="SalaryHistory" asp-action="GetSalaryHistory" asp-route-userId=@userId>
+    <label for="number">Ile rekordów:</label>
+    <input type="number" id="number" name="number" min="0" max="60" value="@(ViewContext.HttpContext.Request.Query["number"])" />
+    <button type="submit">Pobierz</button>
+</form>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Brak danych do wyświetlenia.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Miesiąc i rok</th>
+                <th>Wynagrodzenie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MonthNYear.ToString("MM/yyyy")</td>
+                    <td>@item.Salary.ToString("C")</td>  
+                </tr>
+            }
+        </tbody>
+    </table>
+}
