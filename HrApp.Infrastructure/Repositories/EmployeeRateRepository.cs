@@ -21,5 +21,11 @@ public class EmployeeRateRepository : IEmployeeRateRepository
     {
         return Task.FromResult(_dbContext.EmployeeRate.Where(x => x.EmployeeId == userid).AsEnumerable());
     }
-
+    public Task<List<EmployeeRate>> GetRatesForUserAsync(Guid userId)
+    {
+        var rates = _dbContext.EmployeeRate
+            .Where(x => x.EmployeeId == userId)
+            .ToList();
+        return Task.FromResult(rates);
+    }
 }

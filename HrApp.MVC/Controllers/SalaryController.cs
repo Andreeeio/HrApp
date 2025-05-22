@@ -3,6 +3,8 @@ using HrApp.Application.Salary.Command.UpdatePaid;
 using HrApp.Application.Salary.Query.GetById;
 using HrApp.Application.Salary.Query.GetByUserId;
 using HrApp.Application.Users.Query.GetUserByEmail;
+using HrApp.Domain.Repositories;
+using HrApp.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;

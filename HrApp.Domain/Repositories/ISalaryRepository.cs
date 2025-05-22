@@ -14,5 +14,6 @@ namespace HrApp.Domain.Repositories
         Task<Paid> GetPaidByUserId(Guid userid);
         Task<Paid> GetPaidById(Guid paidid);
         Task UpdatePaid(Paid paid);
+        Task<List<Paid>> GetAllPaidAsync();
     }
 }

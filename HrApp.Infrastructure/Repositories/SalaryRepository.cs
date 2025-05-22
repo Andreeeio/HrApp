@@ -42,5 +42,9 @@ namespace HrApp.Infrastructure.Repositories
             _dbcontext.Paid.Update(paid);
             return _dbcontext.SaveChangesAsync();
         }
+        public Task<List<Paid>> GetAllPaidAsync()
+        {
+            return Task.FromResult(_dbcontext.Paid.ToList());
+        }
     }
 }

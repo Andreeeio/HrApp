@@ -118,6 +118,7 @@ public class UserController : Controller
     public async Task<IActionResult> Details(string encodedName)
     {
         var dto = await _sender.Send(new GetUserByEmailQuery(encodedName));
+        ViewBag.UserId = dto.Id;
         return View(dto);
     }
 

@@ -25,12 +25,20 @@ var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Ti
 recurringJobs.AddOrUpdate<IDeadlineChecker>(
     "check-deadlines",
     x => x.Check(),
-    "0 7 * * *",
+    "19 9 * * *",
     new RecurringJobOptions
     {
         TimeZone = timezone
     });
 
+recurringJobs.AddOrUpdate<ISalaryHistoryGenerator>(
+    "generate-salary-history",
+    x => x.GenerateSalaryHistoryAsync(),
+    "0 1 24 * *", 
+    new RecurringJobOptions
+    {
+        TimeZone = timezone
+    });
 Env.Load();
 
 // Configure the HTTP request pipeline.

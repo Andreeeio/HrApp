@@ -51,5 +51,6 @@ public static class ServiceCollectionExtentions
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtentions).Assembly).AddFluentValidationAutoValidation();
         services.AddTransient<IEmailSender, EmailSender>();
         services.AddTransient<IDeadlineChecker, DeadlineChecker>();
+        services.AddTransient<ISalaryHistoryGenerator, SalaryHistoryGenerator>();
     }
 }

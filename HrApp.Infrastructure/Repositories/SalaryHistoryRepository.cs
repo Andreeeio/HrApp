@@ -20,4 +20,9 @@ public class SalaryHistoryRepository(HrAppContext dbContext) : ISalaryHistoryRep
 
         return await salaryHistory.Take(howMany.Value).ToListAsync();
     }
+    public Task AddAsync(SalaryHistory history)
+    {
+        _dbContext.SalaryHistory.Add(history);
+        return _dbContext.SaveChangesAsync();
+    }
 }
