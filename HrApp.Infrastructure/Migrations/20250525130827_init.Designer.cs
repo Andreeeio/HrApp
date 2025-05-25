@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250519131649_mg1")]
-    partial class mg1
+    [Migration("20250525130827_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -613,6 +613,26 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("WorkLog");
+                });
+
+            modelBuilder.Entity("HrApp.Domain.Entities.WorkLogExportHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ExportedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ExportedForUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkLogExportHistory");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.WorkedHoursRaport", b =>

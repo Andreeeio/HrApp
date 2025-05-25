@@ -18,7 +18,6 @@ namespace HrApp.Application.Services
     {
         public async Task GenerateSalaryHistoryAsync()
         {
-            Console.WriteLine("--------------------------------- Generationg salary ---------------------------------");
             var now = DateOnly.FromDateTime(DateTime.UtcNow);
             var paidList = await salaryRepository.GetAllPaidAsync();
 

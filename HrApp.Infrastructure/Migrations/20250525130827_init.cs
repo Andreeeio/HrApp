@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HrApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mg1 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,6 +54,20 @@ namespace HrApp.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkLogExportHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExportedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExportedForUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExportDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkLogExportHistory", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -706,6 +720,9 @@ namespace HrApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "WorkLog");
+
+            migrationBuilder.DropTable(
+                name: "WorkLogExportHistory");
 
             migrationBuilder.DropTable(
                 name: "Candidate");

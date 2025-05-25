@@ -612,6 +612,26 @@ namespace HrApp.Infrastructure.Migrations
                     b.ToTable("WorkLog");
                 });
 
+            modelBuilder.Entity("HrApp.Domain.Entities.WorkLogExportHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ExportedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ExportedForUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkLogExportHistory");
+                });
+
             modelBuilder.Entity("HrApp.Domain.Entities.WorkedHoursRaport", b =>
                 {
                     b.Property<Guid>("Id")

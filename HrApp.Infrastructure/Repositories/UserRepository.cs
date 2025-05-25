@@ -94,4 +94,10 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
             .Where(u => u.Roles.Any(r => roles.Contains(r.Name)))
             .ToListAsync();
     }
+    public async Task<User> GetByIdAsync(Guid id)
+    {
+        return await dbContext.User
+            .Include(u => u.Roles) 
+            .FirstOrDefaultAsync(u => u.Id == id);
+    }
 }

@@ -30,4 +30,6 @@ public class User
     public List<ExellImport> ExellImports { get; set; } = default!;
     public List<EmployeeRate> EmployeeRates { get; set; } = default!;
     public List<EmployeeRate> Rater { get; set; } = default!;
+    public List<WorkLogExportHistory> ExportedWorkLogs { get; set; } = new();
+    public List<WorkLogExportHistory> ReceivedExportedWorkLogs { get; set; } = new();
 }

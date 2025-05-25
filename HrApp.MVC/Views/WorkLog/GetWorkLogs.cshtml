@@ -5,7 +5,8 @@
 }
 
 <div class="container mt-5">
-    <h2 class="text-center">Work Logs for @ViewBag.UserEmail</h2>
+	<h2 class="text-center">Work Logs for @ViewBag.UserEmail</h2>
+    <a asp-action="ExportToExcel" asp-route-UserId="@ViewBag.UserId" class="btn btn-success ml-2">Export to Excel</a>
     <a asp-action="GenerateReport" asp-route-UserId="@ViewBag.UserId" class="btn btn-primary">Generate Report</a>
     <table class="table table-striped mt-4">
         <thead class="thead-dark">
