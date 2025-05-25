@@ -181,8 +181,8 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
     private List<EmploymentHistory> GetEmploymentsHistory()
     {
         var empHist = new Faker<EmploymentHistory>(Locale)
-            .RuleFor(x => x.StartDate, y => y.Date.FutureDateOnly())
-            .RuleFor(x => x.EndDate, (y, x) => x.StartDate.AddMonths(y.Random.Int(1, 10)))
+            .RuleFor(x => x.StartDate, y => y.Date.RecentDateOnly())
+            .RuleFor(x => x.EndDate, (y, x) => x.StartDate.AddMonths(y.Random.Int(10, 20)))
             .Generate(10);
 
         return empHist;

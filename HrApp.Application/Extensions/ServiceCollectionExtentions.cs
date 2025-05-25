@@ -52,5 +52,6 @@ public static class ServiceCollectionExtentions
         services.AddTransient<IEmailSender, EmailSender>();
         services.AddTransient<IDeadlineChecker, DeadlineChecker>();
         services.AddTransient<ISalaryHistoryGenerator, SalaryHistoryGenerator>();
+        services.AddTransient<IContractChecker, ContractChecker>();
     }
 }

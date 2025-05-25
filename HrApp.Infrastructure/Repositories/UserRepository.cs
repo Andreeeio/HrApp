@@ -80,12 +80,18 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
             .Where(r => roleNames.Contains(r.Name)) 
             .ToListAsync();
 
-        user.Roles.Clear();
+        user!.Roles.Clear();
 
         user.Roles.AddRange(rolesToAdd);
 
         await dbContext.SaveChangesAsync();
     }
 
-
+    public async Task<List<User>> GetUserWithRolesAsync(List<string> roles)
+    {
+        return await dbContext.User
+            .Include(u => u.Roles) 
+            .Where(u => u.Roles.Any(r => roles.Contains(r.Name)))
+            .ToListAsync();
+    }
 }
