@@ -9,6 +9,7 @@ using HrApp.Application.WorkLog.Query.GetWorkLog;
 using HrApp.Application.Users.Command.DeleteUser;
 using HrApp.Application.Users.Query.GetRoleForUser;
 using HrApp.Application.Users.Command.ChangeRoles;
+using HrApp.Application.Users.Command.ImportUsersFromExcel;
 
 namespace HrApp.MVC.Controllers;
 
@@ -162,5 +163,28 @@ public class UserController : Controller
         });
 
         return RedirectToAction("Details", new { email }); 
+    }
+
+    [HttpGet("import")]
+    public IActionResult ImportUsers()
+    {
+        return View();
+    }
+
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportUsers(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            ModelState.AddModelError("file", "Please select a file.");
+            return View();
+        }
+
+        await _sender.Send(new ImportUsersFromExcelCommand
+        {
+            ExcelFile = file
+        });
+
+        return RedirectToAction("Index");
     }
 }
