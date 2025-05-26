@@ -29,7 +29,7 @@ public class AddTaskRatesCommandHandler(ILogger<AddTaskRatesCommandHandler> logg
         if (user == null)
             throw new UnauthorizedException("User is not authorized");
 
-        if (!_teamAuthorizationService.Authorize(ResourceOperation.Update))
+        if (!_teamAuthorizationService.Authorize(ResourceOperation.Read))
             throw new UnauthorizedException("User is not authorized");
 
         var empRates = _mapper.Map<List<Domain.Entities.EmployeeRate>>(request.TaskRates);

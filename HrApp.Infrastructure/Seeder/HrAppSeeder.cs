@@ -72,8 +72,6 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
                 _dbContext.WorkLog.AddRange(workLog);
                 _dbContext.Paid.AddRange(paids);
                 _dbContext.EmployeeRate.AddRange(rates);
-                var exportHistory = GetWorkLogExportHistory(users);
-                _dbContext.WorkLogExportHistory.AddRange(exportHistory);
             }
             _dbContext.User.AddRange(users);
             await _dbContext.SaveChangesAsync();
@@ -319,7 +317,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
 
         for (int i = 0; i < users.Count; i++)
         {
-            var exportedBy = users[0]; // Załóżmy, że CEO eksportuje
+            var exportedBy = users[0]; 
             var exportedFor = users[i];
 
             var exportDate = faker.Date.Between(new DateTime(2025, 4, 1), new DateTime(2025, 4, 20));

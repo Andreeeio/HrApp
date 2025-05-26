@@ -23,7 +23,12 @@ public class TeamAuthorizationService(IUserContext userContext) : ITeamAuthoriza
         {
             return true;
         }
+        else if (operation == ResourceOperation.Create
+            && (user.IsInRole(Roles.Hr.ToString()) || user.IsInRole(Roles.Ceo.ToString())))
+        {
+            return true;
+        }
 
-        return false; // Placeholder for actual authorization logic
+        return false; 
     }
 }
