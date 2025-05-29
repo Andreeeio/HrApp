@@ -6,6 +6,7 @@
 
 <h1>@Model.Email Details</h1>
 <a asp-controller="SalaryHistory" asp-action="GetSalaryHistory" asp-route-userId="@ViewBag.UserId">Salary history</a>
+<a asp-controller="User" asp-action="EditUser" asp-route-id="@ViewBag.UserId">Edit</a>
 <div>
     <h4>UserDto</h4>
     <hr />

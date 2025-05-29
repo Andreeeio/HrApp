@@ -100,4 +100,8 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
             .Include(u => u.Roles) 
             .FirstOrDefaultAsync(u => u.Id == id);
     }
+    public async Task SaveChangesAsync()
+    {
+        await dbContext.SaveChangesAsync();
+    }
 }
