@@ -1,9 +1,7 @@
-﻿namespace HrApp.Domain.Entities;
+﻿namespace HrApp.Application.Calendars.DTO;
 
-public class Calendar
+public class CalendarDTO
 {
-    public Guid Id { get; set; }
-    public string GoogleEventId { get; set; } = default!;
     public string Title { get; set; } = default!;
     public DateTime CreatedDate { get; set; }
     public DateTime StartDate { get; set; }

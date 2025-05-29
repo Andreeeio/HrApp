@@ -21,7 +21,8 @@ public class HrAppContext : DbContext
     public DbSet<Department> Department { get; set; } 
     public DbSet<EmployeeRate> EmployeeRate { get; set; }
     public DbSet<EmploymentHistory> EmploymentHistory { get; set; }
-    public DbSet<ExellImport> ExellImports { get; set; } 
+    public DbSet<ExellImport> ExellImports { get; set; }
+    public DbSet<GoogleOAuthToken> GoogleOAuthToken { get; set; }
     public DbSet<LeaderFeedback> LeaderFeedback { get; set; } 
     public DbSet<Leave> Leave { get; set; } 
     public DbSet<Offer> Offer { get; set; }
@@ -48,7 +49,8 @@ public class HrAppContext : DbContext
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeRateConfiguration());
         modelBuilder.ApplyConfiguration(new EmploymentHistoryConfiguration());
-        modelBuilder.ApplyConfiguration(new ExellImportConfiguration()); 
+        modelBuilder.ApplyConfiguration(new ExellImportConfiguration());
+        modelBuilder.ApplyConfiguration(new GoogleOAuthTokenConfiguration());
         modelBuilder.ApplyConfiguration(new LeaderFeedbackConfiguration());
         modelBuilder.ApplyConfiguration(new LeaveConfiguration());
         modelBuilder.ApplyConfiguration(new OfferConfiguration());

@@ -1,0 +1,46 @@
+﻿@using HrApp.Application.Calendars.DTO
+@model List<CalendarDTO>
+@{
+    ViewBag.Title = "Wydarzenia z Google Kalendarza";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (!(bool) ViewBag.IsConnected)
+{
+    <div class="alert alert-warning">
+        <p>Nie jesteś połączony z Google Kalendarzem.</p>
+        <a href="/calendar/connect" class="btn btn-primary">Połącz z Google</a>
+    </div>
+}
+else if (!Model.Any())
+{
+    <p>Brak wydarzeń do wyświetlenia.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tytuł</th>
+                <th>Opis</th>
+                <th>Start</th>
+                <th>Koniec</th>
+                <th>Utworzone</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>@item.StartDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@item.EndDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@item.CreatedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

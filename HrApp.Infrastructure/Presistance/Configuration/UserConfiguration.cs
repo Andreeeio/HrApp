@@ -78,5 +78,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.Rater)
             .WithOne(er => er.RatedBy)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(u => u.GoogleOAuthTokens)
+            .WithOne(g => g.User)
+            .HasForeignKey(g => g.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

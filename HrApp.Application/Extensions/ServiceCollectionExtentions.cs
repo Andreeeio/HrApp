@@ -44,7 +44,8 @@ public static class ServiceCollectionExtentions
 
         }
         );
-        
+        services.AddHttpClient(); 
+
         services.AddHttpContextAccessor();
         services.AddAutoMapper(typeof(ServiceCollectionExtentions).Assembly);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtentions).Assembly));
@@ -53,5 +54,6 @@ public static class ServiceCollectionExtentions
         services.AddTransient<IDeadlineChecker, DeadlineChecker>();
         services.AddTransient<ISalaryHistoryGenerator, SalaryHistoryGenerator>();
         services.AddTransient<IContractChecker, ContractChecker>();
+        services.AddTransient<IGoogleAuthService, GoogleAuthService>();
     }
 }
