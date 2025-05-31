@@ -33,4 +33,5 @@ public class User
     public List<WorkLogExportHistory> ExportedWorkLogs { get; set; } = new();
     public List<WorkLogExportHistory> ReceivedExportedWorkLogs { get; set; } = new();
     public List<GoogleOAuthToken> GoogleOAuthTokens { get; set; } = default!;
+    public List<UserIpAddress> IpAddresses { get; set; } = default!;
 }

@@ -39,6 +39,7 @@ public static class ServiceCollectionExtentions
         services.AddScoped<IEmploymentHistoryRepository, EmploymentHistoryRepository>();
         services.AddScoped<IGoogleOAuthTokenRepository, GoogleOAuthTokenRepository>();
         services.AddScoped<ICalendarRepository, CalendarRepository>();
+        services.AddScoped<IUserIpAddressRepository, UserIpAddressRepository>();
 
         services.AddScoped<IFeedbackRepository, FeedbackRepository>();
         services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();

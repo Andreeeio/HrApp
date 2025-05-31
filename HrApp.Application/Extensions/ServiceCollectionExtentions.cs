@@ -56,5 +56,6 @@ public static class ServiceCollectionExtentions
         services.AddTransient<IContractChecker, ContractChecker>();
         services.AddTransient<ICalendarService, CalendarService>();
         services.AddTransient<IGoogleAuthService, GoogleAuthService>();
+        services.AddTransient<IIpAddressService, IpAddressService>();
     }
 }

@@ -31,7 +31,8 @@ public class HrAppContext : DbContext
     public DbSet<Role> Role { get; set; } 
     public DbSet<SalaryHistory> SalaryHistory { get; set; } 
     public DbSet<Team> Team { get; set; } 
-    public DbSet<User> User { get; set; } 
+    public DbSet<User> User { get; set; }
+    public DbSet<UserIpAddress> UserIpAddress { get; set; }
     public DbSet<WorkedHoursRaport> WorkedHoursRaport { get; set; }
     public DbSet<WorkLog> WorkLog { get; set; }
     public DbSet<WorkLogExportHistory> WorkLogExportHistory { get; set; }
@@ -61,6 +62,7 @@ public class HrAppContext : DbContext
         modelBuilder.ApplyConfiguration(new SalaryHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new TeamConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserIpAddressConfiguration());
         modelBuilder.ApplyConfiguration(new WorkedHoursRaportConfiguration());
         modelBuilder.ApplyConfiguration(new WorkLogConfiguration());
         modelBuilder.ApplyConfiguration(new WorkLogExportHistoryConfiguration());

@@ -9,6 +9,8 @@ using HrApp.Application.WorkLog.Query.GetWorkLog;
 using HrApp.Application.Users.Command.DeleteUser;
 using HrApp.Application.Users.Query.GetRoleForUser;
 using HrApp.Application.Users.Command.ChangeRoles;
+using System.Threading.Tasks;
+using HrApp.Application.UserIpAddresses.Command.AddUserIpAddress;
 
 namespace HrApp.MVC.Controllers;
 
@@ -109,9 +111,9 @@ public class UserController : Controller
         _logger.LogInformation("Getting current users");
         var user = await _sender.Send(new GetDataFromTokenQuery());
         ViewBag.UserId = user.id;
-        var workLogs = await _sender.Send(new GetWorkLogQuery(Guid.Parse(user.id))); // Fetch work logs
+        var workLogs = await _sender.Send(new GetWorkLogQuery(Guid.Parse(user.id))); 
         var todayWorkLog = workLogs.FirstOrDefault(wl => wl.StartTime.Date == DateTime.UtcNow.Date);
-        return View(todayWorkLog); // Pass work logs to the view
+        return View(todayWorkLog);
     }
 
     [Route("User/{encodedName}/Details")]
@@ -163,4 +165,26 @@ public class UserController : Controller
 
         return RedirectToAction("Details", new { email }); 
     }
+
+    [HttpGet("CreateNewIp")]
+    public async Task<IActionResult> CreateNewIp()
+    {
+        try
+        {
+            await _sender.Send(new AddUserIpAddressCommand());
+
+        }
+        catch (BadRequestException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Wystąpił nieoczekiwany błąd.";
+        }
+
+        return RedirectToAction("currentuser");
+    }
+
+
 }

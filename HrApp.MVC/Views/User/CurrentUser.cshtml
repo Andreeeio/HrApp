@@ -2,9 +2,28 @@
 @model CurrentUser
 
 <h1>Your currnet data</h1>
-<a asp-controller="User" asp-action="DeleteUser" asp-route-UserId="@Model.id" class="btn btn-danger">Delete</a>
+
 @if (Model != null)
 {
+    @if (Model.ipVerification == "true")
+    {
+        <a asp-controller="User" asp-action="CreateNewIp" class="btn">Dodaj kolejne ip</a>
+    }
+    else
+    {
+        <a asp-controller="User" asp-action="CreateNewIp" class="btn">Dodaj ip</a>
+    }
+    <a asp-controller="User" asp-action="DeleteUser" asp-route-UserId="@Model.id" class="btn btn-danger">Delete</a>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
     <div>
         <p>Email: @Model.email</p>
         <p>Id: @Model.id</p>

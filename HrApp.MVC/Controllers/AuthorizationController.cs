@@ -1,9 +1,11 @@
 ﻿using HrApp.Application.Authorizations.Command.Add2FA;
+using HrApp.Application.Authorizations.Command.CreateNewCode;
 using HrApp.Application.Authorizations.Command.Validate2FA;
 using HrApp.Application.Users.Query.LoginUser;
 using HrApp.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HrApp.MVC.Controllers;
 
@@ -19,8 +21,9 @@ public class AuthorizationController : Controller
     }
 
     [HttpGet("verf")]
-    public IActionResult Verf2FA()
+    public async Task<IActionResult> Verf2FA()
     {
+        await _sender.Send(new CreateNewCodeCommand());
         return View(new Validate2FARequest());
     }
 

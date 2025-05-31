@@ -22,7 +22,8 @@ public class UserContext(IHttpContextAccessor httpContext) : IUserContext
         var email = user.FindFirst(u => u.Type == ClaimTypes.Email)!.Value;
         var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role)!.Select(c => c.Value).ToList();
         var twoFA = user.FindFirst(u => u.Type == "2FA_verf")!.Value;
+        var ipVerification = user.FindFirst(u => u.Type == "IpVerification")!.Value;
 
-        return new CurrentUser(id, email, twoFA, roles);
+        return new CurrentUser(id, email, twoFA, ipVerification, roles);
     }
 }
