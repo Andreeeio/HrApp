@@ -1,5 +1,4 @@
-﻿using HrApp.Application.GoogleOAuthTokens.Query.DTO;
-using MediatR;
+﻿using MediatR;
 
 namespace HrApp.Application.GoogleOAuthTokens.Query.ExchangeCodeForToken;
 

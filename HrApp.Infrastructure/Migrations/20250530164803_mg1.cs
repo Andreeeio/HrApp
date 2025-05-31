@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HrApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class mg1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,6 +16,7 @@ namespace HrApp.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GoogleEventId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -57,17 +58,22 @@ namespace HrApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkLogExportHistory",
+                name: "CalendarEventCreator",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExportedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExportedForUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExportDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CalendarId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkLogExportHistory", x => x.Id);
+                    table.PrimaryKey("PK_CalendarEventCreator", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CalendarEventCreator_Calendar_CalendarId",
+                        column: x => x.CalendarId,
+                        principalTable: "Calendar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -219,6 +225,21 @@ namespace HrApp.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExellImports", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GoogleOAuthToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccessToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Expiry = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GoogleOAuthToken", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -415,6 +436,32 @@ namespace HrApp.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "WorkLogExportHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExportedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExportedForUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExportDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkLogExportHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkLogExportHistory_User_ExportedByUserId",
+                        column: x => x.ExportedByUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WorkLogExportHistory_User_ExportedForUserId",
+                        column: x => x.ExportedForUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AnonymousFeedbacks_TeamId",
                 table: "AnonymousFeedbacks",
@@ -434,6 +481,12 @@ namespace HrApp.Infrastructure.Migrations
                 name: "IX_Authorization_UserId",
                 table: "Authorization",
                 column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CalendarEventCreator_CalendarId",
+                table: "CalendarEventCreator",
+                column: "CalendarId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -467,6 +520,11 @@ namespace HrApp.Infrastructure.Migrations
                 name: "IX_ExellImports_UploadedById",
                 table: "ExellImports",
                 column: "UploadedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GoogleOAuthToken_UserId",
+                table: "GoogleOAuthToken",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobApplication_CandidateId",
@@ -546,6 +604,16 @@ namespace HrApp.Infrastructure.Migrations
                 table: "WorkLog",
                 column: "UserId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkLogExportHistory_ExportedByUserId",
+                table: "WorkLogExportHistory",
+                column: "ExportedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkLogExportHistory_ExportedForUserId",
+                table: "WorkLogExportHistory",
+                column: "ExportedForUserId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_AnonymousFeedbacks_Team_TeamId",
                 table: "AnonymousFeedbacks",
@@ -604,6 +672,14 @@ namespace HrApp.Infrastructure.Migrations
                 name: "FK_ExellImports_User_UploadedById",
                 table: "ExellImports",
                 column: "UploadedById",
+                principalTable: "User",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_GoogleOAuthToken_User_UserId",
+                table: "GoogleOAuthToken",
+                column: "UserId",
                 principalTable: "User",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -686,7 +762,7 @@ namespace HrApp.Infrastructure.Migrations
                 name: "Authorization");
 
             migrationBuilder.DropTable(
-                name: "Calendar");
+                name: "CalendarEventCreator");
 
             migrationBuilder.DropTable(
                 name: "EmployeeRate");
@@ -696,6 +772,9 @@ namespace HrApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExellImports");
+
+            migrationBuilder.DropTable(
+                name: "GoogleOAuthToken");
 
             migrationBuilder.DropTable(
                 name: "JobApplication");
@@ -723,6 +802,9 @@ namespace HrApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "WorkLogExportHistory");
+
+            migrationBuilder.DropTable(
+                name: "Calendar");
 
             migrationBuilder.DropTable(
                 name: "Candidate");

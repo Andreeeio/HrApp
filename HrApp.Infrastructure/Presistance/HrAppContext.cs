@@ -17,6 +17,7 @@ public class HrAppContext : DbContext
     public DbSet<AssignmentNotification> AssignmentNotification { get; set; }
     public DbSet<Authorization> Authorization { get; set; } 
     public DbSet<Calendar> Calendar { get; set; } 
+    public DbSet<CalendarEventCreator> CalendarEventCreator { get; set; }
     public DbSet<Candidate> Candidate { get; set; } 
     public DbSet<Department> Department { get; set; } 
     public DbSet<EmployeeRate> EmployeeRate { get; set; }
@@ -45,6 +46,7 @@ public class HrAppContext : DbContext
         modelBuilder.ApplyConfiguration(new AssignmentNotificationConfiguration());
         modelBuilder.ApplyConfiguration(new AuthorizationConfiguration());
         modelBuilder.ApplyConfiguration(new CalendarConfiguration()); 
+        modelBuilder.ApplyConfiguration(new CalendarEventCreatorConfiguration());
         modelBuilder.ApplyConfiguration(new CandidateConfiguration());
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeRateConfiguration());

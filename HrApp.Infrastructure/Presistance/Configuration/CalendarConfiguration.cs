@@ -15,5 +15,10 @@ public class CalendarConfiguration : IEntityTypeConfiguration<Calendar>
         builder.Property(c => c.Description)
             .IsRequired() 
             .HasMaxLength(200);
+
+        builder.HasOne(c => c.Creator)
+            .WithOne(cec => cec.Calendar)
+            .HasForeignKey<CalendarEventCreator>(cec => cec.CalendarId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

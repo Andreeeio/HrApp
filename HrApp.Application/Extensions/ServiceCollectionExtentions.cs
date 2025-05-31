@@ -54,6 +54,7 @@ public static class ServiceCollectionExtentions
         services.AddTransient<IDeadlineChecker, DeadlineChecker>();
         services.AddTransient<ISalaryHistoryGenerator, SalaryHistoryGenerator>();
         services.AddTransient<IContractChecker, ContractChecker>();
+        services.AddTransient<ICalendarService, CalendarService>();
         services.AddTransient<IGoogleAuthService, GoogleAuthService>();
     }
 }

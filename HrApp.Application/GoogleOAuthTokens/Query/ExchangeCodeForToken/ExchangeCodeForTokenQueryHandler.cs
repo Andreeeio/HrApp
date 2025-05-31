@@ -1,6 +1,4 @@
 ﻿using DotNetEnv;
-using Google.Apis.Auth.OAuth2.Responses;
-using HrApp.Application.GoogleOAuthTokens.Query.DTO;
 using HrApp.Application.Interfaces;
 using HrApp.Domain.Entities;
 using HrApp.Domain.Exceptions;
@@ -9,7 +7,6 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace HrApp.Application.GoogleOAuthTokens.Query.ExchangeCodeForToken;
 
@@ -29,9 +26,9 @@ public class ExchangeCodeForTokenQueryHandler(ILogger<ExchangeCodeForTokenQueryH
         Env.Load();
 
         var user = _userContext.GetCurrentUser();
-        if (user is null)
-            throw new UnauthorizedException("User not found in context");
-        
+        if (user == null)
+            throw new UnauthorizedException("User is not authenticated");
+
 
         var clientId = _configuration["GoogleAPI:client_id"];
         var clientSecret = Env.GetString("CLIENT_SECRET");

@@ -1,4 +1,4 @@
-﻿namespace HrApp.Application.GoogleOAuthTokens.Query.DTO;
+﻿namespace HrApp.Application.GoogleOAuthTokens.DTO;
 
 public class GoogleOAuthTokenDTO
 {

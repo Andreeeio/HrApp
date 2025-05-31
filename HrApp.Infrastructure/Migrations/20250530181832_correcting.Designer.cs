@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    [Migration("20250525130827_init")]
-    partial class init
+    [Migration("20250530181832_correcting")]
+    partial class correcting
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,6 +186,27 @@ namespace HrApp.Infrastructure.Migrations
                     b.ToTable("Calendar");
                 });
 
+            modelBuilder.Entity("HrApp.Domain.Entities.CalendarEventCreator", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CalendarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalendarId")
+                        .IsUnique();
+
+                    b.ToTable("CalendarEventCreator");
+                });
+
             modelBuilder.Entity("HrApp.Domain.Entities.Candidate", b =>
                 {
                     b.Property<Guid>("Id")
@@ -330,6 +351,33 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasIndex("UploadedById");
 
                     b.ToTable("ExellImports");
+                });
+
+            modelBuilder.Entity("HrApp.Domain.Entities.GoogleOAuthToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccessToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Expiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GoogleOAuthToken");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.JobApplication", b =>
@@ -632,6 +680,10 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ExportedByUserId");
+
+                    b.HasIndex("ExportedForUserId");
+
                     b.ToTable("WorkLogExportHistory");
                 });
 
@@ -715,6 +767,17 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HrApp.Domain.Entities.CalendarEventCreator", b =>
+                {
+                    b.HasOne("HrApp.Domain.Entities.Calendar", "Calendar")
+                        .WithOne("Creator")
+                        .HasForeignKey("HrApp.Domain.Entities.CalendarEventCreator", "CalendarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Calendar");
+                });
+
             modelBuilder.Entity("HrApp.Domain.Entities.Department", b =>
                 {
                     b.HasOne("HrApp.Domain.Entities.User", "HeadOfDepartment")
@@ -764,6 +827,17 @@ namespace HrApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("HrApp.Domain.Entities.GoogleOAuthToken", b =>
+                {
+                    b.HasOne("HrApp.Domain.Entities.User", "User")
+                        .WithMany("GoogleOAuthTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.JobApplication", b =>
@@ -887,6 +961,25 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HrApp.Domain.Entities.WorkLogExportHistory", b =>
+                {
+                    b.HasOne("HrApp.Domain.Entities.User", "ExportedByUser")
+                        .WithMany("ExportedWorkLogs")
+                        .HasForeignKey("ExportedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HrApp.Domain.Entities.User", "ExportedForUser")
+                        .WithMany("ReceivedExportedWorkLogs")
+                        .HasForeignKey("ExportedForUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ExportedByUser");
+
+                    b.Navigation("ExportedForUser");
+                });
+
             modelBuilder.Entity("HrApp.Domain.Entities.WorkedHoursRaport", b =>
                 {
                     b.HasOne("HrApp.Domain.Entities.User", "User")
@@ -918,6 +1011,12 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("AssignmentNotifications");
 
                     b.Navigation("LeaderFeedbacks");
+                });
+
+            modelBuilder.Entity("HrApp.Domain.Entities.Calendar", b =>
+                {
+                    b.Navigation("Creator")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.Candidate", b =>
@@ -960,12 +1059,18 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.Navigation("ExellImports");
 
+                    b.Navigation("ExportedWorkLogs");
+
+                    b.Navigation("GoogleOAuthTokens");
+
                     b.Navigation("Leaves");
 
                     b.Navigation("Paid")
                         .IsRequired();
 
                     b.Navigation("Rater");
+
+                    b.Navigation("ReceivedExportedWorkLogs");
 
                     b.Navigation("SalaryHistory");
 

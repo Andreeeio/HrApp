@@ -6,14 +6,7 @@
 
 <h2>@ViewBag.Title</h2>
 
-@if (!(bool) ViewBag.IsConnected)
-{
-    <div class="alert alert-warning">
-        <p>Nie jesteś połączony z Google Kalendarzem.</p>
-        <a href="/calendar/connect" class="btn btn-primary">Połącz z Google</a>
-    </div>
-}
-else if (!Model.Any())
+@if(!Model.Any())
 {
     <p>Brak wydarzeń do wyświetlenia.</p>
 }
