@@ -11,6 +11,9 @@ using HrApp.Application.Users.Query.GetRoleForUser;
 using HrApp.Application.Users.Command.ChangeRoles;
 using System.Threading.Tasks;
 using HrApp.Application.UserIpAddresses.Command.AddUserIpAddress;
+using HrApp.Application.Users.Command.ImportUsersFromExcel;
+using HrApp.Application.Users.Command.EditUser;
+using HrApp.Application.Users.Query.GetUserById;
 
 namespace HrApp.MVC.Controllers;
 
@@ -186,5 +189,52 @@ public class UserController : Controller
         return RedirectToAction("currentuser");
     }
 
+
+
+    [HttpGet("import")]
+    public IActionResult ImportUsers()
+    {
+        return View();
+    }
+
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportUsers(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            ModelState.AddModelError("file", "Please select a file.");
+            return View();
+        }
+
+        await _sender.Send(new ImportUsersFromExcelCommand
+        {
+            ExcelFile = file
+        });
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("{id}/Edit")]
+    public async Task<IActionResult> EditUser(Guid id)
+    {
+        var user = await _sender.Send(new GetUserByIdQuery(id));
+        return View(new EditUserCommand
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email
+        });
+    }
+
+    [HttpPost("{id}/Edit")]
+    public async Task<IActionResult> EditUser(EditUserCommand command)
+    {
+        if (!ModelState.IsValid)
+            return View(command);
+
+        await _sender.Send(command);
+        return RedirectToAction("Details", new { encodedName = command.Email });
+    }
 
 }
