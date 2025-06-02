@@ -12,5 +12,9 @@ public class UserProfile : Profile
         CreateMap<AddUserCommand, User>();
         CreateMap<User, UserDTO>();
         CreateMap<User, AddTaskRateCommand>();
+        CreateMap<User, UserRaport>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(u => u.Id))
+            .ForMember(dest => dest.YearRoundSalary, opt => opt.MapFrom(src => src.SalaryHistory.Sum(s => s.Salary)));
     }
 }

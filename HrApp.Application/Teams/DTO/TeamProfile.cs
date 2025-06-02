@@ -9,5 +9,8 @@ public class TeamProfile : Profile
     {
         CreateMap<Team, TeamDTO>();
         CreateMap<TeamDTO, Team>();
+        CreateMap<Team, TeamRaport>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.TeamId, opt => opt.MapFrom(t => t.Id));
     }
 }

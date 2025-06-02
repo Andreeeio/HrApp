@@ -4,6 +4,11 @@ namespace HrApp.Domain.Repositories;
 
 public interface IAssignmentRepository
 {
+    public Task<List<Assignment>> GetAssignments(string? name,
+            bool? isEnded,
+            Guid? assignedToTeamId,
+            int? difficultyLevel,
+            CancellationToken cancellationToken);
     public Task<List<Assignment>> GetAllAssignmentsForTeam(Guid TeamId);
     public Task<List<Assignment>> GetActiveAssignments();
     public Task<List<Assignment>> GetFreeAssignments();

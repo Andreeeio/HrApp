@@ -4,6 +4,7 @@ using HrApp.Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApp.Infrastructure.Migrations
 {
     [DbContext(typeof(HrAppContext))]
-    partial class HrAppContextModelSnapshot : ModelSnapshot
+    [Migration("20250602152359_migr")]
+    partial class migr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,12 +130,10 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<Guid?>("AssignedToTeamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssignmentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<int>("DifficultyLevel")
                         .HasColumnType("int");
@@ -145,7 +146,8 @@ namespace HrApp.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<Guid>("OverallRaportId")
                         .HasColumnType("uniqueidentifier");
@@ -154,6 +156,8 @@ namespace HrApp.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedToTeamId");
 
                     b.HasIndex("OverallRaportId");
 
@@ -647,15 +651,14 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<Guid>("OverallRaportId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TeamId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("TeamLeaderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OverallRaportId");
+
+                    b.HasIndex("TeamLeaderId");
 
                     b.ToTable("TeamRaport");
                 });
@@ -779,7 +782,7 @@ namespace HrApp.Infrastructure.Migrations
                     b.Property<Guid?>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("TeamLeaderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("YearRoundSalary")
@@ -788,6 +791,10 @@ namespace HrApp.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OverallRaportId");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("TeamLeaderId");
 
                     b.ToTable("UserRaport");
                 });
@@ -912,11 +919,18 @@ namespace HrApp.Infrastructure.Migrations
 
             modelBuilder.Entity("HrApp.Domain.Entities.AssignmentRaport", b =>
                 {
+                    b.HasOne("HrApp.Domain.Entities.TeamRaport", "AssignedToTeam")
+                        .WithMany("Assignments")
+                        .HasForeignKey("AssignedToTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("HrApp.Domain.Entities.OverallRaport", "OverallRaport")
                         .WithMany("AssignmentRaport")
                         .HasForeignKey("OverallRaportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AssignedToTeam");
 
                     b.Navigation("OverallRaport");
                 });
@@ -1106,7 +1120,15 @@ namespace HrApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("HrApp.Domain.Entities.UserRaport", "TeamLeader")
+                        .WithMany()
+                        .HasForeignKey("TeamLeaderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("OverallRaport");
+
+                    b.Navigation("TeamLeader");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.User", b =>
@@ -1145,7 +1167,20 @@ namespace HrApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("HrApp.Domain.Entities.TeamRaport", "Team")
+                        .WithMany("Employers")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HrApp.Domain.Entities.TeamRaport", "TeamLeader")
+                        .WithMany()
+                        .HasForeignKey("TeamLeaderId");
+
                     b.Navigation("OverallRaport");
+
+                    b.Navigation("Team");
+
+                    b.Navigation("TeamLeader");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.WorkLog", b =>
@@ -1250,6 +1285,13 @@ namespace HrApp.Infrastructure.Migrations
                     b.Navigation("Employers");
 
                     b.Navigation("Offers");
+                });
+
+            modelBuilder.Entity("HrApp.Domain.Entities.TeamRaport", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Employers");
                 });
 
             modelBuilder.Entity("HrApp.Domain.Entities.User", b =>

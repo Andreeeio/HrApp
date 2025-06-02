@@ -5,25 +5,25 @@
 namespace HrApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class correcting : Migration
+    public partial class migr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "GoogleEventId",
-                table: "Calendar");
+                name: "WorkedHours",
+                table: "UserRaport");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "GoogleEventId",
-                table: "Calendar",
-                type: "nvarchar(max)",
+            migrationBuilder.AddColumn<int>(
+                name: "WorkedHours",
+                table: "UserRaport",
+                type: "int",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: 0);
         }
     }
 }

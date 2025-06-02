@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HrApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mg1 : Migration
+    public partial class RaportMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,6 @@ namespace HrApp.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GoogleEventId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -43,6 +42,19 @@ namespace HrApp.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Candidate", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OverallRaport",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    BackupDate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OverallRaport", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -147,6 +159,31 @@ namespace HrApp.Infrastructure.Migrations
                         name: "FK_LeaderFeedback_Assignment_AssignmentId",
                         column: x => x.AssignmentId,
                         principalTable: "Assignment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AssignmentRaport",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsEnded = table.Column<bool>(type: "bit", nullable: false),
+                    AssignedToTeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DifficultyLevel = table.Column<int>(type: "int", nullable: false),
+                    OverallRaportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssignmentRaport", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AssignmentRaport_OverallRaport_OverallRaportId",
+                        column: x => x.OverallRaportId,
+                        principalTable: "OverallRaport",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -396,6 +433,28 @@ namespace HrApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserIpAddress",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IpAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserAgent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserIpAddress", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserIpAddress_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkedHoursRaport",
                 columns: table => new
                 {
@@ -462,6 +521,63 @@ namespace HrApp.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TeamRaport",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamLeaderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OverallRaportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamRaport", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeamRaport_OverallRaport_OverallRaportId",
+                        column: x => x.OverallRaportId,
+                        principalTable: "OverallRaport",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRaport",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    WorkedHours = table.Column<int>(type: "int", nullable: false),
+                    YearRoundSalary = table.Column<float>(type: "real", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TeamLeaderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OverallRaportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRaport", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRaport_OverallRaport_OverallRaportId",
+                        column: x => x.OverallRaportId,
+                        principalTable: "OverallRaport",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRaport_TeamRaport_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "TeamRaport",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserRaport_TeamRaport_TeamLeaderId",
+                        column: x => x.TeamLeaderId,
+                        principalTable: "TeamRaport",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AnonymousFeedbacks_TeamId",
                 table: "AnonymousFeedbacks",
@@ -476,6 +592,16 @@ namespace HrApp.Infrastructure.Migrations
                 name: "IX_AssignmentNotification_AssignmentId",
                 table: "AssignmentNotification",
                 column: "AssignmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssignmentRaport_AssignedToTeamId",
+                table: "AssignmentRaport",
+                column: "AssignedToTeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssignmentRaport_OverallRaportId",
+                table: "AssignmentRaport",
+                column: "OverallRaportId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Authorization_UserId",
@@ -579,6 +705,16 @@ namespace HrApp.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_TeamRaport_OverallRaportId",
+                table: "TeamRaport",
+                column: "OverallRaportId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamRaport_TeamLeaderId",
+                table: "TeamRaport",
+                column: "TeamLeaderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_Email",
                 table: "User",
                 column: "Email",
@@ -592,6 +728,26 @@ namespace HrApp.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_User_TeamLeaderId",
                 table: "User",
+                column: "TeamLeaderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserIpAddress_UserId",
+                table: "UserIpAddress",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRaport_OverallRaportId",
+                table: "UserRaport",
+                column: "OverallRaportId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRaport_TeamId",
+                table: "UserRaport",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRaport_TeamLeaderId",
+                table: "UserRaport",
                 column: "TeamLeaderId");
 
             migrationBuilder.CreateIndex(
@@ -629,6 +785,14 @@ namespace HrApp.Infrastructure.Migrations
                 principalTable: "Team",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AssignmentRaport_TeamRaport_AssignedToTeamId",
+                table: "AssignmentRaport",
+                column: "AssignedToTeamId",
+                principalTable: "TeamRaport",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Authorization_User_UserId",
@@ -739,6 +903,14 @@ namespace HrApp.Infrastructure.Migrations
                 principalTable: "User",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TeamRaport_UserRaport_TeamLeaderId",
+                table: "TeamRaport",
+                column: "TeamLeaderId",
+                principalTable: "UserRaport",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
@@ -752,11 +924,30 @@ namespace HrApp.Infrastructure.Migrations
                 name: "FK_User_Team_TeamLeaderId",
                 table: "User");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_TeamRaport_OverallRaport_OverallRaportId",
+                table: "TeamRaport");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_UserRaport_OverallRaport_OverallRaportId",
+                table: "UserRaport");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_UserRaport_TeamRaport_TeamId",
+                table: "UserRaport");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_UserRaport_TeamRaport_TeamLeaderId",
+                table: "UserRaport");
+
             migrationBuilder.DropTable(
                 name: "AnonymousFeedbacks");
 
             migrationBuilder.DropTable(
                 name: "AssignmentNotification");
+
+            migrationBuilder.DropTable(
+                name: "AssignmentRaport");
 
             migrationBuilder.DropTable(
                 name: "Authorization");
@@ -795,6 +986,9 @@ namespace HrApp.Infrastructure.Migrations
                 name: "SalaryHistory");
 
             migrationBuilder.DropTable(
+                name: "UserIpAddress");
+
+            migrationBuilder.DropTable(
                 name: "WorkedHoursRaport");
 
             migrationBuilder.DropTable(
@@ -826,6 +1020,15 @@ namespace HrApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "OverallRaport");
+
+            migrationBuilder.DropTable(
+                name: "TeamRaport");
+
+            migrationBuilder.DropTable(
+                name: "UserRaport");
         }
     }
 }

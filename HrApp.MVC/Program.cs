@@ -49,6 +49,15 @@ recurringJobs.AddOrUpdate<IContractChecker>(
         TimeZone = timezone
     });
 
+recurringJobs.AddOrUpdate<IRaportService>(
+    "generate-salary-history",
+    x => x.GenerateRaport(),
+    "0 23 30 12 *",  
+    new RecurringJobOptions
+    {
+        TimeZone = timezone
+    });
+
 Env.Load();
 
 // Configure the HTTP request pipeline.

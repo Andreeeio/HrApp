@@ -57,5 +57,6 @@ public static class ServiceCollectionExtentions
         services.AddTransient<ICalendarService, CalendarService>();
         services.AddTransient<IGoogleAuthService, GoogleAuthService>();
         services.AddTransient<IIpAddressService, IpAddressService>();
+        services.AddTransient<IRaportService, RaportService>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using HrApp.Domain.Entities;
+﻿using DocumentFormat.OpenXml.InkML;
+using HrApp.Domain.Entities;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
@@ -60,5 +61,26 @@ public class AssignmentRepository : IAssignmentRepository
 
         await _dbContext.SaveChangesAsync();
 
+    }
+
+    public async Task<List<Assignment>> GetAssignments(string? name, bool? isEnded, Guid? assignedToTeamId, int? difficultyLevel, CancellationToken cancellationToken)
+    {
+        var query = _dbContext.Assignment
+               .Include(a => a.AssignedToTeam)
+               .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(name))
+            query = query.Where(a => a.Name.Contains(name));
+
+        if (isEnded.HasValue)
+            query = query.Where(a => a.IsEnded == isEnded.Value);
+
+        if (assignedToTeamId.HasValue)
+            query = query.Where(a => a.AssignedToTeamId == assignedToTeamId.Value);
+
+        if (difficultyLevel.HasValue)
+            query = query.Where(a => a.DifficultyLevel == difficultyLevel.Value);
+
+        return await query.ToListAsync(cancellationToken);
     }
 }

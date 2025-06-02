@@ -12,9 +12,9 @@ public class HrAppContext : DbContext
     }
 
     public DbSet<AnonymousFeedback> AnonymousFeedbacks { get; set; } 
-    public DbSet<JobApplication> JobApplication { get; set; } 
     public DbSet<Assignment> Assignment { get; set; } 
     public DbSet<AssignmentNotification> AssignmentNotification { get; set; }
+    public DbSet<AssignmentRaport> AssignmentRaport { get; set; }
     public DbSet<Authorization> Authorization { get; set; } 
     public DbSet<Calendar> Calendar { get; set; } 
     public DbSet<CalendarEventCreator> CalendarEventCreator { get; set; }
@@ -24,15 +24,19 @@ public class HrAppContext : DbContext
     public DbSet<EmploymentHistory> EmploymentHistory { get; set; }
     public DbSet<ExellImport> ExellImports { get; set; }
     public DbSet<GoogleOAuthToken> GoogleOAuthToken { get; set; }
+    public DbSet<JobApplication> JobApplication { get; set; }
     public DbSet<LeaderFeedback> LeaderFeedback { get; set; } 
     public DbSet<Leave> Leave { get; set; } 
     public DbSet<Offer> Offer { get; set; }
+    public DbSet<OverallRaport> OverallRaport { get; set; }
     public DbSet<Paid> Paid { get; set; } 
     public DbSet<Role> Role { get; set; } 
     public DbSet<SalaryHistory> SalaryHistory { get; set; } 
     public DbSet<Team> Team { get; set; } 
+    public DbSet<TeamRaport> TeamRaport { get; set; }
     public DbSet<User> User { get; set; }
     public DbSet<UserIpAddress> UserIpAddress { get; set; }
+    public DbSet<UserRaport> UserRaport { get; set; }
     public DbSet<WorkedHoursRaport> WorkedHoursRaport { get; set; }
     public DbSet<WorkLog> WorkLog { get; set; }
     public DbSet<WorkLogExportHistory> WorkLogExportHistory { get; set; }
@@ -66,6 +70,12 @@ public class HrAppContext : DbContext
         modelBuilder.ApplyConfiguration(new WorkedHoursRaportConfiguration());
         modelBuilder.ApplyConfiguration(new WorkLogConfiguration());
         modelBuilder.ApplyConfiguration(new WorkLogExportHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new UserRaportConfiguration());
+        modelBuilder.ApplyConfiguration(new TeamRaportConfiguration());
+        modelBuilder.ApplyConfiguration(new AssignmentRaportConfiguration());
+        modelBuilder.ApplyConfiguration(new OverallRaportConfiguration());
+
+
         modelBuilder.Entity<Team>()
             .HasMany(t => t.Employers)
             .WithOne(u => u.Team)
