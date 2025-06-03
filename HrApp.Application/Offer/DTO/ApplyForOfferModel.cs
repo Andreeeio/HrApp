@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,6 @@ namespace HrApp.Application.Offer.DTO
         public int HomeNumber { get; set; }
         public string Street { get; set; } = default!;
         public string City { get; set; } = default!;
-        public string CvLink { get; set; } = default!;
+        public IFormFile CvFile { get; set; } = default!;
     }
 }

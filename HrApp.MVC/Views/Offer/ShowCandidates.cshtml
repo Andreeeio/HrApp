@@ -23,6 +23,13 @@
                 <td>@app.ApplicationDate</td>
                 <td>@app.Status</td>
                 <td><a href="@app.CvLink" target="_blank">CV</a></td>
+                <td>
+                    <a asp-action="Update"
+                       asp-route-jobApIp="@app.Id"
+                       class="btn btn-sm btn-primary">
+                        Update
+                    </a>
+                </td>
             </tr>
         }
     </tbody>

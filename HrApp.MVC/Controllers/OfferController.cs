@@ -9,6 +9,11 @@ using HrApp.Application.Offer.Command.CreateCandidate;
 using HrApp.Application.Offer.Command.CreateJobApplication;
 using HrApp.Application.Offer.DTO;
 using HrApp.Application.Offer.Query.ShowCandidates;
+using HrApp.Application.Offer.Command.UpdateJobApOffer;
+using Microsoft.AspNetCore.Authorization;
+using HrApp.Domain.Constants;
+using Azure.Core;
+using DotNetEnv;
 
 namespace HrApp.MVC.Controllers;
 
@@ -29,6 +34,7 @@ public class OfferController : Controller
         return View(offers);
     }
 
+    [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpGet("Create")]
     public async Task<IActionResult> Create()
     {
@@ -37,6 +43,7 @@ public class OfferController : Controller
         return View();
     }
 
+    [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpPost("Create")]
     public async Task<IActionResult> Create(CreateOfferCommand command)
     {
@@ -52,14 +59,6 @@ public class OfferController : Controller
         return RedirectToAction("Index");
     }
 
-    //[HttpGet("Details/{id}")]
-    //public async Task<IActionResult> Details(Guid id)
-    //{
-    //    var offer = await _sender.Send(new GetOfferByIdQuery(id));
-    //    if (offer == null) return NotFound();
-
-    //    return View(offer);
-    //}
     [HttpGet("Apply/{id}")]
     public IActionResult Apply(Guid id)
     {
@@ -85,9 +84,9 @@ public class OfferController : Controller
         {
             OfferId = model.OfferId,
             CandidateId = candidateId,
-            CvLink = model.CvLink,
+            CvFile = model.CvFile,
             ApplicationDate = DateOnly.FromDateTime(DateTime.UtcNow),
-            Status = "Pending"
+            Status = "Received"
         });
 
         return RedirectToAction("Index");
@@ -100,4 +99,24 @@ public class OfferController : Controller
         return View(candidates);
     }
 
+    [Authorize(Roles = "Hr,Ceo")]
+    [HttpGet("Update/{jobApIp}")]
+    public IActionResult Update(Guid jobApIp)
+    {
+        var model = new UpdateJobApOfferCommand(jobApIp);
+        return View(model);
+    }
+
+    [Authorize(Roles = "Hr,Ceo")]
+    [HttpPost("Update/{jobApIp}")]
+    public async Task<IActionResult> Update(Guid jobApIp, UpdateJobApOfferCommand command)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(command);
+        }
+
+        await _sender.Send(command);
+        return RedirectToAction("Index"); 
+    }
 }

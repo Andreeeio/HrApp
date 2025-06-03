@@ -14,5 +14,7 @@ namespace HrApp.Domain.Repositories
         Task CreateCandidate(Candidate candidate);
         Task CreateJobApplication(JobApplication jobApplication);
         Task<Offer?> GetOfferWithApplications(Guid offerId);
+        Task<JobApplication?> GetJobApplicationAsync(Guid id);
+        Task SaveChangesAsync();
     }
 }

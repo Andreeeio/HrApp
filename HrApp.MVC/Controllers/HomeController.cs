@@ -24,7 +24,6 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        _raportService.GenerateRaport().GetAwaiter().GetResult();
         return View();
     }
 

@@ -15,5 +15,6 @@ namespace HrApp.Application.Offer.DTO
         public string Surname { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string City { get; set; } = default!;
+        public Guid Id { get; set; }
     }
 }

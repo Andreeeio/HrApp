@@ -1,0 +1,30 @@
+﻿@using HrApp.Application.Offer.Command.UpdateJobApOffer
+@model UpdateJobApOfferCommand
+
+@{
+    ViewData["Title"] = "Update Application Status";
+}
+
+<h2>Update Application Status</h2>
+
+<form asp-action="Update" asp-route-jobApIp="@Model.JobApId" method="post">
+    <div class="form-group">
+        <label asp-for="UpdatedTitle">Application Status</label>
+        <select asp-for="UpdatedTitle" class="form-control">
+            <option value="">-- Select Status --</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Denied">Denied</option>
+        </select>
+        <span asp-validation-for="UpdatedTitle" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="JobApId" />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
