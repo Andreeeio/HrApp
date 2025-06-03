@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using HrApp.Application.Assignment.Command.AddAssignment;
+using HrApp.Application.Calendars.Command.CreateCalendarEvent;
 using HrApp.Application.Interfaces;
 using HrApp.Application.Services;
 using HrApp.Domain.Repositories;
@@ -44,6 +46,13 @@ public static class ServiceCollectionExtentions
 
         }
         );
+
+        services.AddFluentValidationAutoValidation(); 
+        services.AddFluentValidationClientsideAdapters(); 
+        services.AddValidatorsFromAssemblyContaining<AddAssignmentCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<CreateCalendarEventCommandValidator>();
+
+
         services.AddHttpClient(); 
 
         services.AddHttpContextAccessor();

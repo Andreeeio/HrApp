@@ -26,8 +26,6 @@ public class CompleteAssignmentCommandHandler(ILogger<CompleteAssignmentCommandH
 
         if(!await _assignmentAuthorizationService.Authorize(ResourceOperation.Update, assignment))
             throw new UnauthorizedAccessException("You are not authorized to complete this assignment");
-        
-
 
         assignment.IsEnded = true;
         await _assignmentRepository.SaveChangesAsync();

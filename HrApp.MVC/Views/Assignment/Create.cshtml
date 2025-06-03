@@ -1,4 +1,5 @@
-﻿@model HrApp.Application.Assignment.Command.AddAssignment.AddAssignmentCommand
+﻿@using HrApp.Application.Assignment.Command.AddAssignment
+@model AddAssignmentCommand
 
 @{
     ViewData["Title"] = "Create";
@@ -39,7 +40,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="DifficultyLevel" class="control-label"></label>
-                <input asp-for="DifficultyLevel" class="form-control" />
+                <input asp-for="DifficultyLevel" class="form-control" type="number" min="1" max="5" />
                 <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
             </div>
             <div class="form-group">

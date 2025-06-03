@@ -43,7 +43,7 @@ public class Validate2FARequestHandler(ILogger<Validate2FARequestHandler> logger
             var uIp = userIps.FirstOrDefault(x => x.IpAddress == ipAddress && x.UserAgent == userAgent);
 
             if (uIp == null)
-                throw new BadRequestException("User IP address is not registered in the database");
+                throw new UnauthorizedException("User IP address is not registered in the database");
             else
             {
                 uIp.LastAccessed = DateTime.UtcNow;

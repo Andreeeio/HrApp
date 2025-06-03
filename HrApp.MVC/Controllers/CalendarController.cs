@@ -6,11 +6,13 @@ using HrApp.Application.Interfaces;
 using HrApp.Application.Services;
 using HrApp.Domain.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HrApp.MVC.Controllers;
 
+[Authorize]
 [Route("Calendar")]
 public class CalendarController : Controller
 {
@@ -29,6 +31,7 @@ public class CalendarController : Controller
         var url = _auth.GetAuthorizationUrl();
         return Redirect(url);
     }
+
     [HttpGet("Add")]
     public async Task<IActionResult> AddEvent()
     {
@@ -36,7 +39,7 @@ public class CalendarController : Controller
         {
             ViewBag.IsConnected = await _sender.Send(new VerifyOAuthTokenQuery());
         }
-        catch (NotFoundAuthOTokenException ex)
+        catch (NotFoundAuthOTokenException)
         {
             ViewBag.IsConnected = false;
         }
@@ -46,15 +49,21 @@ public class CalendarController : Controller
     [HttpPost("Add")]
     public async Task<IActionResult> AddEvent(CreateCalendarEventCommand command)
     {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.IsConnected = true;
+            return View(command);
+        }
+
         try
         {
             await _sender.Send(command);
         }
-        catch(NotFoundAuthOTokenException ex)
+        catch(NotFoundAuthOTokenException)
         {
-            return RedirectToAction("events");
+            return RedirectToAction("Events");
         }
-        return RedirectToAction("events");
+        return RedirectToAction("Events");
     }
 
     [HttpGet("Callback")]

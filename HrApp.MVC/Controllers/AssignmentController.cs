@@ -6,32 +6,28 @@ using HrApp.Application.Teams.Query.GetAllTeams;
 using HrApp.Application.Assignment.Command.AddAssignment;
 using HrApp.Application.Teams.Query.GetTeamForUser;
 using HrApp.Application.Users.Query.GetDataFromToken;
-using HrApp.Domain.Entities;
 using HrApp.Application.Assignment.Query.GetActiveAssignments;
-using Microsoft.EntityFrameworkCore;
 using HrApp.Application.Assignment.Query.GetFreeAssignments;
 using HrApp.Application.Assignment.Command.AddAssignmentToTeam;
 using HrApp.Application.Assignment.Query.GetAssignmentById;
 using HrApp.Application.Assignment.Command.EditAssignment;
-using HrApp.Application.Assignment.DTO;
 using HrApp.Domain.Exceptions;
 using HrApp.Application.Assignment.Command.CompleteAssignment;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HrApp.MVC.Controllers;
 
-[Route("Assigment")]
+[Authorize(Roles = "Junior, Mid, Senior, TeamLeader, Hr, Ceo")]
+[Route("Assignment")]
 public class AssignmentController : Controller
 {
     public readonly ISender _sender;
-    public readonly ILogger logger;
 
-    public AssignmentController(ISender sender, ILogger<AssignmentController> logger)
+    public AssignmentController(ISender sender)
     {
         _sender = sender;
-        this.logger = logger;
     }
 
-    // GET: Assignment
     [HttpGet("{TeamId}/Assignments")]
     public async Task<IActionResult> Index(Guid TeamId)
     {
@@ -41,21 +37,21 @@ public class AssignmentController : Controller
         return View(assignments);
     }
 
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpGet]
     public async Task<IActionResult> Create()
     {
         var teams = await _sender.Send(new GetAllTeamsQuery());
-        //ViewBag.teams = new SelectList(teams, "Id", "Name");
+        ViewBag.teams = new SelectList(teams, "Id", "Name");
         var teamList = teams.Select(t => new SelectListItem
         {
             Value = t.Id.ToString(),
             Text = t.Name
         }).ToList();
 
-        // Dodaj opcję pustą (null)
         teamList.Insert(0, new SelectListItem
         {
-            Value = "", // pusty string = null po stronie modelu
+            Value = "",
             Text = "-- Brak zespołu --",
             Selected = true
         });
@@ -64,16 +60,18 @@ public class AssignmentController : Controller
         return View();
     }
 
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpPost]
     public async Task<IActionResult> Create(AddAssignmentCommand command)
     {
         if (!ModelState.IsValid)
         {
-            // Handle the command to create an assignment
             return View(command);
         }
+
         await _sender.Send(command);
         var user = await _sender.Send(new GetDataFromTokenQuery());
+
         var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
         if (team == null)
         {
@@ -82,6 +80,7 @@ public class AssignmentController : Controller
         return RedirectToAction("EmployersInTeam", "Team", new { TeamId = team.Id, TeamName = team.Name });
     }
 
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpGet("AddAssignmentToTeam/{id}")]
     public async Task<IActionResult> AddAssignmentToTeam(Guid id)
     {
@@ -96,12 +95,13 @@ public class AssignmentController : Controller
         ViewBag.AssignmentId = id;
         return View();
     }
+
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpPost("AddAssignmentToTeam/{id}")]
     public async Task<IActionResult> AddAssignmentToTeam(AddAssignmentToTeamCommand command)
     {
         if (!ModelState.IsValid)
         {
-            // Jeśli potrzebujesz znowu listy zespołów (np. po błędzie), załaduj ją ponownie
             var teams = await _sender.Send(new GetAllTeamsQuery());
             ViewBag.teams = teams
                 .Select(t => new SelectListItem
@@ -113,8 +113,15 @@ public class AssignmentController : Controller
             ViewBag.AssignmentId = command.AssignmentId;
             return View(command);
         }
-
-        await _sender.Send(command);
+        try
+        {
+            await _sender.Send(command);
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            RedirectToAction("Index", "Departments");
+        }
         return RedirectToAction("Index", "Departments");
     }
 
@@ -132,21 +139,31 @@ public class AssignmentController : Controller
         return View("Index", assignments);
     }
 
-    [HttpGet("ShowNotFreeAssignments")]
-    public async Task<IActionResult> ShowNotFreeAssignments()
+    [HttpGet("ShowAssignedAssignments")]
+    public async Task<IActionResult> ShowAssignedAssignments()
     {
         var assignments = await _sender.Send(new GetActiveAssignmentsQuery());
-        ViewBag.Title = "All Assignments";
+        ViewBag.Title = "Assigned Assignments";
         return View("Index", assignments);
     }
 
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpGet("Edit/{assignmentId}")]
     public async Task<IActionResult> Edit(Guid assignmentId)
     {
-        var assignment = await _sender.Send(new GetAssignmentByIdQuery(assignmentId));
-        return View(assignment);
+        try
+        {
+            var assignment = await _sender.Send(new GetAssignmentByIdQuery(assignmentId));
+            return View(assignment);
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View();
+        }
     }
 
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpPost("Edit/{assignmentId}")]
     public async Task<IActionResult> Edit(Guid assignmentId, EditAssignmentCommand command)
     {
@@ -159,12 +176,7 @@ public class AssignmentController : Controller
         {
             await _sender.Send(command);
 
-            return RedirectToAction("ShowNotFreeAssignments");
-        }
-        catch (UnauthorizedException ex)
-        {
-            ModelState.AddModelError(string.Empty, ex.Message);
-            return View();
+            return RedirectToAction("ShowAssignedAssignments");
         }
         catch (BadRequestException ex)
         {
@@ -173,13 +185,14 @@ public class AssignmentController : Controller
         }
     }
 
+    [Authorize(Roles = "Hr, Ceo, TeamLeader")]
     [HttpGet("{TeamId}/Complete/{AssignmentId}")]
     public async Task<IActionResult> Complete(Guid TeamId, Guid AssignmentId)
     {
-        logger.LogInformation($"Complete assignment {AssignmentId} for team {TeamId}");
         return await CompleteTask(TeamId,AssignmentId);
     }
 
+    [Authorize(Roles = "Hr, Ceo, TeamLeader")]
     [HttpPost("{TeamId}/Complete/{AssignmentId}")]
     public async Task<IActionResult> CompleteTask(Guid TeamId, Guid AssignmentId)
     {
@@ -198,66 +211,4 @@ public class AssignmentController : Controller
             controllerName: "EmployeeRate",
             routeValues: new { TeamId });
     }
-
-    
-
-
-
-    //// GET: Assignment/Details/5
-    //public async Task<IActionResult> Details(Guid? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var assignment = await _context.Assignment
-    //        .Include(a => a.AssignedToTeam)
-    //        .FirstOrDefaultAsync(m => m.Id == id);
-    //    if (assignment == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return View(assignment);
-    //}
-
-    //// GET: Assignment/Delete/5
-    //public async Task<IActionResult> Delete(Guid? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var assignment = await _context.Assignment
-    //        .Include(a => a.AssignedToTeam)
-    //        .FirstOrDefaultAsync(m => m.Id == id);
-    //    if (assignment == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return View(assignment);
-    //}
-
-    //// POST: Assignment/Delete/5
-    //[HttpPost, ActionName("Delete")]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> DeleteConfirmed(Guid id)
-    //{
-    //    var assignment = await _context.Assignment.FindAsync(id);
-    //    if (assignment != null)
-    //    {
-    //        _context.Assignment.Remove(assignment);
-    //    }
-
-    //    await _context.SaveChangesAsync();
-    //    return RedirectToAction(nameof(Index));
-    //}
-
-    //private bool AssignmentExists(Guid id)
-    //{
-    //    return _context.Assignment.Any(e => e.Id == id);
-    //}
 }

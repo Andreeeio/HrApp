@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HrApp.Application.Assignment.DTO;
 using HrApp.Application.Interfaces;
+using HrApp.Domain.Constants;
 using HrApp.Domain.Exceptions;
 using HrApp.Domain.Interfaces;
 using HrApp.Domain.Repositories;
@@ -27,9 +28,6 @@ public class GetAssignmentForTeamQueryHandler(ILogger<GetAssignmentForTeamQueryH
 
         if (currentUser == null)
             throw new UnauthorizedException("User is not authenticated");
-
-        //if (!_teamAuthorizationService.Authorize(ResourceOperation.Read))
-        //    throw new AccessForbiddenException("User is not authorized");
 
         var assignments = await _repository.GetAllAssignmentsForTeam(request.AssignedToTeamId);
 

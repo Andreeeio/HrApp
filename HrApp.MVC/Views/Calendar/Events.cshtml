@@ -1,25 +1,34 @@
 ﻿@using HrApp.Application.Calendars.DTO
 @model List<CalendarDTO>
 @{
-    ViewBag.Title = "Wydarzenia z Google Kalendarza";
+    ViewBag.Title = "Events from Google Calendar";
 }
 
 <h2>@ViewBag.Title</h2>
 
+@if (User.IsInRole("Ceo") || User.IsInRole("Hr") || User.IsInRole("TeamLeader"))
+{
+    <p>
+        <a class="btn btn-primary" asp-controller="Calendar" asp-action="Add">Add new event</a>
+    </p>
+}
+
+<hr />
+
 @if(!Model.Any())
 {
-    <p>Brak wydarzeń do wyświetlenia.</p>
+    <p>No events to display.</p>
 }
 else
 {
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Tytuł</th>
-                <th>Opis</th>
+                <th>Title</th>
+                <th>Description</th>
                 <th>Start</th>
-                <th>Koniec</th>
-                <th>Utworzone</th>
+                <th>End</th>
+                <th>Created</th>
             </tr>
         </thead>
         <tbody>
@@ -36,4 +45,3 @@ else
         </tbody>
     </table>
 }
-

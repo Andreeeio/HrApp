@@ -26,7 +26,7 @@ public class GetGoogleCalendarEventsQueryHandler(ILogger<GetGoogleCalendarEvents
 
         var service = _googleAuthService.GetCalendarService();
         if (service == null) 
-            throw new Exception("Google Calendar service is not initialized. Ensure the service account JSON file is correctly configured.");
+            throw new FatalErrorException("Google Calendar service is not initialized. Ensure the service account JSON file is correctly configured.");
         
         var listReq = service.Events.List(CalendarId);
         listReq.TimeMinDateTimeOffset = DateTimeOffset.UtcNow;

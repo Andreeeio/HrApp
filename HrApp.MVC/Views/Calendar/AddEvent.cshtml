@@ -2,7 +2,7 @@
 @model CreateCalendarEventCommand
 
 @{
-    ViewData["Title"] = "Dodaj wydarzenie do kalendarza";
+    ViewData["Title"] = "Add event to calendar";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -10,8 +10,8 @@
 @if (!(bool)ViewBag.IsConnected)
 {
     <div class="alert alert-warning">
-        <p>Nie jesteś połączony z Google Kalendarzem.</p>
-        <a href="/calendar/connect" class="btn btn-primary">Połącz z Google</a>
+        <p>You are not connected to Google Calendar.</p>
+        <a href="/calendar/connect" class="btn btn-primary">Connect with Google</a>
     </div>
 }
 else
@@ -24,24 +24,24 @@ else
         </div>
 
         <div class="form-group">
-            <label asp-for="StartDate">Data rozpoczęcia</label>
+            <label asp-for="StartDate">Start date</label>
             <input asp-for="StartDate" type="datetime-local" class="form-control" />
             <span asp-validation-for="StartDate" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="EndDate">Data zakończenia</label>
+            <label asp-for="EndDate">End date</label>
             <input asp-for="EndDate" type="datetime-local" class="form-control" />
             <span asp-validation-for="EndDate" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Description">Opis</label>
+            <label asp-for="Description">Description</label>
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary">Dodaj wydarzenie</button>
+        <button type="submit" class="btn btn-primary">Add event</button>
     </form>
 }
 @section Scripts {

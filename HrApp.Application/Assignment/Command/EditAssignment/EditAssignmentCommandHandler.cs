@@ -33,7 +33,10 @@ public class EditAssignmentCommandHandler(ILogger<EditAssignmentCommandHandler> 
         if (request.EndDate < DateTime.UtcNow)
             request.EndDate = DateTime.UtcNow.AddDays(1);
 
-        if(request.DifficultyLevel >= 5)
+        if(request.EndDate > assignment.StartDate)
+            request.EndDate = assignment.StartDate.AddDays(1);
+
+        if (request.DifficultyLevel >= 5)
             request.DifficultyLevel = 5;
 
         assignment.EndDate = request.EndDate;

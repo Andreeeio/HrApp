@@ -34,9 +34,6 @@ IMapper mapper) : IRequestHandler<GetActiveAssignmentsQuery, List<AssignmentDTO>
         if (currentUser == null)
             throw new UnauthorizedException("User is not authenticated");
 
-        //if (!_teamAuthorizationService.Authorize(ResourceOperation.Read))
-        //    throw new AccessForbiddenException("User is not authorized");
-
         var assignments = await _repository.GetNotFreeAssignments();
 
         var dto = _mapper.Map<List<AssignmentDTO>>(assignments);

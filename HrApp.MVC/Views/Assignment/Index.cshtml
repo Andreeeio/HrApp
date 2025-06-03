@@ -1,4 +1,6 @@
-﻿@model IEnumerable<HrApp.Application.Assignment.DTO.AssignmentDTO>
+﻿@using HrApp.Application.Assignment.DTO
+@using HrApp.Domain.Constants
+@model IEnumerable<AssignmentDTO>
 
 @{
     ViewData["Title"] = "Assignments";
@@ -8,16 +10,19 @@
 
 <h1>@(title)</h1>
 
-<p>
-    @if (isTeamView)
-    {
-        <a asp-controller="Assignment" asp-action="Create" asp-route-TeamId="@ViewBag.TeamId" class="btn btn-primary">Create</a>
-    }
-    else
-    {
-        <a asp-controller="Assignment" asp-action="Create" class="btn btn-primary">Create</a>
-    }
-</p>
+@if (User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()))
+{
+    <p>
+        @if (isTeamView)
+        {
+            <a asp-controller="Assignment" asp-action="Create" asp-route-TeamId="@ViewBag.TeamId" class="btn btn-primary">Create</a>
+        }
+        else
+        {
+            <a asp-controller="Assignment" asp-action="Create" class="btn btn-primary">Create</a>
+        }
+    </p>
+}
 
 <table class="table">
     <thead>
@@ -27,7 +32,7 @@
             <th>@Html.DisplayNameFor(model => model.StartDate)</th>
             <th>@Html.DisplayNameFor(model => model.EndDate)</th>
             <th>@Html.DisplayNameFor(model => model.DifficultyLevel)</th>
-            <th></th>
+            <th colspan="2">Edit data</th>
         </tr>
     </thead>
     <tbody>
@@ -39,22 +44,23 @@
                 <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
                 <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
                 <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-assignmentId="@item.Id">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
                     @if(User.IsInRole("Ceo") || User.IsInRole("Hr"))
                     {
-                        <a asp-action="AddAssignmentToTeam" asp-route-id="@item.Id">Assign to Team</a>
+                        <td>
+                            <a asp-action="Edit" asp-route-assignmentId="@item.Id">Edit</a>
+                        </td>
+                        <td>
+                            <a asp-action="AddAssignmentToTeam" asp-route-id="@item.Id">Assign to Team</a>
+                        </td>
                     }
                     else if(User.IsInRole("TeamLeader"))
                     {
-                        <a asp-route-TeamId="@item.AssignedToTeamId"
-                           asp-action="Complete"
-                           asp-route-AssignmentId="@item.Id">End task</a>
-
-                    }
-                </td>
+                        <td>
+                            <a asp-route-TeamId="@item.AssignedToTeamId"
+                               asp-action="Complete"
+                               asp-route-AssignmentId="@item.Id">End task</a>
+                        </td>
+                    }               
             </tr>
         }
     </tbody>

@@ -1,4 +1,5 @@
-﻿@model HrApp.Application.Assignment.Command.AddAssignmentToTeam.AddAssignmentToTeamCommand
+﻿@using HrApp.Application.Assignment.Command.AddAssignmentToTeam;
+@model AddAssignmentToTeamCommand
 
 @{
     ViewData["Title"] = "Assign to Team";
@@ -18,6 +19,8 @@
 
     <button type="submit" class="btn btn-primary">Assign</button>
 </form>
+
+<div asp-validation-summary="All" class="text-danger"></div>
 
 <div>
     <a asp-action="Index" asp-controller="Assignment">Back to List</a>

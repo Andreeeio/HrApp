@@ -18,8 +18,8 @@ public class RaportService(IOverallRaportRepository overallRaportRepository,
         var teams = await _overallRaportRepository.GetTeamToCreateRaportAsync();
         var teamsRaport = _mapper.Map<List<TeamRaport>>(teams);
 
-        var assigments = await _overallRaportRepository.GetAssignmentToCreateRaportAsync();
-        var assignmentsRaport = _mapper.Map<List<AssignmentRaport>>(assigments);
+        var assignments = await _overallRaportRepository.GetAssignmentToCreateRaportAsync();
+        var assignmentsRaport = _mapper.Map<List<AssignmentRaport>>(assignments);
 
         var overallRaport = new OverallRaport
         {

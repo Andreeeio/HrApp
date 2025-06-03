@@ -1,12 +1,18 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Chose Assignments";
+}
+
 <h1>Chose</h1>
 
 <hr />
 
-<div style="text-align:center">
-    <a asp-action="ShowFreeAssignments" asp-controller="Assignment" style="margin-right:40">Task without team</a>
-    
-    <a asp-action="ShowNotFreeAssignments" asp-controller="Assignment" style="margin-left:40">Task with team</a>
+<div class="text-center my-4">
+    <a asp-action="ShowFreeAssignments" asp-controller="Assignment" class="btn btn-outline-primary mx-2">
+        Tasks without team
+    </a>
+    <a asp-action="ShowAssignedAssignments" asp-controller="Assignment" class="btn btn-outline-success mx-2">
+        Tasks with team
+    </a>
 </div>
 
 @{

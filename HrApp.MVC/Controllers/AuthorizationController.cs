@@ -4,30 +4,30 @@ using HrApp.Application.Authorizations.Command.Validate2FA;
 using HrApp.Application.Users.Query.LoginUser;
 using HrApp.Domain.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HrApp.MVC.Controllers;
 
-[Route("authorization")]
+[Authorize(Roles = "TeamLeader, Hr, Ceo")]
+[Route("Authorization")]
 public class AuthorizationController : Controller
 {
-    private readonly ILogger<AuthorizationController> _logger;
     private readonly ISender _sender;
-    public AuthorizationController(ISender sender, ILogger<AuthorizationController> logger)
+    public AuthorizationController(ISender sender)
     {
         _sender = sender;
-        _logger = logger;
     }
 
-    [HttpGet("verf")]
+    [HttpGet("Verf")]
     public async Task<IActionResult> Verf2FA()
     {
         await _sender.Send(new CreateNewCodeCommand());
         return View(new Validate2FARequest());
     }
 
-    [HttpPost("verf")]
+    [HttpPost("Verf")]
     public async Task<IActionResult> Verf2FA(Validate2FARequest request)
     {
         if (!ModelState.IsValid)
@@ -54,26 +54,25 @@ public class AuthorizationController : Controller
         }
         catch (No2FAException ex)
         {
-         _logger.LogError(ex.ToString());
-            return RedirectToAction("addverf", "Authorization");
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction("AddVerf");
         }
         catch (BadRequestException ex)
         {
-            _logger.LogError(ex.ToString());
-            ModelState.AddModelError(string.Empty, "Niepoprawny kod weryfikacyjny.");
+            ModelState.AddModelError(string.Empty, ex.Message);
         }
 
         return View(request);
     }
 
 
-    [HttpGet("addverf")]
+    [HttpGet("AddVerf")]
     public IActionResult AddVerf2FA()
     {
         return View(new Add2FARequest());
     }
 
-    [HttpPost("addverf")]
+    [HttpPost("AddVerf")]
     public async Task<IActionResult> AddVerf2FA(Add2FARequest request)
     {
         if (!ModelState.IsValid)
@@ -82,8 +81,7 @@ public class AuthorizationController : Controller
         try
         {
             await _sender.Send(request);
-            TempData["Success"] = "Verification code sent to your email.";
-            return RedirectToAction("verf", "Authorization");
+            return RedirectToAction("Verf", "Authorization");
         }
         catch (BadRequestException ex)
         {
