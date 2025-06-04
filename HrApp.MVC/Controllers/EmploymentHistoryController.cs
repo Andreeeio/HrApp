@@ -2,11 +2,13 @@
 using HrApp.Application.EmploymentHistories.Query.GetEmploymentHistoryForUser;
 using HrApp.Domain.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrApp.MVC.Controllers;
 
-[Route("employmentHistory")]
+[Authorize]
+[Route("EmploymentHistory")]
 public class EmploymentHistoryController : Controller
 {
     private readonly ISender _sender;
@@ -22,13 +24,17 @@ public class EmploymentHistoryController : Controller
         return View(employmentHistory);
     }
 
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpGet("Create")]
-    public IActionResult CreateEmpHist()
+    public IActionResult CreateEmpHist([FromQuery]string? email = null)
     {
+        ViewBag.Email = email;
         return View(new AddEmploymentHistoryCommand());
     }
 
+    [Authorize(Roles = "Hr, Ceo")]
     [HttpPost("Create")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateEmpHist(AddEmploymentHistoryCommand command)
     {
         if (!ModelState.IsValid)
@@ -37,16 +43,12 @@ public class EmploymentHistoryController : Controller
         try
         {
             await _sender.Send(command);
-            TempData["Success"] = "Historia zatrudnienia została dodana.";
-            return RedirectToAction("Index", "Home");
+            TempData["Success"] = "History has been added.";
+            return RedirectToAction("Index", "Departments");
         }
         catch (BadRequestException ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-        }
-        catch (Exception ex)
-        {
-            ModelState.AddModelError(string.Empty, "Wystąpił błąd: " + ex.Message);
         }
 
         return View(command);

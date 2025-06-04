@@ -10,6 +10,13 @@
 
 <h1>@(title)</h1>
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
 @if (User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()))
 {
     <p>

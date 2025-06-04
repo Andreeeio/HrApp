@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HrApp.Application.Teams.Query.GetAllTeams;
-using HrApp.Application.Offer.Query;
 using HrApp.Application.Offer.Command.CreateOffer;
 using HrApp.Application.Offer.Query.GetAllOffers;
 using HrApp.Application.Offer.Command.CreateCandidate;
@@ -11,13 +10,10 @@ using HrApp.Application.Offer.DTO;
 using HrApp.Application.Offer.Query.ShowCandidates;
 using HrApp.Application.Offer.Command.UpdateJobApOffer;
 using Microsoft.AspNetCore.Authorization;
-using HrApp.Domain.Constants;
-using Azure.Core;
-using DotNetEnv;
 
 namespace HrApp.MVC.Controllers;
 
-[Route("offer")]
+[Route("Offer")]
 public class OfferController : Controller
 {
     private readonly ISender _sender;

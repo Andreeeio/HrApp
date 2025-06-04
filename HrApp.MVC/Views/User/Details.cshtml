@@ -5,6 +5,10 @@
 }
 
 <h1>@Model.Email Details</h1>
+<a asp-controller="EmploymentHistory" asp-action="Create" asp-route-email="@Model.Email">
+    Change employment history
+</a>
+
 <a asp-controller="SalaryHistory" asp-action="GetSalaryHistory" asp-route-userId="@ViewBag.UserId">Salary history</a>
 <a asp-controller="EmploymentHistory" asp-action="GetEmpHist" asp-route-userId="@ViewBag.UserId">Employment history</a>
 <div>

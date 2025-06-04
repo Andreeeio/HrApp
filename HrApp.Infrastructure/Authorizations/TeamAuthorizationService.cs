@@ -32,6 +32,11 @@ public class TeamAuthorizationService(IUserContext userContext) : ITeamAuthoriza
         {
             return true;
         }
+        else if (operation == ResourceOperation.Delete
+            && (user.IsInRole(Roles.Ceo.ToString())))
+        {
+            return true;
+        }
 
         return false; 
     }

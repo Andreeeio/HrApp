@@ -12,5 +12,7 @@ namespace HrApp.Domain.Repositories
         Task<List<Department>> GetAllDepartments();
         Task CreateDepartment(Department department);
         Task DeleteDepartment(Guid DepartmentId);
+        Task<Department?> GetDepartmentById(Guid departmentId);
+        Task<int> CountDepartment();
     }
 }

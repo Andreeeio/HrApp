@@ -1,9 +1,11 @@
 ﻿using HrApp.Application.SalaryHistories.Query.GetSalaryHistoryForUser;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrApp.MVC.Controllers;
 
+[Authorize]
 [Route("SalaryHistory")]
 public class SalaryHistoryController : Controller
 {

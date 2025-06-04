@@ -1,12 +1,14 @@
-﻿@model HrApp.Application.Salary.Command.AddPaid.AddPaidCommand
+﻿@using HrApp.Application.Salary.Command.AddPaid;
+@model AddPaidCommand
 
 @{
     ViewData["Title"] = "Add Paid";
+    var emial = ViewData["Email"];
 }
 
 <h2>Add Paid</h2>
 
-<form asp-action="AddPaid" method="post">
+<form asp-action="AddPaid" method="post" asp-antiforgery="true">
     <div class="form-group">
         <label asp-for="BaseSalary"></label>
         <input asp-for="BaseSalary" class="form-control" />
@@ -15,9 +17,17 @@
 
     <div class="form-group">
         <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
+        <input asp-for="Email" class="form-control" value="@emial"/>
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <button type="submit" class="btn btn-primary">Add</button>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

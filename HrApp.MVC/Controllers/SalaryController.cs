@@ -1,17 +1,16 @@
 ﻿using HrApp.Application.Salary.Command.AddPaid;
 using HrApp.Application.Salary.Command.UpdatePaid;
-using HrApp.Application.Salary.Query.GetById;
 using HrApp.Application.Salary.Query.GetByUserId;
 using HrApp.Application.Users.Query.GetUserByEmail;
-using HrApp.Domain.Repositories;
-using HrApp.Infrastructure.Repositories;
+using HrApp.Domain.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace HrApp.MVC.Controllers;
 
-[Route("salary")]
+[Authorize(Roles = "Hr, Ceo")]
+[Route("Salary")]
 public class SalaryController : Controller
 {
     private readonly ISender _sender;
@@ -21,26 +20,34 @@ public class SalaryController : Controller
         _sender = sender;
     }
 
-    [HttpGet("addpaid")]
-    public IActionResult AddPaid()
+    [HttpGet("AddPaid")]
+    public IActionResult AddPaid([FromQuery] string email = null)
     {
+        ViewBag.Email = email;
         return View();
     }
 
-    [HttpPost("addpaid")]
+    [HttpPost("AddPaid")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddPaid(AddPaidCommand command)
     {
-
         if (!ModelState.IsValid)
             return View(command);
 
-        var user = await _sender.Send(new GetUserByEmailQuery(command.Email));
-        command.UserId = user.Id;
-        await _sender.Send(command);
-        return RedirectToAction("AddPaid");
+        try
+        {
+            await _sender.Send(command);
+        }
+        catch(BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(command);
+        }
+
+        return RedirectToAction("Index", "Departments");
     }
 
-    [HttpGet("editpaid/{useremail}")]
+    [HttpGet("EditPaid/{useremail}")]
     public async Task<IActionResult> EditPaid(string useremail)
     {
         var user = await _sender.Send(new GetUserByEmailQuery(useremail));
@@ -58,15 +65,20 @@ public class SalaryController : Controller
         return View("EditPaid", command);
     }
 
-    [HttpPost("editpaid/{useremail}")]
+    [HttpPost("EditPaid/{useremail}")]
     public async Task<IActionResult> EditPaid(UpdatePaidCommand command)
     {
-        var user = await _sender.Send(new GetUserByEmailQuery(command.Email));
-        command.UserId = user.Id;
         if (!ModelState.IsValid)
             return View("EditPaid", command);
-
-        await _sender.Send(command);
+        try
+        {
+            await _sender.Send(command);
+        }
+        catch(BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View("EditPaid", command);
+        }
         return RedirectToAction("Index", "Departments");
     }
 }

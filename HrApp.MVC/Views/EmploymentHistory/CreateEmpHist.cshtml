@@ -2,15 +2,16 @@
 @model AddEmploymentHistoryCommand
 
 @{
-    ViewData["Title"] = "Dodaj historię zatrudnienia";
+    ViewData["Title"] = "Add Employment History";
+    var text = ViewData["Email"];
 }
 
-<h2>Dodaj historię zatrudnienia</h2>
+<h2>Add Employment History</h2>
 
 <form asp-action="CreateEmpHist" method="post">
     <div class="form-group">
         <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
+        <input asp-for="Email" class="form-control" value="@text"/>
         <span asp-validation-for="Email" class="text-danger" />
     </div>
 
@@ -32,8 +33,10 @@
         <span asp-validation-for="EndDate" class="text-danger" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
+
+<div asp-validation-summary="All" class="text-danger"></div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

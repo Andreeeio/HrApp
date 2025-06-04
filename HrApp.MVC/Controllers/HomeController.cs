@@ -9,12 +9,10 @@ namespace HrApp.MVC.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IRaportService _raportService;
 
-    public HomeController(ILogger<HomeController> logger, IRaportService raportService)
+    public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-        _raportService = raportService;
     }
 
     public IActionResult Index()

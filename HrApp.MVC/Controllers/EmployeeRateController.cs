@@ -3,11 +3,13 @@ using HrApp.Application.EmployeeRates.Query.GetEmployeeToRate;
 using HrApp.Application.Teams.Query.GetEmployersInTeam;
 using HrApp.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HrApp.MVC.Controllers;
 
+[Authorize(Roles = "TeamLeader")]
 [Route("employeeRate")]
 public class EmployeeRateController : Controller
 {
@@ -24,6 +26,7 @@ public class EmployeeRateController : Controller
         return View(employess);
     }
     [HttpPost("{teamId}")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddTaskRate(Guid teamId, AddTaskRatesCommand command)
     {
         if (!ModelState.IsValid)
@@ -31,6 +34,7 @@ public class EmployeeRateController : Controller
             return View(command);
         }
         await _sender.Send(command);
+        TempData["Success"] = "Task rates added successfully.";
         return RedirectToAction("Index", "Assignment", new { TeamId = teamId });
     }
 }

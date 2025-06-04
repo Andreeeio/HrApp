@@ -37,4 +37,15 @@ public class DepartmentRepository : IDepartmentRepository
             await dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task<Department?> GetDepartmentById(Guid departmentId)
+    {
+        return await dbContext.Department
+            .FirstOrDefaultAsync(d => d.Id == departmentId);
+    }
+
+    public async Task<int> CountDepartment()
+    {
+        return await dbContext.Department.CountAsync();
+    }
 }

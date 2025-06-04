@@ -13,6 +13,8 @@
             <input type="hidden" asp-for="TaskRates[@i].Email" />
 
             <input asp-for="TaskRates[@i].Rate" class="form-control w-auto" type="number" min="0" max="5" />
+            <span asp-validation-for="TaskRates[@i].Rate" class="text-danger"></span>
+
         </div>
     }
 

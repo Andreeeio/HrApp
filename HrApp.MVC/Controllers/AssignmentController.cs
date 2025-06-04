@@ -72,7 +72,7 @@ public class AssignmentController : Controller
         await _sender.Send(command);
         var user = await _sender.Send(new GetDataFromTokenQuery());
 
-        var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
+        var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user!.id)));
         if (team == null)
         {
             return RedirectToAction("ShowFreeAssignments");

@@ -8,6 +8,7 @@ public class EmployeeRatesProfile : Profile
     public EmployeeRatesProfile()
     {
         CreateMap<AddTaskRateCommand, Domain.Entities.EmployeeRate>()
-            .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.Id));
+            .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }

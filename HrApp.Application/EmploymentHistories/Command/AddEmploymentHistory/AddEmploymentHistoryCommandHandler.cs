@@ -44,7 +44,7 @@ public class AddEmploymentHistoryCommandHandler(ILogger<AddEmploymentHistoryComm
 
         if(lastEmployment != null)
         {
-            lastEmployment.EndDate = DateOnly.FromDateTime(DateTime.UtcNow);
+            lastEmployment.EndDate = request.StartDate.AddDays(-1);
             await _employmentHistoryRepository.SaveChangesAsync();
         }
 
