@@ -3,24 +3,22 @@ using HrApp.Application.Teams.Command.AddEmployer;
 using HrApp.Application.Teams.Command.AddTeam;
 using HrApp.Application.Teams.Query.GetEmployersInTeam;
 using HrApp.Application.Teams.Query.GetTeamForDepartment;
-using HrApp.MVC.Views.Team;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HrApp.Application.Teams.Query.GetAllTeams;
-using HrApp.Domain.Entities;
-using HrApp.Application.Users.Query.GetDataFromToken;
 using HrApp.Application.Teams.Query.GetTeamForUser;
-using HrApp.Application.Users.Query.GetUserByEmail;
 using HrApp.Application.Teams.Command.DeleteUserFromTeam;
 using HrApp.Application.Teams.Command.DeleteTeam;
 using HrApp.Application.Feedback.Command;
 using HrApp.Application.Feedback.Query;
-using HrApp.Application.Salary.Query.GetByUserId;
+using Microsoft.AspNetCore.Authorization;
+using HrApp.Domain.Exceptions;
 
 namespace HrApp.MVC.Controllers;
 
-[Route("team")]
+[Authorize]
+[Route("Team")]
 public class TeamController : Controller
 {
     private readonly ISender _sender;
@@ -37,7 +35,7 @@ public class TeamController : Controller
         return View(teams);
     }
 
-    [HttpGet("employers/{TeamId}/{TeamName}")]
+    [HttpGet("Employers/{TeamId}/{TeamName}")]
     public async Task<IActionResult> EmployersInTeam(Guid Teamid, string TeamName)
     {
         var employers = await _sender.Send(new GetEmployersInTeamQuery(Teamid));
@@ -46,21 +44,23 @@ public class TeamController : Controller
         return View(employers);
     }
 
-    [Route("Index")]
+    [HttpGet("Index")]
     public async Task<IActionResult> Index()
     {
-        var user = await _sender.Send(new GetDataFromTokenQuery());
-        var team = await _sender.Send(new GetTeamForUserQuery(Guid.Parse(user.id)));
-
-        if (team == null)
+        try
         {
-            return View("NoTeam");
-        }
+            var team = await _sender.Send(new GetTeamForUserQuery());
 
-        // Przekierowanie do akcji EmployersInTeam z parametrami TeamId i TeamName
-        return RedirectToAction("EmployersInTeam", new { TeamId = team.Id, TeamName = team.Name });
+            return RedirectToAction("EmployersInTeam", new { TeamId = team.Id, TeamName = team.Name });
+        }
+        catch (BadRequestException)
+        {
+            TempData["ErrorMessage"] = "You are not assigned to any team.";
+            return RedirectToAction("Index", "Departments");
+        }
     }
 
+    [Authorize(Roles = "Ceo, Hr")]
     [HttpGet("{id}/Create")]
     public async Task<IActionResult> Create(Guid id)
     {
@@ -70,20 +70,28 @@ public class TeamController : Controller
         return View();
     }
 
+    [Authorize(Roles = "Ceo, Hr")]
     [HttpPost("{id}/Create")]
-    public async Task<IActionResult> Create(AddTeamCommand command)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Guid id, AddTeamCommand command)
     {
         if (!ModelState.IsValid)
         {
-            // Handle the command to create a team
             return View(command);
         }
-        var user = await _sender.Send(new GetUserByEmailQuery(command.TeamLeaderEmail));
-        command.TeamLeaderId = user.Id;
-        await _sender.Send(command);
-        return RedirectToAction("Index","Departments");
+        try
+        {
+            await _sender.Send(command);
+        }
+        catch (BadRequestException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            return RedirectToAction("TeamInDept", new { id });
+        }
+        return RedirectToAction("TeamInDept", new { id });
     }
 
+    [Authorize(Roles = "Ceo ,Hr, TeamLeader")]
     [HttpGet("AddEmployer")]
     public async Task<IActionResult> AddEmployer()
     {
@@ -92,21 +100,31 @@ public class TeamController : Controller
         return View();
     }
 
+    [Authorize(Roles = "Ceo ,Hr, TeamLeader")]
     [HttpPost("AddEmployer")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddEmployer(AddEmployerCommand command)
     {
         if (!ModelState.IsValid)
         {
-            // Handle the command to create a team
             return View(command);
         }
-        var user = await _sender.Send(new GetUserByEmailQuery(command.UserEmail));
-        command.UserId = user.Id;
-        await _sender.Send(command);
-        return RedirectToAction("Index", "Departments");
+        var userId = await _sender.Send(command);
+        try
+        {
+            var team = await _sender.Send(new GetTeamForUserQuery(userId));
+            return RedirectToAction("EmployersInTeam", new { TeamId = command.TeamId, TeamName = team.Name });
+        }
+        catch (BadRequestException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            return RedirectToAction("Index", "Departments");
+        }
     }
 
-    [HttpGet("DeleteUserFromTeam/{UserId}/{TeamId}")]
+    [Authorize(Roles = "Ceo ,Hr, TeamLeader")]
+    [HttpPost("DeleteUserFromTeam/{UserId}/{TeamId}")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteUserFromTeam(Guid UserId, Guid TeamId)
     {
         var command = new DeleteUserFromTeamCommand
@@ -114,18 +132,40 @@ public class TeamController : Controller
             UserId = UserId,
             TeamId = TeamId
         };
-        await _sender.Send(command);
-        return RedirectToAction("Index", "Departments");
+
+        try
+        {
+            var team = await _sender.Send(new GetTeamForUserQuery(UserId));
+            await _sender.Send(command);
+            TempData["SuccessMessage"] = "User has been removed from the team successfully.";
+            return RedirectToAction("EmployersInTeam", new { TeamId = command.TeamId, TeamName = team.Name });
+        }
+        catch (BadRequestException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            return RedirectToAction("Index", "Departments");
+        }
     }
 
-    [HttpGet("DeleteTeam/{id}")]
+    [Authorize(Roles = "Ceo ,Hr, TeamLeader")]
+    [HttpPost("DeleteTeam/{id}")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteTeam(Guid id)
     {
         var command = new DeleteTeamCommand
         {
             TeamId = id
         };
-        await _sender.Send(command);
+        try
+        {
+            TempData["SuccessMessage"] = "Team has been deleted successfully.";
+            await _sender.Send(command);
+        }
+        catch (BadRequestException ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            return RedirectToAction("Index", "Departments");
+        }
         return RedirectToAction("Index", "Departments");
     }
 
@@ -137,12 +177,19 @@ public class TeamController : Controller
     }
 
     [HttpPost("LeaveAnonymousFeedback/{teamId}")]
-    public async Task<IActionResult> LeaveAnonymousFeedback(AddAnonymousFeedbackCommand command)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LeaveAnonymousFeedback(Guid teamId, AddAnonymousFeedbackCommand command)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(command);
+        }
+
         await _sender.Send(command);
         TempData["SuccessMessage"] = "Your feedback has been submitted anonymously.";
-        return RedirectToAction("Index");
+        return RedirectToAction("ViewAnonymousFeedbacks", new { teamId});
     }
+
     [HttpGet("Feedbacks/{teamId}")]
     public async Task<IActionResult> ViewAnonymousFeedbacks(Guid teamId)
     {

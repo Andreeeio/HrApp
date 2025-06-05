@@ -43,7 +43,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasOne(u => u.Team)
             .WithMany(t => t.Employers)
             .HasForeignKey(u => u.TeamId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasMany(u => u.SalaryHistory)
             .WithOne(s => s.User)

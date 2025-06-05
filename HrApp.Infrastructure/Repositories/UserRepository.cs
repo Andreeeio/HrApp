@@ -38,6 +38,7 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
     {
         var users = await dbContext.User
             .Include(u => u.Roles)
+            .Include(p => p.Paid)
             .Where(u => u.TeamId == teamId)
             .ToListAsync();
 

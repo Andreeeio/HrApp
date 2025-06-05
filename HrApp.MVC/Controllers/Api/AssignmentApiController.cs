@@ -6,7 +6,7 @@ namespace HrApp.MVC.Controllers.Api;
 
 [ApiController]
 [Route("api/Assignments")]
-public class AssignmentApiController(ISender sender) : Controller
+public class AssignmentApiController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
     [HttpGet]
