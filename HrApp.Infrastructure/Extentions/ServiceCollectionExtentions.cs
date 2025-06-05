@@ -42,6 +42,7 @@ public static class ServiceCollectionExtentions
         services.AddScoped<IUserIpAddressRepository, UserIpAddressRepository>();
         services.AddScoped<IOverallRaportRepository, OverallRaportRepository>();
         services.AddScoped<IExellImportRepository, ExellImportRepository>();
+        services.AddScoped<IApiLogRepository, ApiLogRepository>();
 
         services.AddScoped<IFeedbackRepository, FeedbackRepository>();
         services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();

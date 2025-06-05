@@ -1,7 +1,6 @@
 ﻿using HrApp.Domain.Entities;
 using HrApp.Infrastructure.Presistance.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace HrApp.Infrastructure.Presistance;
 
@@ -12,6 +11,7 @@ public class HrAppContext : DbContext
     }
 
     public DbSet<AnonymousFeedback> AnonymousFeedbacks { get; set; } 
+    public DbSet<ApiLog> ApiLogs { get; set; }
     public DbSet<Assignment> Assignment { get; set; } 
     public DbSet<AssignmentNotification> AssignmentNotification { get; set; }
     public DbSet<AssignmentRaport> AssignmentRaport { get; set; }
@@ -46,6 +46,7 @@ public class HrAppContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new AnonymousFeedbackConfiguration());
+        modelBuilder.ApplyConfiguration(new ApiLogConfiguration());
         modelBuilder.ApplyConfiguration(new JobApplicationConfiguration());
         modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
         modelBuilder.ApplyConfiguration(new AssignmentNotificationConfiguration());
