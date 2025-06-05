@@ -17,7 +17,7 @@ public static class ServiceCollectionExtentions
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("HrApp");
+        var connectionString = configuration.GetConnectionString("HrApp1");
         services.AddDbContext<HrAppContext>(options => options.UseSqlServer(connectionString));
 
         services.AddHangfire(config =>

@@ -27,7 +27,7 @@ public class User
     public virtual Department Department { get; set; } = default!;
     public List<WorkedHoursRaport> WorkedHoursRaports { get; set; } = default!;
     public virtual Paid Paid { get; set; } = default!;
-    public List<ExellImport> ExellImports { get; set; } = default!;
+    public List<ExcelImport> ExellImports { get; set; } = default!;
     public List<EmployeeRate> EmployeeRates { get; set; } = default!;
     public List<EmployeeRate> Rater { get; set; } = default!;
     public List<WorkLogExportHistory> ExportedWorkLogs { get; set; } = new();

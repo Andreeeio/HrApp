@@ -19,21 +19,21 @@ namespace HrApp.Infrastructure.Repositories
         }
         public async Task AddAnonymousFeedback(AnonymousFeedback feedback)
         {
-            await _context.AnonymousFeedbacks.AddAsync(feedback);
+            await _context.AnonymousFeedback.AddAsync(feedback);
             await _context.SaveChangesAsync();
         }
         public async Task DeleteFeedback(Guid id)
         {
-            var feedback = await _context.AnonymousFeedbacks.FindAsync(id);
+            var feedback = await _context.AnonymousFeedback.FindAsync(id);
             if (feedback != null)
             {
-                _context.AnonymousFeedbacks.Remove(feedback);
+                _context.AnonymousFeedback.Remove(feedback);
                 await _context.SaveChangesAsync();
             }
         }
         public async Task<List<AnonymousFeedback>> GetAnonymousFeedbacksForTeam(Guid teamId)
         {
-            return await _context.AnonymousFeedbacks
+            return await _context.AnonymousFeedback
                 .Where(f => f.TeamId == teamId)
                 .OrderByDescending(f => f.CreatedAt)
                 .ToListAsync();

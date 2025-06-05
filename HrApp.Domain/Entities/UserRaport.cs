@@ -10,7 +10,7 @@ public class UserRaport
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public DateOnly DateOfBirth { get; set; }
-    public float YearRoundSalary { get; set; }
+    public double YearRoundSalary { get; set; }
     public Guid? TeamId { get; set; }
     public Guid OverallRaportId { get; set; }
     public virtual OverallRaport OverallRaport { get; set; } = default!;

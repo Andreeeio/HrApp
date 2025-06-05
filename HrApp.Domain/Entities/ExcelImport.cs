@@ -1,6 +1,7 @@
 ﻿namespace HrApp.Domain.Entities;
 
-public class ExellImport
+public class ExcelImport
+
 {
     public Guid Id { get; set; }
     public Guid UploadedById { get; set; }

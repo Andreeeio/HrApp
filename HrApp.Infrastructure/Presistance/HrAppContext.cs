@@ -11,7 +11,7 @@ public class HrAppContext : DbContext
     {
     }
 
-    public DbSet<AnonymousFeedback> AnonymousFeedbacks { get; set; } 
+    public DbSet<AnonymousFeedback> AnonymousFeedback { get; set; } 
     public DbSet<Assignment> Assignment { get; set; } 
     public DbSet<AssignmentNotification> AssignmentNotification { get; set; }
     public DbSet<AssignmentRaport> AssignmentRaport { get; set; }
@@ -22,7 +22,7 @@ public class HrAppContext : DbContext
     public DbSet<Department> Department { get; set; } 
     public DbSet<EmployeeRate> EmployeeRate { get; set; }
     public DbSet<EmploymentHistory> EmploymentHistory { get; set; }
-    public DbSet<ExellImport> ExellImports { get; set; }
+    public DbSet<ExcelImport> ExellImports { get; set; }
     public DbSet<GoogleOAuthToken> GoogleOAuthToken { get; set; }
     public DbSet<JobApplication> JobApplication { get; set; }
     public DbSet<LeaderFeedback> LeaderFeedback { get; set; } 

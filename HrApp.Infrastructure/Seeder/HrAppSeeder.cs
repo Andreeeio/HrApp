@@ -103,7 +103,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             department.HeadOfDepartment = users.FirstOrDefault(x => x.Roles.Any(y => y.Name == Roles.Ceo.ToString()))!;
 
             _dbContext.Department.Add(department);
-            _dbContext.AnonymousFeedbacks.AddRange(anonymousFeedbacks);
+            _dbContext.AnonymousFeedback.AddRange(anonymousFeedbacks);
             _dbContext.Assignment.AddRange(assignments);
             _dbContext.LeaderFeedback.AddRange(leaderFeedbacks);
             _dbContext.AssignmentNotification.AddRange(assignmentNotifications);
