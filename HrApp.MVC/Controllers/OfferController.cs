@@ -10,6 +10,7 @@ using HrApp.Application.Offer.DTO;
 using HrApp.Application.Offer.Query.ShowCandidates;
 using HrApp.Application.Offer.Command.UpdateJobApOffer;
 using Microsoft.AspNetCore.Authorization;
+using HrApp.Domain.Exceptions;
 
 namespace HrApp.MVC.Controllers;
 
@@ -66,26 +67,39 @@ public class OfferController : Controller
     {
         if (!ModelState.IsValid) return View(model);
 
-        var candidateId = await _sender.Send(new CreateCandidateCommand
+        try
         {
-            Name = model.Name,
-            Surname = model.Surname,
-            Email = model.Email,
-            HomeNumber = model.HomeNumber,
-            Street = model.Street,
-            City = model.City
-        });
+            var candidateId = await _sender.Send(new CreateCandidateCommand
+            {
+                Name = model.Name,
+                Surname = model.Surname,
+                Email = model.Email,
+                HomeNumber = model.HomeNumber,
+                Street = model.Street,
+                City = model.City
+            });
 
-        await _sender.Send(new CreateJobApplicationCommand
+            await _sender.Send(new CreateJobApplicationCommand
+            {
+                OfferId = model.OfferId,
+                CandidateId = candidateId,
+                CvFile = model.CvFile,
+                ApplicationDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                Status = "Received"
+            });
+
+            return RedirectToAction("Index");
+        }
+        catch (InvalidOperationException ex)
         {
-            OfferId = model.OfferId,
-            CandidateId = candidateId,
-            CvFile = model.CvFile,
-            ApplicationDate = DateOnly.FromDateTime(DateTime.UtcNow),
-            Status = "Received"
-        });
-
-        return RedirectToAction("Index");
+            ModelState.AddModelError(string.Empty, $"An error occurred while applying for the offer: {ex.Message}");
+            return View(model);
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, $"An unexpected error occurred: {ex.Message}");
+            return View(model);
+        }
     }
 
     [HttpGet("ShowCandidates/{id}")]

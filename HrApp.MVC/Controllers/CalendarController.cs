@@ -1,14 +1,12 @@
 ﻿using HrApp.Application.Calendars.Command.CreateCalendarEvent;
 using HrApp.Application.Calendars.Query.GetGoogleCalendarEvents;
 using HrApp.Application.GoogleOAuthTokens.Query.ExchangeCodeForToken;
-using HrApp.Application.GoogleOAuthTokens.VerifyOAuthToken;
+using HrApp.Application.GoogleOAuthTokens.Query.VerifyOAuthToken;
 using HrApp.Application.Interfaces;
-using HrApp.Application.Services;
 using HrApp.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace HrApp.MVC.Controllers;
 
@@ -32,6 +30,7 @@ public class CalendarController : Controller
         return Redirect(url);
     }
 
+    [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpGet("Add")]
     public async Task<IActionResult> AddEvent()
     {
@@ -46,6 +45,7 @@ public class CalendarController : Controller
         return View();
     }
 
+    [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpPost("Add")]
     public async Task<IActionResult> AddEvent(CreateCalendarEventCommand command)
     {

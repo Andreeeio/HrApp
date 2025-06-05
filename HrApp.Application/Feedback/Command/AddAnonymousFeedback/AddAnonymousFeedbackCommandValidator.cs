@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace HrApp.Application.Feedback.Command;
+namespace HrApp.Application.Feedback.Command.AddAnonymousFeedback;
 
 public class AddAnonymousFeedbackCommandValidator : AbstractValidator<AddAnonymousFeedbackCommand>
 {

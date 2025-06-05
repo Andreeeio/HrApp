@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "User Panel";
 }
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -15,11 +16,17 @@
                     <p class="lead text-center">
                         Welcome to your user panel! Here, you will find:
                     </p>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Your assigned tasks</li>
-                        <li class="list-group-item">The number of hours you have worked</li>
-                        <li class="list-group-item">Your performance statistics</li>
-                        <li class="list-group-item">Upcoming deadlines</li>
+                    <ul class="list-group list-group-flush text-center" >
+                        <li class="list-group-item">
+                            <a asp-controller="WorkLog" asp-action="GetWorkLogs" asp-route-UserId="@ViewBag.UserId">The number of hours you have worked</a>
+                        </li>
+                        <li class="list-group-item">
+                            Your performance statistics
+                            <a asp-controller="WorkLog" asp-action="GetWorkLogs" asp-route-UserId="@ViewBag.UserId">The number of hours you have worked</a>
+                        </li>
+                        <li class="list-group-item">
+                            Upcoming deadlines : On your work mail!
+                        </li>
                     </ul>
                     <p class="mt-4 text-center">
                         Stay organized and keep track of your progress!

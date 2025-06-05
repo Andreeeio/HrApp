@@ -1,4 +1,5 @@
-﻿using HrApp.Domain.Entities;
+﻿using HrApp.Domain.Constants;
+using HrApp.Domain.Entities;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
@@ -95,10 +96,21 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
             .Where(u => u.Roles.Any(r => roles.Contains(r.Name)))
             .ToListAsync();
     }
-    public async Task<User> GetByIdAsync(Guid id)
+
+    public async Task<List<User>> GetAllUsersAsync()
+    {
+        return await dbContext.User
+            .Where(u => !u.Roles.Any(r => r.Name == Roles.User.ToString() || r.Name == Roles.Ceo.ToString()))
+            .Include(u => u.Roles)
+            .Include(u => u.Paid)
+            .ToListAsync();
+    }
+
+    public async Task<User?> GetByIdAsync(Guid id)
     {
         return await dbContext.User
             .Include(u => u.Roles) 
+            .Include(u => u.Paid)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
     public async Task SaveChangesAsync()

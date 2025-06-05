@@ -1,20 +1,42 @@
 ﻿@using HrApp.Application.Users.DTO
 @model CurrentUser
 
+@{
+    ViewData["Title"] = "User";
+}
+
 <h1>Your currnet data</h1>
 
 @if (Model != null)
 {
-    @if (Model.ipVerification == "true")
+    @if (Model.ipVerification == true.ToString())
     {
-        <a asp-controller="User" asp-action="CreateNewIp" class="btn">Dodaj kolejne ip</a>
+        <form asp-controller="User"
+              asp-action="DeleteIp"
+              method="post"
+              onsubmit="return confirm('Are you sure you want to delete ip verification?');"
+              style="display:inline;">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger p-2 m-0 align-baseline">
+                Delete
+            </button>
+        </form>
     }
     else
     {
-        <a asp-controller="User" asp-action="CreateNewIp" class="btn">Dodaj ip</a>
+        <form asp-controller="User"
+              asp-action="CreateNewIp"
+              method="post"
+              onsubmit="return confirm('Are you sure you want to create ip verification?');"
+              style="display:inline;">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-success p-2 m-0 align-baseline">
+                Create
+            </button>
+        </form>
     }
-    <a asp-controller="User" asp-action="DeleteUser" asp-route-UserId="@Model.id" class="btn btn-danger">Delete</a>
-
+    <!--<a asp-controller="User" asp-action="DeleteUser" asp-route-UserId="@Model.id" class="btn btn-danger">Delete</a>
+       -->
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success">@TempData["SuccessMessage"]</div>

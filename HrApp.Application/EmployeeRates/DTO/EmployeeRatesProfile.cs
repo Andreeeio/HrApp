@@ -10,5 +10,8 @@ public class EmployeeRatesProfile : Profile
         CreateMap<AddTaskRateCommand, Domain.Entities.EmployeeRate>()
             .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<Domain.Entities.EmployeeRate, EmployeeRateDto>()
+            .ForMember(dest => dest.Rater, opt => opt.MapFrom(x => x.RatedBy.Email ?? ""));
     }
 }

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HrApp.Application.Feedback.Command
+namespace HrApp.Application.Feedback.Command.AddAnonymousFeedback
 {
     public class AddAnonymousFeedbackCommandHandler : IRequestHandler<AddAnonymousFeedbackCommand>
     {

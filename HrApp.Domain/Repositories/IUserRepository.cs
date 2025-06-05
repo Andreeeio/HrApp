@@ -14,6 +14,7 @@ public interface IUserRepository
     public Task<List<Role>> GetUserRoles(string email);
     public Task AddRolesForUser(string email, List<string> strings);
     public Task<List<User>> GetUserWithRolesAsync(List<string> roles);
-    Task<User> GetByIdAsync(Guid id);
+    Task<User?> GetByIdAsync(Guid id);
+    Task<List<User>> GetAllUsersAsync();
     Task SaveChangesAsync();
 }

@@ -17,10 +17,10 @@ public class EmploymentHistoryController : Controller
         _sender = sender;
     }
 
-    [HttpGet("{UserId}")]
-    public async Task<IActionResult> GetEmpHist(Guid UserId)
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetEmpHist(Guid userId)
     {
-        var employmentHistory = await _sender.Send(new GetEmploymentHistoryForUserQuery(UserId));
+        var employmentHistory = await _sender.Send(new GetEmploymentHistoryForUserQuery(userId));
         return View(employmentHistory);
     }
 

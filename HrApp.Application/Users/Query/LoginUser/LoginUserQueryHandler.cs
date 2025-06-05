@@ -29,6 +29,9 @@ public class LoginUserQueryHandler(ILogger<LoginUserQueryHandler> logger,
         var user = await _userRepository.GetUserByEmail(request.Email)
             ?? throw new BadRequestException("Invalid login or password");
 
+        if(user.IsEmailConfirmed == false)
+            throw new FirstLoginException("Email is not confirmed");
+
         using var hmac = new HMACSHA512(user.PasswordSalt);
         var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password));
 

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HrApp.Application.Feedback.Query
+namespace HrApp.Application.Feedback.Query.GetAnonymousFeedbacksForTeam
 {
     public class GetAnonymousFeedbacksForTeamQuery : IRequest<List<AnonymousFeedbackDTO>>
     {

@@ -21,11 +21,18 @@ public class EmployeeRateRepository : IEmployeeRateRepository
     {
         return Task.FromResult(_dbContext.EmployeeRate.Where(x => x.EmployeeId == userid).AsEnumerable());
     }
-    public Task<List<EmployeeRate>> GetRatesForUserAsync(Guid userId)
+    public async Task<List<EmployeeRate>> GetRatesForUserAsync(Guid userId)
     {
-        var rates = _dbContext.EmployeeRate
-            .Where(x => x.EmployeeId == userId)
-            .ToList();
-        return Task.FromResult(rates);
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startOfMonth = new DateOnly(today.Year, today.Month, 1);
+        var startOfNextMonth = startOfMonth.AddMonths(1);
+
+        var rates = await _dbContext.EmployeeRate
+            .Where(x => x.EmployeeId == userId && x.RateDate >= startOfMonth && x.RateDate < startOfNextMonth)
+            .Include(x => x.RatedBy)
+            .ToListAsync();
+
+        return rates;
     }
+
 }

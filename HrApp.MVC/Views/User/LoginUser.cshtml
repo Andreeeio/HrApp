@@ -1,12 +1,16 @@
 ﻿@using HrApp.Application.Users.Query.LoginUser
 @model LoginUserQuery
 
+@{
+    ViewData["Title"] = "Login";
+}
+
 <h1>Log yoursel</h1>
 
 <hr />
 
 <div>
-    <form action="/user/login" method="post">
+    <form asp-action="Login" method="post">
         <div>
             <label asp-for="Email">Email</label>
             <input type="text" id="Email" asp-for="Email" />

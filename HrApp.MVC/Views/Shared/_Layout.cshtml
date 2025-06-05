@@ -27,6 +27,13 @@
                             <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="CurrentUser">Account</a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
+                        @if (User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()))
+                        {
+                            <li>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="Create">Create</a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                        }
                         <li>
                             <form asp-controller="User" asp-action="Logout" method="post" style="display:inline;">
                                 <button type="submit" class="btn btn-link dropdown-item text-dark">Logout</button>
@@ -36,10 +43,11 @@
                     else
                     {
                         <li>
-                            <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="Create">Create</a>
-                        </li>
-                        <li>
                             <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                            <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="FirstLogin">First Login</a>
                         </li>
                     }
                 </ul>

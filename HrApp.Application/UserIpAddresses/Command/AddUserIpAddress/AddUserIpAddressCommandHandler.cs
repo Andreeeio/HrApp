@@ -11,13 +11,15 @@ namespace HrApp.Application.UserIpAddresses.Command.AddUserIpAddress;
 public class AddUserIpAddressCommandHandler(ILogger<AddUserIpAddressCommandHandler> logger,
     IUserContext userContext,
     IIpAddressService ipAddressService,
-    IUserIpAddressRepository userIpAddressRepository) : IRequestHandler<AddUserIpAddressCommand>
+    ITokenService tokenService,
+    IUserIpAddressRepository userIpAddressRepository) : IRequestHandler<AddUserIpAddressCommand, string>
 {
     private readonly ILogger<AddUserIpAddressCommandHandler> _logger = logger;
     private readonly IUserContext _userContext = userContext;
     private readonly IIpAddressService _ipAddressService = ipAddressService;
     private readonly IUserIpAddressRepository _userIpAddressRepository = userIpAddressRepository;
-    public async Task Handle(AddUserIpAddressCommand request, CancellationToken cancellationToken)
+    private readonly ITokenService _tokenService = tokenService;
+    public async Task<string> Handle(AddUserIpAddressCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling AddUserIpAddressCommand");
         var user = _userContext.GetCurrentUser();
@@ -41,5 +43,6 @@ public class AddUserIpAddressCommandHandler(ILogger<AddUserIpAddressCommandHandl
         };
 
         await _userIpAddressRepository.AddUserIpAddressAsync(entity);
+        return _tokenService.GetToken(user, true);
     }
 }

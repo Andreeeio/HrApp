@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using HrApp.Application.Users.DTO;
+using HrApp.Domain.Exceptions;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Users.Query.GetUserByEmail;
 
-public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, UserDTO>
+public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, UserDTO?>
 {
     private readonly IUserRepository _repository;
     private readonly ILogger<GetUserByEmailQueryHandler> _logger;
@@ -17,9 +18,12 @@ public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, U
         _logger = logger;
         _mapper = mapper;
     }
-    public async Task<UserDTO> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+    public async Task<UserDTO?> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
     {
         var user = await _repository.GetUserByEmail(request.Email);
+
+        if (user == null)
+            throw new BadRequestException($"User with email {request.Email} not found");
 
         var dto = _mapper.Map<UserDTO>(user);
         return dto;

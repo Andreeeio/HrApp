@@ -66,23 +66,10 @@
                 <td>@user.DateOfBirth.ToString("dd-MM-yyyy")</td>
                 <td>
                     <a asp-controller="User" asp-action="Details" asp-route-encodedName="@user.Email">Details</a>
-                    <span class="mx-1 text-muted">|</span>
-                    <!--O TO DO ZMIANY-->
-                    <!--O TO DO ZMIANY-->                    
-                    <!--O TO DO ZMIANY-->                    
-                    <!--O TO DO ZMIANY-->
-                    <a asp-controller="User" asp-action="EditRole" asp-route-email="@user.Email">Edit</a>
-                    <span class="mx-1 text-muted">|</span>
                     @if (isManager)
                     {
-                        @if(user.Paid != null)
-                        {
-                            <a asp-controller="Salary" asp-action="EditPaid" asp-route-id="@user.Email">Edit Paid</a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Salary" asp-action="AddPaid" asp-route-email="@user.Email">Add Paid</a>                       
-                        }
+                        <span class="mx-1 text-muted">|</span>
+                        <a asp-controller="User" asp-action="Manage" asp-route-userId="@user.Id">Edit</a>
                         <span class="mx-1 text-muted">|</span>
                         <form asp-controller="Team"
                               asp-action="DeleteUserFromTeam"

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<HrApp.Application.WorkLog.DTO.WorkLogDTO>
+﻿@using HrApp.Application.WorkLog.DTO;
+@model List<WorkLogDTO>
 
 @{
     ViewData["Title"] = "Work Logs";
@@ -6,8 +7,8 @@
 
 <div class="container mt-5">
 	<h2 class="text-center">Work Logs for @ViewBag.UserEmail</h2>
-    <a asp-action="ExportToExcel" asp-route-UserId="@ViewBag.UserId" class="btn btn-success ml-2">Export to Excel</a>
-    <a asp-action="GenerateReport" asp-route-UserId="@ViewBag.UserId" class="btn btn-primary">Generate Report</a>
+    <a asp-action="ExportToExcel" asp-route-userId="@ViewBag.UserId" class="btn btn-success ml-2">Export to Excel</a>
+    <a asp-action="GenerateReport" asp-route-userId="@ViewBag.UserId" class="btn btn-primary">Generate Report</a>
     <table class="table table-striped mt-4">
         <thead class="thead-dark">
             <tr>

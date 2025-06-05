@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HrApp.Application.Feedback.Command;
+using HrApp.Application.Feedback.Command.AddAnonymousFeedback;
 using System;
 using System.Collections.Generic;
 using System.Linq;

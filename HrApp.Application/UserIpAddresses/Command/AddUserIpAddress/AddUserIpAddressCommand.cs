@@ -2,6 +2,6 @@
 
 namespace HrApp.Application.UserIpAddresses.Command.AddUserIpAddress;
 
-public class AddUserIpAddressCommand : IRequest
+public class AddUserIpAddressCommand : IRequest<string>
 {
 }

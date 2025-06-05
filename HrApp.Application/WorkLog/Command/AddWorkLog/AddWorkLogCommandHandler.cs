@@ -15,25 +15,19 @@ public class AddWorkLogCommandHandler : IRequestHandler<AddWorkLogCommand>
     }
     public async Task Handle(AddWorkLogCommand request, CancellationToken cancellationToken)
     {
-        // Log the start of the operation
         _logger.LogInformation("Adding a new WorkLog for UserId: {UserId} at {StartTime}", request.UserId, request.StartTime);
 
-        // Create a new WorkLog instance
         var workLog = new HrApp.Domain.Entities.WorkLog
         {
             Id = Guid.NewGuid(),
             UserId = request.UserId,
             StartTime = request.StartTime,
-            EndTime = null, // WorkLog starts without an end time
-            Hours = 0 // Hours will be calculated when the work ends
+            EndTime = null, 
+            Hours = 0 
         };
 
-        // Add the WorkLog to the repository
         await _repository.AddWorkLog(workLog);
 
-        // Log the successful addition
         _logger.LogInformation("Successfully added WorkLog with Id: {WorkLogId}", workLog.Id);
-
-        return;
     }
 }

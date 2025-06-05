@@ -1,13 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Edytuj Role";
-    var assignedRoles = Model as List<string>;
-    var allRoles = ViewBag.AllRoles as List<string>;
+    ViewData["Title"] = "Edit role";
+    var assignedRoles = Model as List<string> ?? new List<string>();
+    var allRoles = ViewBag.AllRoles as List<string> ?? new List<string>();
 }
 
-<h2>Edytuj role użytkownika</h2>
+<h2>Edit user role</h2>
 
 <form asp-action="EditRole" asp-controller="User" method="post">
-    <input type="hidden" name="UserId" />
+    <input type="hidden" name="UserId" value="@ViewBag.UserId" />
 
     @foreach (var role in allRoles)
     {
@@ -25,5 +25,5 @@
         </div>
     }
 
-    <button type="submit" class="btn btn-primary mt-3">Zapisz</button>
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
 </form>

@@ -1,13 +1,17 @@
 ﻿@using HrApp.Application.Users.Command.AddUser
 @model AddUserCommand
 
+@{
+	ViewData["Title"] = "Creating new user";
+}
+
 <h1>Create User</h1>
 
 <hr />
 
 <div>
 	<div class="col-md-4">
-		<form action="/user/create" method="post">
+		<form asp-action="Create" method="post">
 			<div class="form-group mb-3">
 				<label class="control-label" asp-for="FirstName">Name</label>
 				<input class="form-control" type="text" asp-for="FirstName">
@@ -29,28 +33,13 @@
 				<span asp-validation-for="DateOfBirth" class="text-danger"></span>
 			</div>
 			<div class="form-group mb-3">
-				<label class="control-label" asp-for="Password">Password</label>
-				<input class="form-control" type="password" asp-for="Password" />
-				<span asp-validation-for="Password" class="text-danger"></span>
-			</div>
-			<div class="form-group mb-3">
 				<input type="submit" value="Create" class="btn btn-primary" />
 			</div>
 		</form>
 
-		@if (!ViewData.ModelState.IsValid)
-		{
-			<div class="alert alert-danger">
-				@foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-				{
-					<p>@error.ErrorMessage</p>
-				}
-			</div>
-		}
 	</div>
 </div>
 
-
-
-@{
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
 }

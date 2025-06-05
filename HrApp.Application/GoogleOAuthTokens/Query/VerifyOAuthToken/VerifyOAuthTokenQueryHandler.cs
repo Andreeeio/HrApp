@@ -4,7 +4,7 @@ using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HrApp.Application.GoogleOAuthTokens.VerifyOAuthToken;
+namespace HrApp.Application.GoogleOAuthTokens.Query.VerifyOAuthToken;
 
 public class VerifyOAuthTokenQueryHandler(ILogger<VerifyOAuthTokenQueryHandler> logger,
     IUserContext userContext,

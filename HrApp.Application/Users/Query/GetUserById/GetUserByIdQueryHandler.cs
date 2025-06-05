@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HrApp.Application.Users.Query.GetUserById
 {
-    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDTO>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDTO?>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -21,10 +21,10 @@ namespace HrApp.Application.Users.Query.GetUserById
             _mapper = mapper;
         }
 
-        public async Task<UserDTO> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserDTO?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(request.UserId);
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<UserDTO?>(user);
         }
     }
 }

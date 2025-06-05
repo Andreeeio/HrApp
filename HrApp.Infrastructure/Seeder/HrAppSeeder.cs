@@ -152,7 +152,7 @@ public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
             .RuleFor(x => x.FirstName, y => y.Name.FirstName())
             .RuleFor(x => x.LastName, y => y.Name.LastName())
             .RuleFor(x => x.Email, y => y.Internet.Email())
-            .RuleFor(x => x.IsEmailConfirmed, y => y.Random.Bool())
+            .RuleFor(x => x.IsEmailConfirmed, y => true)
             .RuleFor(x => x.DateOfBirth, y => y.Date.BetweenDateOnly(new DateOnly(1970, 1, 1), new DateOnly(2006, 12, 31)))
             .RuleFor(x => x.PasswordHash, passwordHash)
             .RuleFor(x => x.PasswordSalt, passwordSalt)

@@ -8,14 +8,13 @@ using Microsoft.Extensions.Logging;
 namespace HrApp.Application.Users.Command.EditUser;
 
 public class EditUserCommandHandler(ILogger<EditUserCommandHandler> logger,
-    IUserRepository userRepository,
-    IMapper mapper) : IRequestHandler<EditUserCommand>
+    IUserRepository userRepository) : IRequestHandler<EditUserCommand>
 {
     public async Task Handle(EditUserCommand request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByIdAsync(request.Id);
-        //if (user == null)
-        //    throw new NotFoundException("User not found");
+        if (user == null)
+            throw new BadRequestException("User not found");
 
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;
