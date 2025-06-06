@@ -61,7 +61,7 @@ public class ExchangeCodeForTokenQueryHandler(ILogger<ExchangeCodeForTokenQueryH
 
         var existing = await _googleOAuthTokenRepository.GetTokenByUserIdAsync(token.UserId);
         
-        await _googleOAuthTokenRepository.AddNewToken(token, existing);
+        await _googleOAuthTokenRepository.AddNewTokenAsync(token, existing);
     }
 
     private class TokenResponse

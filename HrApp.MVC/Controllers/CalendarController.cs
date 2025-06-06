@@ -73,7 +73,7 @@ public class CalendarController : Controller
         return RedirectToAction("Add");
     }
 
-    [HttpGet("events")]
+    [HttpGet("Events")]
     public async Task<IActionResult> Events()
     {
         var events = await _sender.Send(new GetGoogleCalendarEventsQuery());

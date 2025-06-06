@@ -9,7 +9,7 @@ public class GoogleOAuthTokenRepository(HrAppContext dbContext) : IGoogleOAuthTo
 {
     private readonly HrAppContext _dbContext = dbContext;
 
-    public async Task AddNewToken(GoogleOAuthToken newToken, GoogleOAuthToken? oldToken)
+    public async Task AddNewTokenAsync(GoogleOAuthToken newToken, GoogleOAuthToken? oldToken)
     {
         if (oldToken != null)
             _dbContext.GoogleOAuthToken.Remove(oldToken);

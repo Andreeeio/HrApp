@@ -13,7 +13,7 @@ public class DeadlineChecker(IEmailSender emailSender,
     IUserRepository _userRepository = userRepository;
     public async Task Check()
     {
-        var assignments = await _assignmentRepository.GetActiveAssignments();
+        var assignments = await _assignmentRepository.GetActiveAssignmentsAsync();
         List<User> users;
         foreach (var assignment in assignments)
         {

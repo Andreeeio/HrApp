@@ -1,16 +1,10 @@
 ﻿using HrApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Domain.Repositories
+namespace HrApp.Domain.Repositories;
+
+public interface IFeedbackRepository
 {
-    public interface IFeedbackRepository
-    {
-        Task AddAnonymousFeedback(AnonymousFeedback feedback);
-        Task DeleteFeedback(Guid id);
-        Task<List<AnonymousFeedback>> GetAnonymousFeedbacksForTeam(Guid teamId);
-    }
+    Task AddAnonymousFeedbackAsync(AnonymousFeedback feedback);
+    Task DeleteFeedbackAsync(Guid id);
+    Task<List<AnonymousFeedback>> GetAnonymousFeedbacksForTeamAsync(Guid teamId);
 }

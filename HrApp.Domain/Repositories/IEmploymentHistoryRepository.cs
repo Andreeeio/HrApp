@@ -4,9 +4,9 @@ namespace HrApp.Domain.Repositories;
 
 public interface IEmploymentHistoryRepository
 {
-    public Task<List<EmploymentHistory>> GetExpiringContractsAsync(DateOnly dateFrom, DateOnly dateTo);
-    public Task<List<EmploymentHistory>> GetEmploymentHistoriesForUserAsync(Guid userId);
-    public Task<EmploymentHistory?> GetLatestEmploymentHistoryForUserAsync(Guid id);
-    public Task AddEmploymentHistoryAsync(EmploymentHistory employmentHistory);
-    public Task SaveChangesAsync();
+    Task<List<EmploymentHistory>> GetExpiringContractsAsync(DateOnly dateFrom, DateOnly dateTo);
+    Task<List<EmploymentHistory>> GetEmploymentHistoriesForUserAsync(Guid userId);
+    Task<EmploymentHistory?> GetLatestEmploymentHistoryForUserAsync(Guid id);
+    Task AddEmploymentHistoryAsync(EmploymentHistory employmentHistory);
+    Task SaveChangesAsync();
 }

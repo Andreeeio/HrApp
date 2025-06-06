@@ -7,13 +7,21 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Assignment.Command.EditAssignment;
 
-public class EditAssignmentCommandHandler(ILogger<EditAssignmentCommandHandler> logger,
-    IUserAuthorizationService userAuthorizationService,
-    IAssignmentRepository assignmentRepository) : IRequestHandler<EditAssignmentCommand>
+public class EditAssignmentCommandHandler : IRequestHandler<EditAssignmentCommand>
 {
-    private readonly ILogger<EditAssignmentCommandHandler> _logger = logger;
-    private readonly IUserAuthorizationService _userAuthorizationService = userAuthorizationService;
-    private readonly IAssignmentRepository _assignmentRepository = assignmentRepository;
+    private readonly ILogger<EditAssignmentCommandHandler> _logger;
+    private readonly IUserAuthorizationService _userAuthorizationService;
+    private readonly IAssignmentRepository _assignmentRepository;
+
+    public EditAssignmentCommandHandler(ILogger<EditAssignmentCommandHandler> logger,
+        IUserAuthorizationService userAuthorizationService,
+        IAssignmentRepository assignmentRepository)
+    {
+        _logger = logger;
+        _userAuthorizationService = userAuthorizationService;
+        _assignmentRepository = assignmentRepository;
+    }
+
     public async Task Handle(EditAssignmentCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Editing assignment with ID: {Id}", request.Id);

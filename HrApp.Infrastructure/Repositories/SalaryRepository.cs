@@ -1,50 +1,42 @@
 ﻿using HrApp.Domain.Entities;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Presistance;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace HrApp.Infrastructure.Repositories
+namespace HrApp.Infrastructure.Repositories;
+
+public class SalaryRepository : ISalaryRepository
 {
-    public class SalaryRepository : ISalaryRepository
+    private readonly HrAppContext _dbcontext;
+    public SalaryRepository(HrAppContext context)
     {
-        private readonly HrAppContext _dbcontext;
-        public SalaryRepository(HrAppContext context)
-        {
-            _dbcontext = context;
-        }
-        public Task AddEmployeeRate(EmployeeRate employeeRate)
-        {
-            _dbcontext.EmployeeRate.AddAsync(employeeRate);
-            return _dbcontext.SaveChangesAsync();
+        _dbcontext = context;
+    }
 
-        }
+    public Task AddPaidAsync(Paid paid)
+    {
+        _dbcontext.Paid.AddAsync(paid);
+        return _dbcontext.SaveChangesAsync();
+    }
 
-        public Task AddPaid(Paid paid)
-        {
-            _dbcontext.Paid.AddAsync(paid);
-            return _dbcontext.SaveChangesAsync();
-        }
+    public async Task<Paid?> GetPaidByUserIdAsync(Guid userid)
+    {
+        return await _dbcontext.Paid.FirstOrDefaultAsync(x => x.UserId == userid);
+    }
 
-        public Task<Paid> GetPaidByUserId(Guid userid)
-        {
-            return Task.FromResult(_dbcontext.Paid.FirstOrDefault(x => x.UserId == userid));
-        }
-        public Task<Paid> GetPaidById(Guid paidid)
-        {
-            return Task.FromResult(_dbcontext.Paid.FirstOrDefault(x => x.Id == paidid));
-        }
-        public Task UpdatePaid(Paid paid)
-        {
-            _dbcontext.Paid.Update(paid);
-            return _dbcontext.SaveChangesAsync();
-        }
-        public Task<List<Paid>> GetAllPaidAsync()
-        {
-            return Task.FromResult(_dbcontext.Paid.ToList());
-        }
+    public async Task<Paid?> GetPaidByIdAsync(Guid paidid)
+    {
+        return await _dbcontext.Paid.FirstOrDefaultAsync(x => x.Id == paidid);
+    }
+
+    public async Task UpdatePaidAsync(Paid paid)
+    {
+        _dbcontext.Paid.Update(paid);
+        await _dbcontext.SaveChangesAsync();
+    }
+
+    public async Task<List<Paid>> GetAllPaidAsync()
+    {
+        return await _dbcontext.Paid.ToListAsync();
     }
 }

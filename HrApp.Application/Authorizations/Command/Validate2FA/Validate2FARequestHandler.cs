@@ -8,21 +8,33 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Authorizations.Command.Validate2FA;
 
-public class Validate2FARequestHandler(ILogger<Validate2FARequestHandler> logger,
-    IUserContext userContext,
-    IAuthorizationRepository authorizationRepository,
-    IIpAddressService ipAddressService,
-    IUserIpAddressRepository userIpAddressRepository,
-    ITokenService tokenService,
-    IEmailSender emailSender) : IRequestHandler<Validate2FARequest,string>
+public class Validate2FARequestHandler : IRequestHandler<Validate2FARequest,string>
 {
-    private readonly ILogger<Validate2FARequestHandler> _logger = logger;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IAuthorizationRepository _authorizationRepository = authorizationRepository;
-    private readonly IIpAddressService _ipAddressService = ipAddressService;
-    private readonly IUserIpAddressRepository _userIpAddressRepository = userIpAddressRepository;
-    private readonly ITokenService _tokenService = tokenService;
-    private readonly IEmailSender _emailSender = emailSender;
+    private readonly ILogger<Validate2FARequestHandler> _logger;
+    private readonly IUserContext _userContext;   
+    private readonly IAuthorizationRepository _authorizationRepository;
+    private readonly IIpAddressService _ipAddressService;
+    private readonly IUserIpAddressRepository _userIpAddressRepository;
+    private readonly ITokenService _tokenService;
+    private readonly IEmailSender _emailSender;
+
+    public Validate2FARequestHandler(ILogger<Validate2FARequestHandler> logger,
+        IUserContext userContext,
+        IAuthorizationRepository authorizationRepository,
+        IIpAddressService ipAddressService,
+        IUserIpAddressRepository userIpAddressRepository,
+        ITokenService tokenService,
+        IEmailSender emailSender)
+    {
+        _logger = logger;
+        _userContext = userContext;
+        _authorizationRepository = authorizationRepository;
+        _ipAddressService = ipAddressService;
+        _userIpAddressRepository = userIpAddressRepository;
+        _tokenService = tokenService;
+        _emailSender = emailSender;
+    }
+
     public async Task<string> Handle(Validate2FARequest request, CancellationToken cancellationToken)
     {
         var user = _userContext.GetCurrentUser();
@@ -57,7 +69,7 @@ public class Validate2FARequestHandler(ILogger<Validate2FARequestHandler> logger
         if(userAuth == null || !userAuth.IsUsed)
         {
             if (userAuth != null)
-                await _authorizationRepository.RemoveAuthorization(userAuth);
+                await _authorizationRepository.RemoveAuthorizationAsync(userAuth);
 
             throw new No2FAException("User need to have 2FA authorization");
         }

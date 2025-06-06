@@ -50,19 +50,27 @@ public class SalaryController : Controller
     [HttpGet("EditPaid/{useremail}")]
     public async Task<IActionResult> EditPaid(string useremail)
     {
-        var user = await _sender.Send(new GetUserByEmailQuery(useremail));
-        var paid = await _sender.Send(new GetPaidByUserIdQuery(user.Id)); 
-        if (paid == null)
-            return NotFound();
-
-        var command = new UpdatePaidCommand
+        try
         {
-            Id = paid.Id,
-            UserId = paid.UserId,
-            BaseSalary = paid.BaseSalary,
-            Email = user.Email,
-        };
-        return View("EditPaid", command);
+            var user = await _sender.Send(new GetUserByEmailQuery(useremail));
+            var paid = await _sender.Send(new GetPaidByUserIdQuery(user.Id));
+            if (paid == null)
+                return NotFound();
+
+            var command = new UpdatePaidCommand
+            {
+                Id = paid.Id,
+                UserId = paid.UserId,
+                BaseSalary = paid.BaseSalary,
+                Email = user.Email,
+            };
+            return View("EditPaid", command);
+        }
+        catch (BadRequestException)
+        {
+            TempData["ErrorMessage"] = "Paid entry not found for the specified user.";
+            return RedirectToAction("AddPaid");
+        }
     }
 
     [HttpPost("EditPaid/{useremail}")]

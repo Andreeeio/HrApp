@@ -15,17 +15,24 @@ using System.Threading.Tasks;
 
 namespace HrApp.Application.Assignment.Query.GetActiveAssignments;
 
-public class GetActiveAssignmentsQueryHandler(ILogger<GetActiveAssignmentsQueryHandler> logger,
-IUserContext userContext,
-IAssignmentRepository repository,
-ITeamAuthorizationService teamAuthorizationService,
-IMapper mapper) : IRequestHandler<GetActiveAssignmentsQuery, List<AssignmentDTO>>
+public class GetActiveAssignmentsQueryHandler : IRequestHandler<GetActiveAssignmentsQuery, List<AssignmentDTO>>
 {
-    private readonly ILogger<GetActiveAssignmentsQueryHandler> _logger = logger;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IAssignmentRepository _repository = repository;
-    private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
-    private readonly IMapper _mapper = mapper;
+    private readonly ILogger<GetActiveAssignmentsQueryHandler> _logger;
+    private readonly IUserContext _userContext;
+    private readonly IAssignmentRepository _assignmentRepository;
+    private readonly IMapper _mapper;
+
+    public GetActiveAssignmentsQueryHandler(ILogger<GetActiveAssignmentsQueryHandler> logger,
+        IUserContext userContext,
+        IAssignmentRepository repository,
+        IMapper mapper)
+    {
+        _logger = logger;
+        _userContext = userContext;
+        _assignmentRepository = repository;
+        _mapper = mapper;
+    }
+
     public async Task<List<AssignmentDTO>> Handle(GetActiveAssignmentsQuery request, CancellationToken cancellationToken)
     {
         var currentUser = _userContext.GetCurrentUser();
@@ -34,7 +41,7 @@ IMapper mapper) : IRequestHandler<GetActiveAssignmentsQuery, List<AssignmentDTO>
         if (currentUser == null)
             throw new UnauthorizedException("User is not authenticated");
 
-        var assignments = await _repository.GetNotFreeAssignments();
+        var assignments = await _assignmentRepository.GetAssignmentsAsync(false);
 
         var dto = _mapper.Map<List<AssignmentDTO>>(assignments);
 

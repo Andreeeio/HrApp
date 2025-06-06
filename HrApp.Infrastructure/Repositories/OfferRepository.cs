@@ -14,29 +14,29 @@ public class OfferRepository : IOfferRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<List<Offer>> GetAllOffers()
+    public async Task<List<Offer>> GetAllOffersAsync()
     {
         return await dbContext.Offer.ToListAsync();
     }
-    public async Task CreateOffer(Offer offer)
+    public async Task CreateOfferAsync(Offer offer)
     {
-        await dbContext.Offer.AddAsync(offer);
+        dbContext.Offer.Add(offer);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task CreateCandidate(Candidate candidate)
+    public async Task CreateCandidateAsync(Candidate candidate)
     {
-        await dbContext.Candidate.AddAsync(candidate);
+        dbContext.Candidate.Add(candidate);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task CreateJobApplication(JobApplication jobApplication)
+    public async Task CreateJobApplicationAsync(JobApplication jobApplication)
     {
-        await dbContext.JobApplication.AddAsync(jobApplication);
+        dbContext.JobApplication.Add(jobApplication);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<Offer?> GetOfferWithApplications(Guid offerId)
+    public async Task<Offer?> GetOfferWithApplicationsAsync(Guid offerId)
     {
         return await dbContext.Offer
             .Include(o => o.JobApplications.Where(s => s.Status == "Received"))

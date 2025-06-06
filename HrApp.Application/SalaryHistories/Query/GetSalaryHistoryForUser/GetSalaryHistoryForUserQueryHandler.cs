@@ -39,7 +39,7 @@ public class GetSalaryHistoryForUserQueryHandler(ILogger<GetSalaryHistoryForUser
         if(request.HowMany > 60)
             request.HowMany = 60;
 
-        var salaryHistory = await _salaryHistoryRepository.GetSalaryHistoryForUser(request.EmpId, request.HowMany);
+        var salaryHistory = await _salaryHistoryRepository.GetSalaryHistoryForUserAsync(request.EmpId, request.HowMany);
 
         var salaryHistoryDTO = _mapper.Map<List<SalaryHistoryDTO>>(salaryHistory);
 

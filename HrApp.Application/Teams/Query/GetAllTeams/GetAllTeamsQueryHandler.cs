@@ -17,7 +17,7 @@ public class GetAllTeamsQueryHandler(ILogger<GetAllTeamsQueryHandler> logger,
     {
         _logger.LogInformation("Getting all teams");
 
-        var teams = await _repository.GetAllTeams();
+        var teams = await _repository.GetAllTeamsAsync();
         var dto = _mapper.Map<List<TeamDTO>>(teams);
 
         return dto;

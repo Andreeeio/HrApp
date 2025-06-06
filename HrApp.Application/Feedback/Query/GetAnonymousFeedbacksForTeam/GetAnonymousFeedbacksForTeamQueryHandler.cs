@@ -27,7 +27,7 @@ namespace HrApp.Application.Feedback.Query.GetAnonymousFeedbacksForTeam
         public async Task<List<AnonymousFeedbackDTO>> Handle(GetAnonymousFeedbacksForTeamQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Getting anonymous feedbacks for team with ID: {TeamId}", request.TeamId);
-            var feedbacks = await _repository.GetAnonymousFeedbacksForTeam(request.TeamId);
+            var feedbacks = await _repository.GetAnonymousFeedbacksForTeamAsync(request.TeamId);
             return _mapper.Map<List<AnonymousFeedbackDTO>>(feedbacks);
         }
     }

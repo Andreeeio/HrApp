@@ -7,7 +7,7 @@ namespace HrApp.Infrastructure.Repositories;
 public class CalendarRepository(HrAppContext dbContext) : ICalendarRepository
 {
     private readonly HrAppContext _dbContext = dbContext;
-    public async Task AddCalendarEvent(Calendar calendar)
+    public async Task AddCalendarEventAsync(Calendar calendar)
     {
         if (calendar.Creator != null)
         {

@@ -30,8 +30,7 @@ namespace HrApp.Application.Feedback.Command.AddAnonymousFeedback
             _logger.LogInformation("Adding anonymous feedback with subject: {Subject} and message: {Message}", request.Subject, request.Message);
             request.CreatedAt = DateTime.UtcNow;
             var feedback = _mapper.Map<AnonymousFeedback>(request);
-            await _repository.AddAnonymousFeedback(feedback);
-            return;
+            await _repository.AddAnonymousFeedbackAsync(feedback);
         }
     }
 

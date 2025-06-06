@@ -59,7 +59,7 @@ namespace HrApp.Application.Offer.Command.CreateJobApplication
             }
 
             var jobApplication = _mapper.Map<Domain.Entities.JobApplication>(request);
-            await _repository.CreateJobApplication(jobApplication);
+            await _repository.CreateJobApplicationAsync(jobApplication);
         }
     }
 }

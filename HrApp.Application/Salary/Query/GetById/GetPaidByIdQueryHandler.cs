@@ -21,7 +21,7 @@ namespace HrApp.Application.Salary.Query.GetById
         public async Task<Domain.Entities.Paid> Handle(GetPaidByIdQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Getting paid entry with ID: {Id}", request.Id);
-            var paid = await _repository.GetPaidById(request.Id);
+            var paid = await _repository.GetPaidByIdAsync(request.Id);
             if (paid == null)
             {
                 _logger.LogWarning("Paid with ID {Id} not found", request.Id);

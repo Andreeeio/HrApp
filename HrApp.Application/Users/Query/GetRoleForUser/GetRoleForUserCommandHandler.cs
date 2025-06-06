@@ -19,10 +19,10 @@ public class GetRoleForUserCommandHandler(ILogger<GetRoleForUserCommandHandler> 
     {
         _logger.LogInformation("Geting roles for user");
 
-        if(!await _userRepository.IfUserExist(request.Email))
+        if(!await _userRepository.IfUserExistAsync(request.Email))
             throw new BadRequestException("User not found");
 
-        var roles = await _userRepository.GetUserRoles(request.Email);
+        var roles = await _userRepository.GetUserRolesAsync(request.Email);
 
         List<string> roleNames = new List<string>();
 

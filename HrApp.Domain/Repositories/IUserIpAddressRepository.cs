@@ -4,9 +4,9 @@ namespace HrApp.Domain.Repositories;
 
 public interface IUserIpAddressRepository
 {
-    public Task<bool> IfUserIpAddressExistAsync(Guid userId, string IpAddress);
-    public Task AddUserIpAddressAsync(UserIpAddress ipAddress);
-    public Task<List<UserIpAddress>> GetUserIpAddressesAsync(Guid userId);
-    public Task DeleteUserIpAddressAsync(Guid userId);
-    public Task SaveChangesAsync();
+    Task<bool> IfUserIpAddressExistAsync(Guid userId, string IpAddress);
+    Task AddUserIpAddressAsync(UserIpAddress ipAddress);
+    Task<List<UserIpAddress>> GetUserIpAddressesAsync(Guid userId);
+    Task DeleteUserIpAddressAsync(Guid userId);
+    Task SaveChangesAsync();
 }

@@ -4,9 +4,8 @@ namespace HrApp.Domain.Repositories;
 
 public interface IAuthorizationRepository
 {
-    public Task<Authorization?> GetUserAuthorizationAsync(Guid userId);
-    public Task AddAuthorization(Authorization authorization);
-    public Task SaveChangesAsync();
-    public Task RemoveAuthorization(Authorization authorization);
-
+    Task<Authorization?> GetUserAuthorizationAsync(Guid userId);
+    Task AddAuthorizationAsync(Authorization authorization);
+    Task SaveChangesAsync();
+    Task RemoveAuthorizationAsync(Authorization authorization);
 }

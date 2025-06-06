@@ -18,7 +18,7 @@ public class DeleteUserFromTeamCommandHandler : IRequestHandler<DeleteUserFromTe
     public async Task Handle(DeleteUserFromTeamCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Deleting employer {UserId} from team {TeamId}", request.UserId, request.TeamId);
-        await _repository.RemoveEmployer(request.TeamId, request.UserId);
+        await _repository.RemoveEmployerAsync(request.TeamId, request.UserId);
         return;
     }
 }

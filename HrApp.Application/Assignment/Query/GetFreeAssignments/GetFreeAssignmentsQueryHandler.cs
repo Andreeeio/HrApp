@@ -1,44 +1,44 @@
 ﻿using AutoMapper;
 using HrApp.Application.Assignment.DTO;
-using HrApp.Application.Assignment.Query.GetActiveAssignments;
 using HrApp.Application.Interfaces;
 using HrApp.Domain.Exceptions;
 using HrApp.Domain.Interfaces;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Application.Assignment.Query.GetFreeAssignments
+namespace HrApp.Application.Assignment.Query.GetFreeAssignments;
+
+public class GetFreeAssignmentsQueryHandler : IRequestHandler<GetFreeAssignmentsQuery, List<AssignmentDTO>>
 {
-    public class GetFreeAssignmentsQueryHandler(ILogger<GetFreeAssignmentsQueryHandler> logger,
-IUserContext userContext,
-IAssignmentRepository repository,
-ITeamAuthorizationService teamAuthorizationService,
-IMapper mapper) : IRequestHandler<GetFreeAssignmentsQuery, List<AssignmentDTO>>
+    private readonly ILogger<GetFreeAssignmentsQueryHandler> _logger;
+    private readonly IUserContext _userContext;
+    private readonly IAssignmentRepository _assignmentRepository;
+    private readonly IMapper _mapper;
+
+    public GetFreeAssignmentsQueryHandler(ILogger<GetFreeAssignmentsQueryHandler> logger,
+     IUserContext userContext,
+     IAssignmentRepository repository,
+     IMapper mapper)
     {
-        private readonly ILogger<GetFreeAssignmentsQueryHandler> _logger = logger;
-        private readonly IUserContext _userContext = userContext;
-        private readonly IAssignmentRepository _repository = repository;
-        private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
-        private readonly IMapper _mapper = mapper;
-        public async Task<List<AssignmentDTO>> Handle(GetFreeAssignmentsQuery request, CancellationToken cancellationToken)
-        {
-            var currentUser = _userContext.GetCurrentUser();
-            _logger.LogInformation("Getting all active assignments");
+        _logger = logger;
+        _userContext = userContext;
+        _assignmentRepository = repository;
+        _mapper = mapper;
+    }
 
-            if (currentUser == null)
-                throw new UnauthorizedException("User is not authenticated");
+    public async Task<List<AssignmentDTO>> Handle(GetFreeAssignmentsQuery request, CancellationToken cancellationToken)
+    {
+        var currentUser = _userContext.GetCurrentUser();
+        _logger.LogInformation("Getting all active assignments");
 
-            var assignments = await _repository.GetFreeAssignments();
+        if (currentUser == null)
+            throw new UnauthorizedException("User is not authenticated");
 
-            var dto = _mapper.Map<List<AssignmentDTO>>(assignments);
+        var assignments = await _assignmentRepository.GetAssignmentsAsync(true);
 
-            return dto;
-        }
+        var dto = _mapper.Map<List<AssignmentDTO>>(assignments);
+
+        return dto;
     }
 }

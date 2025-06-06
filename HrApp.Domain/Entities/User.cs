@@ -19,7 +19,6 @@ public class User
     public List<EmploymentHistory> EmploymentHistories { get; set; } = default!;
     public List<WorkLog> WorkLogs { get; set; } = default!;
     public virtual Authorization Authorization { get; set; } = default!;
-    public Guid? TeamLeaderId { get; set; }  
     public virtual Team? TeamLeader { get; set; }
     public Guid? TeamId { get; set; }  
     public virtual Team? Team { get; set; } = default!;

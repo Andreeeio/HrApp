@@ -27,7 +27,7 @@ public class FirstLoginUserCommandHandler : IRequestHandler<FirstLoginUserComman
     {
         _logger.LogInformation("Handling first login for user with email: {Email}", request.Email);
 
-        var user = await _userRepository.GetUserByEmail(request.Email)
+        var user = await _userRepository.GetUserAsync(request.Email)
             ?? throw new BadRequestException("User not found.");
 
         if(user.IsEmailConfirmed == true)
@@ -53,7 +53,7 @@ public class FirstLoginUserCommandHandler : IRequestHandler<FirstLoginUserComman
         user.ConfirmationToken = null;
         user.ConfirmationTokenExpiration = null;
 
-        await _userRepository.AddRolesForUser(request.Email, new List<string> { Roles.Mid.ToString() });
+        await _userRepository.AddRolesForUserAsync(request.Email, new List<string> { Roles.Mid.ToString() });
 
         var token = _tokenService.GetToken(user, false);
         return token;

@@ -28,7 +28,7 @@ namespace HrApp.Application.Services
                     rates.Add(new HrApp.Domain.Entities.EmployeeRate
                     {
                         EmployeeId = paid.UserId,
-                        Rate = 3 // Default rate if none found
+                        Rate = 3 
                     });
 
                 var averageRate = rates.Average(r => r.Rate);

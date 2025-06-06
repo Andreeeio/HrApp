@@ -22,7 +22,7 @@ public class AddDepartmentCommandHandler : IRequestHandler<AddDepartmentCommand>
     }
     public async Task Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserByEmail(request.HeadOfDepartmentEmail);
+        var user = await _userRepository.GetUserAsync(request.HeadOfDepartmentEmail);
         if(user == null)
             throw new BadRequestException($"User with email {request.HeadOfDepartmentEmail} does not exist.");
 
@@ -33,8 +33,8 @@ public class AddDepartmentCommandHandler : IRequestHandler<AddDepartmentCommand>
         department.HeadOfDepartmentId = user.Id;
         _logger.LogInformation("Adding department {DepartmentName}", department.Name);
 
-        await _departmentRepository.CreateDepartment(department);
-        await _userRepository.AddRolesForUser(request.HeadOfDepartmentEmail, new List<string> { "Ceo" });
+        await _departmentRepository.CreateDepartmentAsync(department);
+        await _userRepository.AddRolesForUserAsync(request.HeadOfDepartmentEmail, new List<string> { "Ceo" });
 
     }
 }

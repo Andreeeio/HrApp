@@ -7,15 +7,24 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Authorizations.Command.Add2FA;
 
-public class Add2FARequestHandler(ILogger<Add2FARequestHandler> logger,
+public class Add2FARequestHandler : IRequestHandler<Add2FARequest>
+{
+    private readonly ILogger<Add2FARequestHandler> _logger;
+    private readonly IUserContext _userContext;
+    private readonly IAuthorizationRepository _authorizationRepository;
+    private readonly IEmailSender _emailSender;
+
+    public Add2FARequestHandler(ILogger<Add2FARequestHandler> logger,
     IUserContext userContext,
     IAuthorizationRepository authorizationRepository,
-    IEmailSender emailSender) : IRequestHandler<Add2FARequest>
-{
-    private readonly ILogger<Add2FARequestHandler> _logger = logger;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IAuthorizationRepository _authorizationRepository = authorizationRepository;
-    private readonly IEmailSender _emailSender = emailSender;
+    IEmailSender emailSender)
+    {
+        _logger = logger;
+        _userContext = userContext;
+        _authorizationRepository = authorizationRepository;
+        _emailSender = emailSender;
+    }
+
     public async Task Handle(Add2FARequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Creating 2FA for user");
@@ -45,7 +54,7 @@ public class Add2FARequestHandler(ILogger<Add2FARequestHandler> logger,
             AttemptCount = 0
         };
         
-        await _authorizationRepository.AddAuthorization(authorization);
+        await _authorizationRepository.AddAuthorizationAsync(authorization);
 
         _logger.LogInformation("Verf code is {verfCode}", verfCod);
         await _emailSender.SendEmailAsync(user.email, "2FA Code", $"Your 2FA code is {verfCod}");

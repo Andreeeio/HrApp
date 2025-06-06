@@ -7,8 +7,8 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public CreateCalendarEventCommandValidator()
     {
         RuleFor(x => x.Title)
-            .NotEmpty()
-            .WithMessage("Title is required.");
+            .NotEmpty().WithMessage("Title is required.")
+            .MaximumLength(60).WithMessage("Title maximum length is 60 characters.");
 
         RuleFor(x => x.StartDate)
             .NotEmpty()
@@ -23,7 +23,8 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .WithMessage("End date must be after the start date.");
 
         RuleFor(x => x.Description)
-            .NotEmpty()
-            .WithMessage("Description is required.");
+            .NotEmpty().WithMessage("Description is required.")
+            .MaximumLength(200)
+            .WithMessage("Description maximum length is 200 characters.");
     }
 }

@@ -9,7 +9,7 @@ namespace HrApp.Infrastructure.Repositories;
 public class SalaryHistoryRepository(HrAppContext dbContext) : ISalaryHistoryRepository
 {
     private readonly HrAppContext _dbContext = dbContext;
-    public async Task<List<SalaryHistory>> GetSalaryHistoryForUser(Guid userId, int? howMany = null)
+    public async Task<List<SalaryHistory>> GetSalaryHistoryForUserAsync(Guid userId, int? howMany = null)
     {
         var salaryHistory = _dbContext.SalaryHistory
             .Where(x => x.UserId == userId)

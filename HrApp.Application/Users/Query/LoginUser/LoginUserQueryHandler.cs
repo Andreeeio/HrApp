@@ -26,7 +26,7 @@ public class LoginUserQueryHandler(ILogger<LoginUserQueryHandler> logger,
     {
         _logger.LogInformation("User tring to log in");
 
-        var user = await _userRepository.GetUserByEmail(request.Email)
+        var user = await _userRepository.GetUserAsync(request.Email)
             ?? throw new BadRequestException("Invalid login or password");
 
         if(user.IsEmailConfirmed == false)

@@ -12,7 +12,7 @@ public class EditUserCommandHandler(ILogger<EditUserCommandHandler> logger,
 {
     public async Task Handle(EditUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(request.Id);
+        var user = await userRepository.GetUserAsync(request.Id);
         if (user == null)
             throw new BadRequestException("User not found");
 

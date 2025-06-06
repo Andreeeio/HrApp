@@ -18,7 +18,7 @@ public class AssignmentAuthorizationService(IUserContext userContext,
         if (user == null || !user.IsInRole("TeamLeader"))
             return false;
 
-        var team = await _teamRepository.GetTeamForUser(Guid.Parse(user.id));
+        var team = await _teamRepository.GetTeamForUserAsync(Guid.Parse(user.id));
 
         if(team == null)
             return false;

@@ -26,7 +26,7 @@ public class GetTeamForDepartmentQueryHandler(ILogger<GetTeamForDepartmentQueryH
         if (currentUser == null)
             throw new UnauthorizedException("User is not authenticated");
         
-        var teams = await _teamRepository.GetAllTeamsForDepartment(request.DepartmentId);
+        var teams = await _teamRepository.GetAllTeamsForDepartmentAsync(request.DepartmentId);
 
         var teamsDTO = _mapper.Map<List<TeamDTO>>(teams);
 

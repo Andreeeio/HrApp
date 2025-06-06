@@ -35,7 +35,7 @@ public class GetEmploymentHistoryForUserQueryHandler(ILogger<GetEmploymentHistor
         if (!(Guid.Parse(user.id) == request.UserId) && !(_teamAuthorizationService.Authorize(ResourceOperation.Read)))
             throw new UnauthorizedException("User notAuthorized");
 
-        if(await _userRepository.IfUserExist(request.UserId) == false)
+        if(await _userRepository.IfUserExistAsync(request.UserId) == false)
             throw new BadRequestException("User not found");
 
         var employmentHistory = await _employmentHistoryRepository.GetEmploymentHistoriesForUserAsync(request.UserId);

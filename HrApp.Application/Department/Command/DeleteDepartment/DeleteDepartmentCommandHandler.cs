@@ -30,22 +30,22 @@ public class DeleteDepartmentCommandHandler : IRequestHandler<DeleteDepartmentCo
         if (!_teamAuthorizationService.Authorize(ResourceOperation.Delete))
             throw new UnauthorizedException("You are not authorized to delete department!");
 
-        if(_departmentRepository.CountDepartment().Result <= 1)
+        if(_departmentRepository.CountDepartmentAsync().Result <= 1)
             throw new BadRequestException("You cannot delete the last department.");
 
-        var department = await _departmentRepository.GetDepartmentById(request.DepartmentId);
+        var department = await _departmentRepository.GetDepartmentByIdAsync(request.DepartmentId);
         if (department == null)
             throw new BadRequestException($"Department with ID {request.DepartmentId} does not exist.");
 
-        var ceo = await _userRepository.GetUserById(department.HeadOfDepartmentId);
+        var ceo = await _userRepository.GetUserAsync(department.HeadOfDepartmentId);
         if (ceo == null)
         {
-            await _departmentRepository.DeleteDepartment(request.DepartmentId);
+            await _departmentRepository.DeleteDepartmentAsync(request.DepartmentId);
         }
         else
         {
-            await _userRepository.AddRolesForUser(ceo.Email, new List<string> { Roles.Senior.ToString() });
-            await _departmentRepository.DeleteDepartment(request.DepartmentId);
+            await _userRepository.AddRolesForUserAsync(ceo.Email, new List<string> { Roles.Senior.ToString() });
+            await _departmentRepository.DeleteDepartmentAsync(request.DepartmentId);
         }
     }
 }

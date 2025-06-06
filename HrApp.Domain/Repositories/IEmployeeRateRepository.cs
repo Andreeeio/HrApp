@@ -4,7 +4,6 @@ namespace HrApp.Domain.Repositories;
 
 public interface IEmployeeRateRepository
 {
-    public Task AddRatesAsync(List<EmployeeRate> rates);
-    Task<IEnumerable<EmployeeRate>> GetEmployeeRatesByUserId(Guid userid);
+    Task AddRatesAsync(List<EmployeeRate> rates);
     Task<List<EmployeeRate>> GetRatesForUserAsync(Guid userId);
 }

@@ -21,7 +21,7 @@ public class GetAllDepartmentsQueryHandler : IRequestHandler<GetAllDepartmentsQu
     public async Task<List<DepartmentDTO>> Handle(GetAllDepartmentsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting all departments");
-        var departments = await _repository.GetAllDepartments();
+        var departments = await _repository.GetAllDepartmentsAsync();
         var dto = _mapper.Map<List<DepartmentDTO>>(departments);
 
         return dto;

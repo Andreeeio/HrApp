@@ -11,17 +11,24 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Assignment.Query.GetAssignmentById;
 
-public class GetAssignmentByIdQueryHandler(ILogger<GetAssignmentByIdQueryHandler> logger,
-    IAssignmentRepository assignmentRepository,
-    IUserContext userContext,
-    IUserAuthorizationService userAuthorizationService,
-    IMapper mapper) : IRequestHandler<GetAssignmentByIdQuery, EditAssignmentCommand>
+public class GetAssignmentByIdQueryHandler : IRequestHandler<GetAssignmentByIdQuery, EditAssignmentCommand>
 {
-    private readonly ILogger<GetAssignmentByIdQueryHandler> _logger = logger;
-    private readonly IAssignmentRepository _assignmentRepository = assignmentRepository;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IUserAuthorizationService _userAuthorizationService = userAuthorizationService;
-    private readonly IMapper _mapper = mapper;
+    private readonly ILogger<GetAssignmentByIdQueryHandler> _logger;
+    private readonly IAssignmentRepository _assignmentRepository;
+    private readonly IUserAuthorizationService _userAuthorizationService;
+    private readonly IMapper _mapper;
+
+    public GetAssignmentByIdQueryHandler(ILogger<GetAssignmentByIdQueryHandler> logger,
+        IAssignmentRepository assignmentRepository,
+        IUserAuthorizationService userAuthorizationService,
+        IMapper mapper)
+    {
+        _logger = logger;
+        _assignmentRepository = assignmentRepository;
+        _userAuthorizationService = userAuthorizationService;
+        _mapper = mapper;
+    }
+
     public async Task<EditAssignmentCommand> Handle(GetAssignmentByIdQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Editing assignment with ID: {Id}", request.Id);

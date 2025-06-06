@@ -19,7 +19,7 @@ public class DeleteTeamCommandHandler : IRequestHandler<DeleteTeamCommand>
         _logger.LogInformation("Deleting team {TeamId}", request.TeamId);
         try
         {
-            await _teamRepository.DeleteTeam(request.TeamId);
+            await _teamRepository.DeleteTeamAsync(request.TeamId);
         }
         catch (Exception ex)
         {

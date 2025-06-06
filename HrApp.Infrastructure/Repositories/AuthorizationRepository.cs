@@ -21,7 +21,7 @@ public class AuthorizationRepository : IAuthorizationRepository
         return authorization;
     }
 
-    public async Task AddAuthorization(Authorization authorization)
+    public async Task AddAuthorizationAsync(Authorization authorization)
     {
         _dbContext.Authorization.Add(authorization);
         await _dbContext.SaveChangesAsync();
@@ -33,7 +33,7 @@ public class AuthorizationRepository : IAuthorizationRepository
 
 
 
-    public async Task RemoveAuthorization(Authorization authorization)
+    public async Task RemoveAuthorizationAsync(Authorization authorization)
     {
         _dbContext.Authorization.Remove(authorization);
         await _dbContext.SaveChangesAsync();

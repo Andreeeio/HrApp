@@ -1,6 +1,9 @@
 ﻿using HrApp.Application.Salary.Query.GetById;
+using HrApp.Domain.Entities;
+using HrApp.Domain.Exceptions;
 using HrApp.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HrApp.Application.Salary.Query.GetByUserId
 {
-    public class GetPaidByUserIdQueryHandler : IRequestHandler<GetPaidByUserIdQuery, Domain.Entities.Paid>
+    public class GetPaidByUserIdQueryHandler : IRequestHandler<GetPaidByUserIdQuery, Paid>
     {
         private readonly ISalaryRepository _repository;
         private readonly ILogger<GetPaidByIdQueryHandler> _logger;
@@ -19,14 +22,14 @@ namespace HrApp.Application.Salary.Query.GetByUserId
             _logger = logger;
             _repository = repository;
         }
-        public async Task<Domain.Entities.Paid> Handle(GetByUserId.GetPaidByUserIdQuery request, CancellationToken cancellationToken)
+        public async Task<Paid> Handle(GetPaidByUserIdQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Getting paid entry with ID: {Id}", request.Id);
-            var paid = await _repository.GetPaidByUserId(request.Id);
+            var paid = await _repository.GetPaidByUserIdAsync(request.Id);
             if (paid == null)
             {
                 _logger.LogWarning("Paid with ID {Id} not found", request.Id);
-                throw new KeyNotFoundException($"Paid with ID {request.Id} not found.");
+                throw new BadRequestException("Paid with not found.");
             }
             return paid;
         }

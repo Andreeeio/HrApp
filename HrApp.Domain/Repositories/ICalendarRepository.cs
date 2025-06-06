@@ -4,5 +4,5 @@ namespace HrApp.Domain.Repositories;
 
 public interface ICalendarRepository
 {
-    public Task AddCalendarEvent(Calendar calendar);
+    Task AddCalendarEventAsync(Calendar calendar);
 }

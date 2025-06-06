@@ -26,7 +26,7 @@ namespace HrApp.Application.Offer.Query.ShowCandidates
 
         public async Task<List<JobApplicationWithCandidateDto>> Handle(ShowCandidatesQuery request, CancellationToken cancellationToken)
         {
-            var offer = await _repository.GetOfferWithApplications(request.OfferId);
+            var offer = await _repository.GetOfferWithApplicationsAsync(request.OfferId);
             if (offer == null)
             {
                 _logger.LogWarning("Offer with ID {OfferId} not found.", request.OfferId);

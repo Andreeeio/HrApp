@@ -4,6 +4,6 @@ namespace HrApp.Domain.Repositories;
 
 public interface ISalaryHistoryRepository
 {
-    public Task<List<SalaryHistory>> GetSalaryHistoryForUser(Guid userId, int? howMany = null);
+    Task<List<SalaryHistory>> GetSalaryHistoryForUserAsync(Guid userId, int? howMany = null);
     Task AddAsync(SalaryHistory history);
 }

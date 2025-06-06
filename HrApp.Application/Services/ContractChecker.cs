@@ -36,7 +36,7 @@ public class ContractChecker(ILogger<ContractChecker> logger,
 
         foreach (var emp in empHist)
         {
-            var user = await _userRepository.GetUserById(emp.UserId);
+            var user = await _userRepository.GetUserAsync(emp.UserId);
             await _emailSender.SendEmailAsync(user!.Email, "Contract Expiration Reminder",
                 $"Dear {user.FirstName},\n\n" +
                 $"Your contract is expiring on {emp.EndDate:dd/MM/yyyy}.\n" +

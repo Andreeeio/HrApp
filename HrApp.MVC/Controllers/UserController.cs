@@ -276,7 +276,7 @@ public class UserController : Controller
             return RedirectToAction("Index");
         }
 
-        return RedirectToAction("Details", new { email }); 
+        return RedirectToAction("Details", new { encodedName = email });
     }
 
     [Authorize]

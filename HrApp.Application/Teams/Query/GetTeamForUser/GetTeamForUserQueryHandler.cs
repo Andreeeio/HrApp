@@ -32,7 +32,7 @@ public class GetTeamForUserQueryHandler : IRequestHandler<GetTeamForUserQuery, T
 
         if (request.Id.HasValue)
         {
-            team = await _repository.GetTeamForUser(request.Id.Value);
+            team = await _repository.GetTeamForUserAsync(request.Id.Value);
 
         }
         else
@@ -40,7 +40,7 @@ public class GetTeamForUserQueryHandler : IRequestHandler<GetTeamForUserQuery, T
             var user = _userContext.GetCurrentUser();
             if (user == null)
                 throw new UnauthorizedException("User is not authenticated");
-            team = await _repository.GetTeamForUser(Guid.Parse(user.id));
+            team = await _repository.GetTeamForUserAsync(Guid.Parse(user.id));
 
         }
 

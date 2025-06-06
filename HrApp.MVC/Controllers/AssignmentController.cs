@@ -71,12 +71,18 @@ public class AssignmentController : Controller
 
         await _sender.Send(command);
 
-        var team = await _sender.Send(new GetTeamForUserQuery());
-        if (team == null)
+
+        try
         {
+            var team = await _sender.Send(new GetTeamForUserQuery());
+            return RedirectToAction("EmployersInTeam", "Team", new { TeamId = team.Id, TeamName = team.Name });
+
+        }
+        catch(BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
             return RedirectToAction("ShowFreeAssignments");
         }
-        return RedirectToAction("EmployersInTeam", "Team", new { TeamId = team.Id, TeamName = team.Name });
     }
 
     [Authorize(Roles = "Hr, Ceo")]

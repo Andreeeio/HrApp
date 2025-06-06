@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HrApp.Application.Mappings
+namespace HrApp.Application.Offer.DTO.Mappings
 {
     public class CreateCandidateCommandProfile : Profile
     {
         public CreateCandidateCommandProfile()
         {
-            CreateMap<HrApp.Domain.Entities.Candidate, CreateCandidateCommand>();
-            CreateMap<CreateCandidateCommand, HrApp.Domain.Entities.Candidate>();
+            CreateMap<Domain.Entities.Candidate, CreateCandidateCommand>();
+            CreateMap<CreateCandidateCommand, Domain.Entities.Candidate>();
         }
     }
 }

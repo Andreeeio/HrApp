@@ -6,15 +6,24 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Authorizations.Command.CreateNewCode;
 
-public class CreateNewCodeCommandHandler(ILogger<CreateNewCodeCommandHandler> logger,
+public class CreateNewCodeCommandHandler: IRequestHandler<CreateNewCodeCommand>
+{
+    private readonly ILogger<CreateNewCodeCommandHandler> _logger;
+    private readonly IUserContext _userContext;
+    private readonly IAuthorizationRepository _authorizationRepository;
+    private readonly IEmailSender _emailSender;
+
+    public CreateNewCodeCommandHandler(ILogger<CreateNewCodeCommandHandler> logger,
         IUserContext userContext,
         IAuthorizationRepository authorizationRepository,
-        IEmailSender emailSender) : IRequestHandler<CreateNewCodeCommand>
-{
-    private readonly ILogger<CreateNewCodeCommandHandler> _logger = logger;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IAuthorizationRepository _authorizationRepository = authorizationRepository;
-    private readonly IEmailSender _emailSender = emailSender;
+        IEmailSender emailSender)
+    {
+        _logger = logger;
+        _userContext = userContext;
+        _authorizationRepository = authorizationRepository;
+        _emailSender = emailSender;
+    }
+
     public async Task Handle(CreateNewCodeCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Creating new 2FA code for user");

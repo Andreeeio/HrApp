@@ -22,13 +22,13 @@ public class AddEmployerCommandHandler : IRequestHandler<AddEmployerCommand, Gui
     {
         _logger.LogInformation("Adding employer {UserEmail} to team {TeamId}",request.UserEmail, request.TeamId);
 
-        var user = await _userRepository.GetUserByEmail(request.UserEmail);
+        var user = await _userRepository.GetUserAsync(request.UserEmail);
         if (user == null)
         {
             throw new BadRequestException($"User with email {request.UserEmail} not found");
         }
 
-        await _teamRepository.AddEmployer(request.TeamId, user.Id);
+        await _teamRepository.AddEmployerAsync(request.TeamId, user.Id);
         return user.Id;
     }
 }

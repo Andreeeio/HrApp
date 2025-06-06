@@ -21,7 +21,7 @@ public class ChangeRolesCommandHandler(ILogger<ChangeRolesCommandHandler> logger
     {
         _logger.LogInformation("Handling ChangeRolesCommand");
 
-        if(!await _userRepository.IfUserExist(request.Email))
+        if(!await _userRepository.IfUserExistAsync(request.Email))
         {
             _logger.LogWarning("User does not exist");
             throw new BadRequestException($"User does not exist");
@@ -43,6 +43,6 @@ public class ChangeRolesCommandHandler(ILogger<ChangeRolesCommandHandler> logger
         if(request.SelectedRoles.Count == 0)
             request.SelectedRoles.Add("User");
 
-        await _userRepository.AddRolesForUser(request.Email,request.SelectedRoles);
+        await _userRepository.AddRolesForUserAsync(request.Email,request.SelectedRoles);
     }
 }

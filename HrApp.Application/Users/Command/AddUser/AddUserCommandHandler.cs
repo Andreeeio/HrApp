@@ -23,7 +23,7 @@ public class AddUserCommandHandler(ILogger<AddUserCommandHandler> logger,
     private readonly IMapper _mapper = mapper;
     public async Task Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        if(await _userRepository.IfUserExist(request.Email))
+        if(await _userRepository.IfUserExistAsync(request.Email))
         {
             throw new BadRequestException("User with this email already exists");
         }
@@ -51,7 +51,7 @@ public class AddUserCommandHandler(ILogger<AddUserCommandHandler> logger,
         user.ConfirmationTokenExpiration = DateTime.UtcNow.AddDays(3);
         user.ConfirmationToken = Guid.NewGuid().ToString();
 
-        await _userRepository.CreateUser(user);
+        await _userRepository.CreateUserAsync(user);
         await _emailSender.SendEmailAsync(
             request.Email,
             "Complete your account",

@@ -29,7 +29,7 @@ public class EmailSender(IConfiguration configuration) : IEmailSender
             From = new MailAddress(fromEmail!),
             Subject = subject,
             Body = message,
-            IsBodyHtml = false
+            IsBodyHtml = true
         };
         mailMessage.To.Add(email);
 

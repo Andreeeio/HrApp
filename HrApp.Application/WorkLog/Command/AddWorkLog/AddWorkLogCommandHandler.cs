@@ -26,7 +26,7 @@ public class AddWorkLogCommandHandler : IRequestHandler<AddWorkLogCommand>
             Hours = 0 
         };
 
-        await _repository.AddWorkLog(workLog);
+        await _repository.AddWorkLogAsync(workLog);
 
         _logger.LogInformation("Successfully added WorkLog with Id: {WorkLogId}", workLog.Id);
     }

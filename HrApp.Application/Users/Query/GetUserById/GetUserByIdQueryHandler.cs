@@ -23,7 +23,7 @@ namespace HrApp.Application.Users.Query.GetUserById
 
         public async Task<UserDTO?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(request.UserId);
+            var user = await _userRepository.GetUserAsync(request.UserId);
             return _mapper.Map<UserDTO?>(user);
         }
     }

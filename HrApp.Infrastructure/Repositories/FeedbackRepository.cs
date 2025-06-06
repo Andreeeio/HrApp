@@ -2,42 +2,36 @@
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Infrastructure.Repositories 
+namespace HrApp.Infrastructure.Repositories; 
+
+public class FeedbackRepository : IFeedbackRepository
 {
-    public class FeedbackRepository : IFeedbackRepository
+    private readonly HrAppContext _context;
+    public FeedbackRepository(HrAppContext context)
     {
-        private readonly HrAppContext _context;
-        public FeedbackRepository(HrAppContext context)
+        _context = context;
+    }
+    public async Task AddAnonymousFeedbackAsync(AnonymousFeedback feedback)
+    {
+        await _context.AnonymousFeedbacks.AddAsync(feedback);
+        await _context.SaveChangesAsync();
+    }
+    public async Task DeleteFeedbackAsync(Guid id)
+    {
+        var feedback = await _context.AnonymousFeedbacks.FindAsync(id);
+        if (feedback != null)
         {
-            _context = context;
-        }
-        public async Task AddAnonymousFeedback(AnonymousFeedback feedback)
-        {
-            await _context.AnonymousFeedbacks.AddAsync(feedback);
+            _context.AnonymousFeedbacks.Remove(feedback);
             await _context.SaveChangesAsync();
         }
-        public async Task DeleteFeedback(Guid id)
-        {
-            var feedback = await _context.AnonymousFeedbacks.FindAsync(id);
-            if (feedback != null)
-            {
-                _context.AnonymousFeedbacks.Remove(feedback);
-                await _context.SaveChangesAsync();
-            }
-        }
-        public async Task<List<AnonymousFeedback>> GetAnonymousFeedbacksForTeam(Guid teamId)
-        {
-            return await _context.AnonymousFeedbacks
-                .Where(f => f.TeamId == teamId)
-                .OrderByDescending(f => f.CreatedAt)
-                .ToListAsync();
-        }
-
     }
+    public async Task<List<AnonymousFeedback>> GetAnonymousFeedbacksForTeamAsync(Guid teamId)
+    {
+        return await _context.AnonymousFeedbacks
+            .Where(f => f.TeamId == teamId)
+            .OrderByDescending(f => f.CreatedAt)
+            .ToListAsync();
+    }
+
 }

@@ -86,7 +86,7 @@ public class CreateCalendarEventCommandHandler(ILogger<CreateCalendarEventComman
             Email = user.email
         };
 
-        await _calendarRepository.AddCalendarEvent(calendar);
+        await _calendarRepository.AddCalendarEventAsync(calendar);
         Console.WriteLine(calendarId);
         await service.Events.Insert(calendarEvent, calendarId).ExecuteAsync(cancellationToken);  
     }

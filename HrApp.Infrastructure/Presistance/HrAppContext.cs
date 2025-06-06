@@ -75,12 +75,5 @@ public class HrAppContext : DbContext
         modelBuilder.ApplyConfiguration(new TeamRaportConfiguration());
         modelBuilder.ApplyConfiguration(new AssignmentRaportConfiguration());
         modelBuilder.ApplyConfiguration(new OverallRaportConfiguration());
-
-
-        modelBuilder.Entity<User>()
-            .HasOne(u => u.TeamLeader)
-            .WithMany()
-            .HasForeignKey(u => u.TeamLeaderId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

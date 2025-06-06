@@ -20,7 +20,7 @@ public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, U
     }
     public async Task<UserDTO?> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
     {
-        var user = await _repository.GetUserByEmail(request.Email);
+        var user = await _repository.GetUserAsync(request.Email);
 
         if (user == null)
             throw new BadRequestException($"User with email {request.Email} not found");

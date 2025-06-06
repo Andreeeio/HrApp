@@ -20,7 +20,7 @@ public class GetAllOffersQueryHandler(
     {
         _logger.LogInformation("Fetching all offers");
 
-        var offers = await _repository.GetAllOffers();
+        var offers = await _repository.GetAllOffersAsync();
         var dto = _mapper.Map<List<OfferDTO>>(offers);
 
         return dto;

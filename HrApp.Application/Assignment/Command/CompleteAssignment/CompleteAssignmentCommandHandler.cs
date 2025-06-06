@@ -8,13 +8,21 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Assignment.Command.CompleteAssignment;
 
-public class CompleteAssignmentCommandHandler(ILogger<CompleteAssignmentCommandHandler> logger,
-    IAssignmentAuthorizationService assignmentAuthorizationService,
-    IAssignmentRepository assignmentRepository) : IRequestHandler<CompleteAssignmentCommand>
+public class CompleteAssignmentCommandHandler : IRequestHandler<CompleteAssignmentCommand>
 {
-    private readonly ILogger _logger = logger;
-    private readonly IAssignmentAuthorizationService _assignmentAuthorizationService = assignmentAuthorizationService;
-    private readonly IAssignmentRepository _assignmentRepository = assignmentRepository;
+    private readonly ILogger<CompleteAssignmentCommandHandler> _logger;
+    private readonly IAssignmentAuthorizationService _assignmentAuthorizationService;
+    private readonly IAssignmentRepository _assignmentRepository;
+
+    public CompleteAssignmentCommandHandler(ILogger<CompleteAssignmentCommandHandler> logger,
+        IAssignmentAuthorizationService assignmentAuthorizationService,
+        IAssignmentRepository assignmentRepository)
+    {
+        _logger = logger;
+        _assignmentAuthorizationService = assignmentAuthorizationService;
+        _assignmentRepository = assignmentRepository;
+    }
+
     public async Task Handle(CompleteAssignmentCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Ending a taks");

@@ -35,7 +35,7 @@ public class AddEmploymentHistoryCommandHandler(ILogger<AddEmploymentHistoryComm
         if(!_teamAuthorizationService.Authorize(ResourceOperation.Create))
             throw new UnauthorizedException("User is not authorized to create employment history.");
 
-        var user = await _userRepository.GetUserByEmail(request.Email);
+        var user = await _userRepository.GetUserAsync(request.Email);
 
         if (user == null)
             throw new BadRequestException($"User with email {request.Email} not found.");

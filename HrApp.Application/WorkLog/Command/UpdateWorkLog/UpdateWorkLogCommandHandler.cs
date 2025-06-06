@@ -18,7 +18,7 @@ public class UpdateWorkLogCommandHandler : IRequestHandler<UpdateWorkLogCommand>
     {
         _logger.LogInformation("Updating WorkLog with Id: {WorkLogId}", request.Id);
 
-        var workLog = await _repository.GetWorkLogById(request.Id);
+        var workLog = await _repository.GetWorkLogByIdAsync(request.Id);
 
         if (workLog == null)
         {
@@ -29,7 +29,7 @@ public class UpdateWorkLogCommandHandler : IRequestHandler<UpdateWorkLogCommand>
         workLog.EndTime = request.EndTime;
         workLog.Hours = request.Hours;
 
-        await _repository.UpdateWorkLog(workLog);
+        await _repository.UpdateWorkLogAsync(workLog);
 
         _logger.LogInformation("Successfully updated WorkLog with Id: {WorkLogId}", request.Id);
     }

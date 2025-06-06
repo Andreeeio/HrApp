@@ -28,11 +28,11 @@ public class AddPaidCommandHandler : IRequestHandler<AddPaidCommand>
 
         var paid = _mapper.Map<Paid>(request);
 
-        var user = await _userRepository.GetUserByEmail(request.Email);
+        var user = await _userRepository.GetUserAsync(request.Email);
         if (user == null)
             throw new BadRequestException($"User with email {request.Email} not found.");
         paid.UserId = user.Id;
 
-        await _salaryRepository.AddPaid(paid);
+        await _salaryRepository.AddPaidAsync(paid);
     }
 }

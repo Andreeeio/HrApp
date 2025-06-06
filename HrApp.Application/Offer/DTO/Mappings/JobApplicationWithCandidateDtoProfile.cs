@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HrApp.Application.Mappings
+namespace HrApp.Application.Offer.DTO.Mappings
 {
     public class JobApplicationWithCandidateDtoProfile : Profile
     {

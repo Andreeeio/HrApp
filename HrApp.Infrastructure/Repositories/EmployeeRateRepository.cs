@@ -17,10 +17,7 @@ public class EmployeeRateRepository : IEmployeeRateRepository
         _dbContext.EmployeeRate.AddRange(rates);
         await _dbContext.SaveChangesAsync();
     }
-    public Task<IEnumerable<EmployeeRate>> GetEmployeeRatesByUserId(Guid userid)
-    {
-        return Task.FromResult(_dbContext.EmployeeRate.Where(x => x.EmployeeId == userid).AsEnumerable());
-    }
+
     public async Task<List<EmployeeRate>> GetRatesForUserAsync(Guid userId)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);

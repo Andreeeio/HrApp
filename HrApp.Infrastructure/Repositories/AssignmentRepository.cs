@@ -15,47 +15,44 @@ public class AssignmentRepository : IAssignmentRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddAssignment(Assignment assignment)
+    public async Task AddAssignmentAsync(Assignment assignment)
     {
         await _dbContext.Assignment.AddAsync(assignment);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<Assignment>> GetAllAssignmentsForTeam(Guid TeamId)
+    public async Task<List<Assignment>> GetAllAssignmentsForTeamAsync(Guid TeamId)
     {
         return await _dbContext.Assignment
             .Where(t => t.AssignedToTeamId == TeamId && t.IsEnded == false)
             .ToListAsync();
     }
 
-    public async Task<List<Assignment>> GetActiveAssignments()
+    public async Task<List<Assignment>> GetActiveAssignmentsAsync()
     {
         return await _dbContext.Assignment
             .Where(a => a.EndDate > DateTime.UtcNow && a.EndDate <= DateTime.UtcNow.AddDays(1) && a.IsEnded == false)
             .ToListAsync();
     }
-    public async Task<List<Assignment>> GetFreeAssignments()
-    {
-        return await _dbContext.Assignment
-            .Where(a => a.EndDate > DateTime.UtcNow && a.IsEnded == false && a.AssignedToTeamId == null)
-            .ToListAsync();
-    }
 
-    public async Task<List<Assignment>> GetNotFreeAssignments()
+    public async Task<List<Assignment>> GetAssignmentsAsync(bool onlyFree)
     {
-        return await _dbContext.Assignment
-            .Where(a => a.EndDate > DateTime.UtcNow && a.IsEnded == false)
-            .ToListAsync();
+        var query = _dbContext.Assignment
+            .Where(a => a.EndDate > DateTime.UtcNow && a.IsEnded == false);
+
+        if (onlyFree)
+        {
+            query = query.Where(a => a.AssignedToTeamId == null);
+        }
+
+        return await query.ToListAsync();
     }
 
     public async Task<Assignment?> GetAssignmentByIdAsync(Guid id)
     {
         return await _dbContext.Assignment.FindAsync(id);
     }
-    public void Update(Assignment assignment)
-    {
-        _dbContext.Assignment.Update(assignment);
-    }
+
     public async Task SaveChangesAsync()
     {
 
@@ -63,7 +60,7 @@ public class AssignmentRepository : IAssignmentRepository
 
     }
 
-    public async Task<List<Assignment>> GetAssignments(string? name, bool? isEnded, Guid? assignedToTeamId, int? difficultyLevel, CancellationToken cancellationToken)
+    public async Task<List<Assignment>> GetApiAssignmentsAsync(string? name, bool? isEnded, Guid? assignedToTeamId, int? difficultyLevel, CancellationToken cancellationToken)
     {
         var query = _dbContext.Assignment
                .Include(a => a.AssignedToTeam)

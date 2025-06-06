@@ -62,10 +62,4 @@ public class OverallRaportRepository(HrAppContext dbContext) : IOverallRaportRep
         _dbContext.AssignmentRaport.AddRange(assignment);
         await _dbContext.SaveChangesAsync();
     }
-    public async Task UpdateAsync(List<UserRaport> userRaports)
-    {
-        _dbContext.UserRaport.UpdateRange(userRaports);
-        await _dbContext.SaveChangesAsync();
-    }
-
 }

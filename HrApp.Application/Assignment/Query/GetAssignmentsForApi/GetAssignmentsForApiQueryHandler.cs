@@ -7,15 +7,24 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Assignment.Query.GetAssignmentsForApi;
 
-public class GetAssignmentsForApiQueryHandler(ILogger<GetAssignmentsForApiQueryHandler> logger,
-    IAssignmentRepository assignmentRepository,
-    IApiLogRepository apiLogRepository,
-    IMapper mapper) : IRequestHandler<GetAssignmentsForApiQuery, List<AssignmentApiDTO>>
+public class GetAssignmentsForApiQueryHandler : IRequestHandler<GetAssignmentsForApiQuery, List<AssignmentApiDTO>>
 {
-    private readonly ILogger<GetAssignmentsForApiQueryHandler> _logger = logger;
-    private readonly IAssignmentRepository _assignmentRepository = assignmentRepository;
-    private readonly IApiLogRepository _apiLogRepository = apiLogRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly ILogger<GetAssignmentsForApiQueryHandler> _logger;
+    private readonly IAssignmentRepository _assignmentRepository;
+    private readonly IApiLogRepository _apiLogRepository;
+    private readonly IMapper _mapper;
+
+    public GetAssignmentsForApiQueryHandler(ILogger<GetAssignmentsForApiQueryHandler> logger,
+        IAssignmentRepository assignmentRepository,
+        IApiLogRepository apiLogRepository,
+        IMapper mapper)
+    {
+        _logger = logger;
+        _assignmentRepository = assignmentRepository;
+        _apiLogRepository = apiLogRepository;
+        _mapper = mapper;
+    }
+
     public async Task<List<AssignmentApiDTO>> Handle(GetAssignmentsForApiQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling GetAssignmentsForApiQuery for api request");
@@ -31,7 +40,7 @@ public class GetAssignmentsForApiQueryHandler(ILogger<GetAssignmentsForApiQueryH
 
         await _apiLogRepository.AddLogAsync(log);
 
-        var assignments = await _assignmentRepository.GetAssignments(
+        var assignments = await _assignmentRepository.GetApiAssignmentsAsync(
             request.Name,
             request.IsEnded,
             request.AssignedToTeamId,

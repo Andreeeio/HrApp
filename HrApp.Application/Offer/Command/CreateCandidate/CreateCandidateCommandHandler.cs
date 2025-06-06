@@ -25,7 +25,7 @@ namespace HrApp.Application.Offer.Command.CreateCandidate
         {
             _logger.LogInformation("Creating candidate with name: {Name} and surname: {Surname}", request.Name, request.Surname);
             var candidate = _mapper.Map<Domain.Entities.Candidate>(request);
-            await _repository.CreateCandidate(candidate);
+            await _repository.CreateCandidateAsync(candidate);
 
             return await Task.FromResult(candidate.Id);
         }

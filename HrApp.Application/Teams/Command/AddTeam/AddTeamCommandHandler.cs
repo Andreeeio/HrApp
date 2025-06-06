@@ -24,14 +24,17 @@ public class AddTeamCommandHandler : IRequestHandler<AddTeamCommand>
     {
         var team = _mapper.Map<Team>(request);
 
-        var user = await _userRepository.GetUserByEmail(request.TeamLeaderEmail);
+        var user = await _userRepository.GetUserAsync(request.TeamLeaderEmail);
 
         if(user == null)
             throw new BadRequestException($"User with email {request.TeamLeaderEmail} does not exist.");
         
+        if(user.IsEmailConfirmed == false)
+            throw new BadRequestException($"User with email {request.TeamLeaderEmail} has not confirmed their email.");
+
         team.TeamLeaderId = user.Id;
 
-        await _teamRepository.CreateTeam(team);
+        await _teamRepository.CreateTeamAsync(team);
         _logger.LogInformation($"Added team {team.Name} to department {team.DepartmentId}");
     }
 }
