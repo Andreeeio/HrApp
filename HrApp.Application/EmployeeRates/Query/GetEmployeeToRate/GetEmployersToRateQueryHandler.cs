@@ -11,15 +11,24 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.EmployeeRate.Query.GetEmployeeToRate;
 
-public class GetEmployersToRateQueryHandler(ILogger<GetEmployersToRateQueryHandler> logger,
-    IUserRepository userRepository,
-    ITeamAuthorizationService teamAuthorizationService,
-    IMapper mapper) : IRequestHandler<GetEmployersToRateQuery,AddTaskRatesCommand>
+public class GetEmployersToRateQueryHandler : IRequestHandler<GetEmployersToRateQuery,AddTaskRatesCommand>
 {
-    private readonly ILogger<GetEmployersToRateQueryHandler> _logger = logger;
-    private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
-    private readonly IUserRepository _userRepository = userRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly ILogger<GetEmployersToRateQueryHandler> _logger;
+    private readonly ITeamAuthorizationService _teamAuthorizationService;
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
+
+    public GetEmployersToRateQueryHandler(ILogger<GetEmployersToRateQueryHandler> logger,
+        IUserRepository userRepository,
+        ITeamAuthorizationService teamAuthorizationService,
+        IMapper mapper)
+    {
+        _logger = logger;
+        _teamAuthorizationService = teamAuthorizationService;
+        _userRepository = userRepository;
+        _mapper = mapper;
+    }
+
     public async Task<AddTaskRatesCommand> Handle(GetEmployersToRateQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting all employers in team {TeamId}", request.TeamId);

@@ -6,9 +6,15 @@ namespace HrApp.MVC.Controllers.Api;
 
 [ApiController]
 [Route("api/Assignments")]
-public class AssignmentApiController(ISender sender) : ControllerBase
+public class AssignmentApiController : ControllerBase
 {
-    private readonly ISender _sender = sender;
+    private readonly ISender _sender;
+
+    public AssignmentApiController(ISender sender)
+    {
+        _sender = sender;
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAssignments(
             [FromQuery] string? name,

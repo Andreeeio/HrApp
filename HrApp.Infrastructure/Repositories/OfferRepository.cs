@@ -7,38 +7,38 @@ namespace HrApp.Infrastructure.Repositories;
 
 public class OfferRepository : IOfferRepository
 {
-    private readonly HrAppContext dbContext;
+    private readonly HrAppContext _dbContext;
 
     public OfferRepository(HrAppContext dbContext)
     {
-        this.dbContext = dbContext;
+        _dbContext = dbContext;
     }
 
     public async Task<List<Offer>> GetAllOffersAsync()
     {
-        return await dbContext.Offer.ToListAsync();
+        return await _dbContext.Offer.ToListAsync();
     }
     public async Task CreateOfferAsync(Offer offer)
     {
-        dbContext.Offer.Add(offer);
-        await dbContext.SaveChangesAsync();
+        _dbContext.Offer.Add(offer);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task CreateCandidateAsync(Candidate candidate)
     {
-        dbContext.Candidate.Add(candidate);
-        await dbContext.SaveChangesAsync();
+        _dbContext.Candidate.Add(candidate);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task CreateJobApplicationAsync(JobApplication jobApplication)
     {
-        dbContext.JobApplication.Add(jobApplication);
-        await dbContext.SaveChangesAsync();
+        _dbContext.JobApplication.Add(jobApplication);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<Offer?> GetOfferWithApplicationsAsync(Guid offerId)
     {
-        return await dbContext.Offer
+        return await _dbContext.Offer
             .Include(o => o.JobApplications.Where(s => s.Status == "Received"))
                 .ThenInclude(a => a.Candidate)
             .FirstOrDefaultAsync(o => o.Id == offerId);
@@ -46,14 +46,14 @@ public class OfferRepository : IOfferRepository
 
     public async Task<JobApplication?> GetJobApplicationAsync(Guid id)
     {
-        return await dbContext.JobApplication
+        return await _dbContext.JobApplication
             .Include(a => a.Candidate)
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task SaveChangesAsync()
     {
-        await dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
 }

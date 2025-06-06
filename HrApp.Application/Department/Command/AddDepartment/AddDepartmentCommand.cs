@@ -1,6 +1,4 @@
-﻿using HrApp.Application.Department.DTO;
-using HrApp.Domain.Entities;
-using MediatR;
+﻿using MediatR;
 
 namespace HrApp.Application.Department.Command.AddDepartment;
 

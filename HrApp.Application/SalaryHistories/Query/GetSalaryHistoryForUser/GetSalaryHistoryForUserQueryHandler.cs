@@ -6,22 +6,31 @@ using HrApp.Domain.Exceptions;
 using HrApp.Domain.Interfaces;
 using HrApp.Domain.Repositories;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.SalaryHistories.Query.GetSalaryHistoryForUser;
 
-public class GetSalaryHistoryForUserQueryHandler(ILogger<GetSalaryHistoryForUserQueryHandler> logger,
-    IUserContext userContext,
-    IUserAuthorizationService userAuthorizationService,
-    ISalaryHistoryRepository salaryHistoryRepository,
-    IMapper mapper) : IRequestHandler<GetSalaryHistoryForUserQuery, List<SalaryHistoryDTO>>
+public class GetSalaryHistoryForUserQueryHandler : IRequestHandler<GetSalaryHistoryForUserQuery, List<SalaryHistoryDTO>>
 {
-    private readonly IUserContext _userContext = userContext;
-    private readonly ILogger<GetSalaryHistoryForUserQueryHandler> _logger = logger;
-    private readonly IUserAuthorizationService _userAuthorizationService = userAuthorizationService;
-    private readonly ISalaryHistoryRepository _salaryHistoryRepository = salaryHistoryRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IUserContext _userContext;
+    private readonly ILogger<GetSalaryHistoryForUserQueryHandler> _logger;
+    private readonly IUserAuthorizationService _userAuthorizationService;
+    private readonly ISalaryHistoryRepository _salaryHistoryRepository;
+    private readonly IMapper _mapper;
+
+    public GetSalaryHistoryForUserQueryHandler(ILogger<GetSalaryHistoryForUserQueryHandler> logger,
+        IUserContext userContext,
+        IUserAuthorizationService userAuthorizationService,
+        ISalaryHistoryRepository salaryHistoryRepository,
+        IMapper mapper)
+    {
+        _logger = logger;
+        _userContext = userContext;
+        _userAuthorizationService = userAuthorizationService;
+        _salaryHistoryRepository = salaryHistoryRepository;
+        _mapper = mapper;
+    }
+
     public async Task<List<SalaryHistoryDTO>> Handle(GetSalaryHistoryForUserQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Get salhistry for user");

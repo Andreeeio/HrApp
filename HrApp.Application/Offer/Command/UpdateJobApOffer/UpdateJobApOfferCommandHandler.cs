@@ -8,17 +8,27 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Offer.Command.UpdateJobApOffer;
 
-public class UpdateJobApOfferCommandHandler(ILogger<UpdateJobApOfferCommandHandler> logger,
-    IOfferRepository offerRepository,
-    IUserContext userContext,
-    IEmailSender emailSender,
-    ITeamAuthorizationService teamAuthorizationService) : IRequestHandler<UpdateJobApOfferCommand>
+public class UpdateJobApOfferCommandHandler : IRequestHandler<UpdateJobApOfferCommand>
 {
-    private readonly ILogger<UpdateJobApOfferCommandHandler> _logger = logger;
-    private readonly IOfferRepository _offerRepository = offerRepository;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IEmailSender _emailSender = emailSender;
-    private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
+    private readonly ILogger<UpdateJobApOfferCommandHandler> _logger;
+    private readonly IOfferRepository _offerRepository;
+    private readonly IUserContext _userContext;
+    private readonly IEmailSender _emailSender;
+    private readonly ITeamAuthorizationService _teamAuthorizationService;
+
+    public UpdateJobApOfferCommandHandler(ILogger<UpdateJobApOfferCommandHandler> logger,
+        IOfferRepository offerRepository,
+        IUserContext userContext,
+        IEmailSender emailSender,
+        ITeamAuthorizationService teamAuthorizationService)
+    {
+        _logger = logger;
+        _offerRepository = offerRepository;
+        _userContext = userContext;
+        _emailSender = emailSender;
+        _teamAuthorizationService = teamAuthorizationService;
+    }
+
     public async Task Handle(UpdateJobApOfferCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling UpdateJobApOfferCommand for Offer ID");
@@ -47,6 +57,5 @@ public class UpdateJobApOfferCommandHandler(ILogger<UpdateJobApOfferCommandHandl
             : "We regret to inform you that your application has been denied.";
 
         await _emailSender.SendEmailAsync(jobApplication.Candidate.Email, subject, body);
-
     }
 }

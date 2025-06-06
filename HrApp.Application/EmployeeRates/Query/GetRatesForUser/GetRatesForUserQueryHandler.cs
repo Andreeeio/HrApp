@@ -11,7 +11,6 @@ public class GetRatesForUserQueryHandler : IRequestHandler<GetRatesForUserQuery,
 {
     private readonly ILogger<GetRatesForUserQueryHandler> _logger;
     private readonly IEmployeeRateRepository _employeeRateRepository;
-    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
     public GetRatesForUserQueryHandler(
@@ -22,7 +21,6 @@ public class GetRatesForUserQueryHandler : IRequestHandler<GetRatesForUserQuery,
     {
         _logger = logger;
         _employeeRateRepository = employeeRateRepository;
-        _userRepository = userRepository;
         _mapper = mapper;
     }
 

@@ -4,9 +4,15 @@ using HrApp.Domain.Interfaces;
 
 namespace HrApp.Infrastructure.Authorizations;
 
-public class TeamAuthorizationService(IUserContext userContext) : ITeamAuthorizationService
+public class TeamAuthorizationService : ITeamAuthorizationService
 {
-    private readonly IUserContext _userContext = userContext;
+    private readonly IUserContext _userContext;
+
+    public TeamAuthorizationService(IUserContext userContext)
+    {
+        _userContext = userContext;
+    }
+
     public bool Authorize(ResourceOperation operation)
     {
         var user = _userContext.GetCurrentUser();

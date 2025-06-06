@@ -13,6 +13,7 @@ public class AddTeamCommandHandler : IRequestHandler<AddTeamCommand>
     private readonly IUserRepository _userRepository;
     private readonly ILogger<AddTeamCommandHandler> _logger;
     private readonly IMapper _mapper;
+
     public AddTeamCommandHandler(ITeamRepository teamRepository, IUserRepository userRepository, ILogger<AddTeamCommandHandler> logger, IMapper mapper)
     {
         _teamRepository = teamRepository;
@@ -20,6 +21,7 @@ public class AddTeamCommandHandler : IRequestHandler<AddTeamCommand>
         _logger = logger;
         _mapper = mapper;
     }
+
     public async Task Handle(AddTeamCommand request, CancellationToken cancellationToken)
     {
         var team = _mapper.Map<Team>(request);

@@ -2,10 +2,7 @@ using DotNetEnv;
 using Hangfire;
 using HrApp.Application.Extensions;
 using HrApp.Application.Interfaces;
-using HrApp.Application.Mappings;
-using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Extentions;
-using HrApp.Infrastructure.Repositories;
 using HrApp.Infrastructure.Seeder;
 using HrApp.MVC.Middleware;
 
@@ -25,7 +22,7 @@ var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Ti
 recurringJobs.AddOrUpdate<IDeadlineChecker>(
     "check-deadlines",
     x => x.Check(),
-    "19 9 * * *",
+    "0 6 * * *",
     new RecurringJobOptions
     {
         TimeZone = timezone
@@ -41,7 +38,7 @@ recurringJobs.AddOrUpdate<ISalaryHistoryGenerator>(
     });
 
 recurringJobs.AddOrUpdate<IContractChecker>(
-    "generate-salary-history",
+    "check-contract",
     x => x.Check(),
     "0 0 1 * *",
     new RecurringJobOptions
@@ -50,7 +47,7 @@ recurringJobs.AddOrUpdate<IContractChecker>(
     });
 
 recurringJobs.AddOrUpdate<IRaportService>(
-    "generate-salary-history",
+    "create-raport",
     x => x.GenerateRaport(),
     "0 23 30 12 *",  
     new RecurringJobOptions

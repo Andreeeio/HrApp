@@ -2,14 +2,19 @@
 using HrApp.Application.Users.DTO;
 using HrApp.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Claims;
 
 namespace HrApp.Application.Services;
 
-public class UserContext(IHttpContextAccessor httpContext) : IUserContext
+public class UserContext : IUserContext
 {
-    private readonly IHttpContextAccessor _httpContext = httpContext;
+    private readonly IHttpContextAccessor _httpContext;
+
+    public UserContext(IHttpContextAccessor httpContext)
+    {
+        _httpContext = httpContext ;
+    }
+
     public CurrentUser? GetCurrentUser()
     {
         var user = (_httpContext?.HttpContext?.User)

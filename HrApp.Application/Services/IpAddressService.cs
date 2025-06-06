@@ -3,9 +3,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace HrApp.Application.Services;
 
-public class IpAddressService(IHttpContextAccessor httpContextAccessor) : IIpAddressService
+public class IpAddressService : IIpAddressService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public IpAddressService(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
 
     public string GetUserAgent()
     {

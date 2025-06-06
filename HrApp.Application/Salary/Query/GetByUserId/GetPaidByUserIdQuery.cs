@@ -1,19 +1,14 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HrApp.Domain.Entities;
+using MediatR;
 
-namespace HrApp.Application.Salary.Query.GetByUserId
+namespace HrApp.Application.Salary.Query.GetByUserId;
+
+public class GetPaidByUserIdQuery : IRequest<Paid>
 {
-    public class GetPaidByUserIdQuery : IRequest<Domain.Entities.Paid>
-    {
-        public Guid Id { get; }
+    public Guid Id { get; }
 
-        public GetPaidByUserIdQuery(Guid id)
-        {
-            Id = id;
-        }
+    public GetPaidByUserIdQuery(Guid id)
+    {
+        Id = id;
     }
 }

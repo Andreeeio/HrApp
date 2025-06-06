@@ -13,6 +13,7 @@ public class DeleteDepartmentCommandHandler : IRequestHandler<DeleteDepartmentCo
     private readonly IUserRepository _userRepository;
     private readonly ITeamAuthorizationService _teamAuthorizationService;
     private readonly ILogger<DeleteDepartmentCommandHandler> _logger;
+
     public DeleteDepartmentCommandHandler(ILogger<DeleteDepartmentCommandHandler> logger, 
         IDepartmentRepository departmentRepository,
         IUserRepository userRepository,
@@ -23,6 +24,7 @@ public class DeleteDepartmentCommandHandler : IRequestHandler<DeleteDepartmentCo
         _userRepository = userRepository;
         _teamAuthorizationService = teamAuthorizationService;
     }
+
     public async Task Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Deleting department {DepartmentId}", request.DepartmentId);

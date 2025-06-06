@@ -6,11 +6,17 @@ using HrApp.Domain.Repositories;
 
 namespace HrApp.Infrastructure.Authorizations;
 
-public class AssignmentAuthorizationService(IUserContext userContext, 
-    ITeamRepository teamRepository) : IAssignmentAuthorizationService
+public class AssignmentAuthorizationService : IAssignmentAuthorizationService
 {
-    private readonly IUserContext _userContext = userContext;
-    private readonly ITeamRepository _teamRepository = teamRepository;
+    private readonly IUserContext _userContext;
+    private readonly ITeamRepository _teamRepository;
+
+    public AssignmentAuthorizationService(IUserContext userContext,
+    ITeamRepository teamRepository)
+    {
+        _userContext = userContext;
+        _teamRepository = teamRepository;
+    }
 
     public async Task<bool> Authorize(ResourceOperation operation, Assignment assignment)
     {
