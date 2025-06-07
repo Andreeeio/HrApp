@@ -1,0 +1,7 @@
+[build]
+builder = "Dockerfile"
+dockerfilePath = "./HrApp.MVC\Dockerfile"
+
+[deploy]
+startCommand = "dotnet HrApp.MVC.dll"
+restartPolicy = "always"
