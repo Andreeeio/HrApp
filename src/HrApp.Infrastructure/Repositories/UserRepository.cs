@@ -59,9 +59,12 @@ public class UserRepository(HrAppContext dbContext) : IUserRepository
 
     public async Task DeleteUserAsync(Guid id)
     {
-        await dbContext.User
-            .Where(u => u.Id == id)
-            .ExecuteDeleteAsync();
+        var user = await dbContext.User.FirstOrDefaultAsync(u => u.Id == id);
+        if (user != null)
+        {
+            dbContext.User.Remove(user);
+            await dbContext.SaveChangesAsync();
+        }
         return;
     }
 
