@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Edit role";
+    var assignedRoles = Model as List<string> ?? new List<string>();
+    var allRoles = ViewBag.AllRoles as List<string> ?? new List<string>();
+}
+
+<h2>Edit user role</h2>
+
+<form asp-action="EditRole" asp-controller="User" method="post">
+    <input type="hidden" name="UserId" value="@ViewBag.UserId" />
+
+    @foreach (var role in allRoles)
+    {
+        var isAssigned = assignedRoles.Contains(role);
+        <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="SelectedRoles"
+                   value="@role"
+                   id="role_@role"
+            @(isAssigned ? "checked" : "") />
+            <label class="form-check-label" for="role_@role">
+                @role
+            </label>
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>

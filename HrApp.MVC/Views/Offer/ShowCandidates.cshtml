@@ -1,0 +1,36 @@
+﻿@model List<HrApp.Application.Offer.DTO.JobApplicationWithCandidateDto>
+
+<h2>Applications</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Candidate</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Application Date</th>
+            <th>Status</th>
+            <th>CV</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var app in Model)
+        {
+            <tr>
+                <td>@app.Name @app.Surname</td>
+                <td>@app.Email</td>
+                <td>@app.City</td>
+                <td>@app.ApplicationDate</td>
+                <td>@app.Status</td>
+                <td><a href="@app.CvLink" target="_blank">CV</a></td>
+                <td>
+                    <a asp-action="Update"
+                       asp-route-jobApIp="@app.Id"
+                       class="btn btn-sm btn-primary">
+                        Update
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

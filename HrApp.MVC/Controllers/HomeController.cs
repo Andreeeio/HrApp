@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using HrApp.MVC.Models;
 using Microsoft.AspNetCore.Authentication;
+using HrApp.Application.Interfaces;
 
 namespace HrApp.MVC.Controllers;
 

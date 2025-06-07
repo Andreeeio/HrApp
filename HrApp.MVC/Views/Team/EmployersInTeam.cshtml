@@ -1,21 +1,59 @@
 ﻿@using HrApp.Application.Users.DTO
+@using HrApp.Domain.Constants
 @model List<UserDTO>
 
+@{
+    ViewData["Title"] = "Employers in Team";
+    var isManager = User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()) || User.IsInRole(Roles.TeamLeader.ToString());
+
+}
+
 <h1>@ViewBag.TeamName</h1>
-<p>
-    <a asp-action="AddEmployer">Add Employers</a>
-</p>
-<p>
-    <a asp-controller="Assignment" asp-action="Index" asp-route-TeamId="@ViewBag.TeamId">View Assignments</a>
-</p>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="d-flex mb-5 gap-2">
+    @if (isManager)
+    {
+        <div>
+            <a asp-action="AddEmployer" class="btn btn-outline-secondary">Add Employers</a>
+        </div>
+    }
+    <div>
+        <a asp-controller="Assignment" asp-action="Index" asp-route-TeamId="@ViewBag.TeamId" class="btn btn-outline-secondary">View Assignments</a>
+    </div>
+    <div>
+        <a asp-action="ViewAnonymousFeedbacks" asp-route-teamId="@ViewBag.TeamId" class="btn btn-outline-secondary">View Anonymous Feedback</a>
+    </div>
+    @if (!User.IsInRole(Roles.Ceo.ToString()) && !User.IsInRole(Roles.Hr.ToString()) && !User.IsInRole(Roles.TeamLeader.ToString()))
+    {
+        <div>
+            <a asp-action="LeaveAnonymousFeedback" asp-route-teamId="@ViewBag.TeamId" class="btn btn-outline-secondary">Leave Anonymous Feedback</a>
+        </div>
+    }
+</div>
+
+
 <table class="table">
     <thead>
         <tr>
-            <th>Imię</th>
-            <th>Nazwisko</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Email</th>
-            <th>Data Urodzenia</th>
-            <th>Akcje</th>
+            <th>Date of Birth</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -27,14 +65,27 @@
                 <td>@user.Email</td>
                 <td>@user.DateOfBirth.ToString("dd-MM-yyyy")</td>
                 <td>
-                    <a asp-controller="User" asp-action="Details" asp-route-encodedName="@user.Email">Szczegóły</a> |
-                    <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Email">Edytuj</a> |
-                    <a asp-controller="Team" asp-action="DeleteUserFromTeam" asp-route-UserId="@user.Id" asp-route-TeamId="@ViewBag.TeamId">Delete</a>
+                    <a asp-controller="User" asp-action="Details" asp-route-encodedName="@user.Email">Details</a>
+                    @if (isManager)
+                    {
+                        <span class="mx-1 text-muted">|</span>
+                        <a asp-controller="User" asp-action="Manage" asp-route-userId="@user.Id">Edit</a>
+                        <span class="mx-1 text-muted">|</span>
+                        <form asp-controller="Team"
+                              asp-action="DeleteUserFromTeam"
+                              asp-route-UserId="@user.Id"
+                              asp-route-TeamId="@ViewBag.TeamId"
+                              method="post"
+                              onsubmit="return confirm('Are you sure you want to delete this user from team?');"
+                              style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline">
+                                Delete
+                            </button>
+                        </form>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-@{
-}

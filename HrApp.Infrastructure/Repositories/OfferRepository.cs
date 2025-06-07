@@ -14,13 +14,46 @@ public class OfferRepository : IOfferRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<List<Offer>> GetAllOffers()
+    public async Task<List<Offer>> GetAllOffersAsync()
     {
         return await dbContext.Offer.ToListAsync();
     }
-    public async Task CreateOffer(Offer offer)
+    public async Task CreateOfferAsync(Offer offer)
     {
-        await dbContext.Offer.AddAsync(offer);
+        dbContext.Offer.Add(offer);
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task CreateCandidateAsync(Candidate candidate)
+    {
+        dbContext.Candidate.Add(candidate);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task CreateJobApplicationAsync(JobApplication jobApplication)
+    {
+        dbContext.JobApplication.Add(jobApplication);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task<Offer?> GetOfferWithApplicationsAsync(Guid offerId)
+    {
+        return await dbContext.Offer
+            .Include(o => o.JobApplications.Where(s => s.Status == "Received"))
+                .ThenInclude(a => a.Candidate)
+            .FirstOrDefaultAsync(o => o.Id == offerId);
+    }
+
+    public async Task<JobApplication?> GetJobApplicationAsync(Guid id)
+    {
+        return await dbContext.JobApplication
+            .Include(a => a.Candidate)
+            .FirstOrDefaultAsync(a => a.Id == id);
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await dbContext.SaveChangesAsync();
+    }
+
 }

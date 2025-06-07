@@ -1,4 +1,10 @@
-﻿@model List<HrApp.Domain.Entities.WorkedHoursRaport>
+﻿@using HrApp.Domain.Entities;
+@model List<WorkedHoursRaport>
+
+@{
+    ViewData["Title"] = "Worked hours raport";
+
+}
 
 <div class="container mt-5">
     <h2 class="text-center">Worked Hours Report</h2>
@@ -20,5 +26,11 @@
                 </tr>
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2"><strong>Total</strong></td>
+                <td><strong>@Model.Sum(r => r.WorkedHours)</strong></td>
+            </tr>
+        </tfoot>
     </table>
 </div>

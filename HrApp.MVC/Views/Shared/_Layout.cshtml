@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using HrApp.Domain.Constants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,24 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>@ViewData["Title"] - </title>
+    <title>@ViewData["Title"] - HrApp </title>
     <link href="~/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" asp-area="" asp-controller="Home" asp-action="Index">hr</a>
-        <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-        <!-- Navbar Search-->
-        @*         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-            </div>
-        </form> *@
-        <!-- Navbar-->
         <ul class="navbar-nav ms-auto me-3 me-lg-4">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,6 +27,13 @@
                             <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="CurrentUser">Account</a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
+                        @if (User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()))
+                        {
+                            <li>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="Create">Create</a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                        }
                         <li>
                             <form asp-controller="User" asp-action="Logout" method="post" style="display:inline;">
                                 <button type="submit" class="btn btn-link dropdown-item text-dark">Logout</button>
@@ -45,10 +43,11 @@
                     else
                     {
                         <li>
-                            <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="Create">Create</a>
-                        </li>
-                        <li>
                             <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                            <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="FirstLogin">First Login</a>
                         </li>
                     }
                 </ul>
@@ -69,7 +68,7 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                             Privacy
                         </a>
-                        @if (User.Identity?.IsAuthenticated == true)
+                        @if (User.Identity?.IsAuthenticated == true && !User.IsInRole(Roles.User.ToString()))
                         {
                             <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
@@ -83,7 +82,19 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                 Department
                             </a>
+                            <a class="nav-link" asp-area="" asp-controller="Assignment" asp-action="AllAssignments">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Assignments
+                            </a>
+                            <a class="nav-link" asp-area="" asp-controller="Calendar" asp-action="Events">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
+                                Calendar
+                            </a>
                         }
+                        <a class="nav-link" asp-area="" asp-controller="Offer" asp-action="Index">
+                           <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            Offers
+                        </a>            
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">

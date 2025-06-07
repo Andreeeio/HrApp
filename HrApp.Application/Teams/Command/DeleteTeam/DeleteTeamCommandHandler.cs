@@ -1,4 +1,5 @@
-﻿using HrApp.Domain.Repositories;
+﻿using HrApp.Domain.Exceptions;
+using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +17,14 @@ public class DeleteTeamCommandHandler : IRequestHandler<DeleteTeamCommand>
     public async Task Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Deleting team {TeamId}", request.TeamId);
-        await _teamRepository.DeleteTeam(request.TeamId);
-        return;
+        try
+        {
+            await _teamRepository.DeleteTeamAsync(request.TeamId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting team {TeamId}", request.TeamId);
+            throw new BadRequestException("An error occurred while deleting the team.");
+        }
     }
 }

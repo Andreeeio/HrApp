@@ -16,6 +16,6 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     public Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Deleting user {UserId}", request.UserId);
-        return _repository.DeleteUser(request.UserId);
+        return _repository.DeleteUserAsync(request.UserId);
     }
 }

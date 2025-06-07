@@ -5,7 +5,6 @@ namespace HrApp.Application.Interfaces;
 
 public interface ITokenService
 {
-    string GetToken(User user);
-    string GetToken(CurrentUser user);
-
+    string GetToken(User user, bool ipVer);
+    string GetToken(CurrentUser user, bool ipVer);
 }

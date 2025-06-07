@@ -1,0 +1,33 @@
+﻿@using HrApp.Application.Assignment.Command.AddAssignmentToTeam;
+@model AddAssignmentToTeamCommand
+
+@{
+    ViewData["Title"] = "Assign to Team";
+}
+
+<h2>Assign Assignment to Team</h2>
+
+<form asp-action="AddAssignmentToTeam" method="post">
+    <input type="hidden" asp-for="AssignmentId" value="@ViewBag.AssignmentId" />
+
+    <div class="form-group">
+        <label asp-for="TeamId" class="control-label">Team</label>
+        <select asp-for="TeamId" class="form-control" asp-items="ViewBag.teams">
+        </select>
+        <span asp-validation-for="TeamId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Assign</button>
+</form>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<div>
+    <a asp-action="Index" asp-controller="Assignment" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

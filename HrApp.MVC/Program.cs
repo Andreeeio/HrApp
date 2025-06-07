@@ -1,5 +1,8 @@
 using DotNetEnv;
+using Hangfire;
 using HrApp.Application.Extensions;
+using HrApp.Application.Interfaces;
+using HrApp.Application.Mappings;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Extentions;
 using HrApp.Infrastructure.Repositories;
@@ -13,12 +16,47 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
 
-builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
-builder.Services.AddScoped<IWorkLogRepository, WorkLogRepository>();
-builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 var app = builder.Build();
 var scope = app.Services.CreateScope();
+
+var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+
+recurringJobs.AddOrUpdate<IDeadlineChecker>(
+    "check-deadlines",
+    x => x.Check(),
+    "0 7 * * *",
+    new RecurringJobOptions
+    {
+        TimeZone = timezone
+    });
+
+recurringJobs.AddOrUpdate<ISalaryHistoryGenerator>(
+    "generate-salary-history",
+    x => x.GenerateSalaryHistoryAsync(),
+    "0 1 24 * *", 
+    new RecurringJobOptions
+    {
+        TimeZone = timezone
+    });
+
+recurringJobs.AddOrUpdate<IContractChecker>(
+    "generate-salary-history",
+    x => x.Check(),
+    "0 0 1 * *",
+    new RecurringJobOptions
+    {
+        TimeZone = timezone
+    });
+
+recurringJobs.AddOrUpdate<IRaportService>(
+    "generate-salary-history",
+    x => x.GenerateRaport(),
+    "0 23 30 12 *",  
+    new RecurringJobOptions
+    {
+        TimeZone = timezone
+    });
 
 Env.Load();
 
@@ -28,8 +66,8 @@ if (app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 
-    var seeder = scope.ServiceProvider.GetRequiredService<IHrAppSeeder>();
-    await seeder.Seed();
+/*    var seeder = scope.ServiceProvider.GetRequiredService<IHrAppSeeder>();
+    await seeder.Seed();*/
 
     app.UseHsts();
 }

@@ -13,12 +13,31 @@ public class TeamAuthorizationService(IUserContext userContext) : ITeamAuthoriza
         if (user == null)
             return false;
 
-        if(operation == ResourceOperation.Read
+        string twoFA = user.twoFA;
+        if (twoFA == null || twoFA == false.ToString()) 
+            return false;
+
+        if (operation == ResourceOperation.Read
             && (user.IsInRole(Roles.TeamLeader.ToString()) || user.IsInRole(Roles.Hr.ToString()) || user.IsInRole(Roles.Ceo.ToString())))
         {
             return true;
         }
+        else if (operation == ResourceOperation.Update
+            && (user.IsInRole(Roles.TeamLeader.ToString()) || user.IsInRole(Roles.Hr.ToString()) || user.IsInRole(Roles.Ceo.ToString())))
+        {
+            return true;
+        }
+        else if (operation == ResourceOperation.Create
+            && (user.IsInRole(Roles.Hr.ToString()) || user.IsInRole(Roles.Ceo.ToString())))
+        {
+            return true;
+        }
+        else if (operation == ResourceOperation.Delete
+            && (user.IsInRole(Roles.Ceo.ToString())))
+        {
+            return true;
+        }
 
-        return false; // Placeholder for actual authorization logic
+        return false; 
     }
 }

@@ -1,0 +1,38 @@
+﻿@using HrApp.Application.EmployeeRates.DTO;
+@model List<EmployeeRateDto>
+
+@{
+    ViewData["Title"] = "Employee Ratings";
+    var averageRate = ViewBag.AverageRate;
+}
+
+<h2>Employee Ratings</h2>
+
+@if (Model.Any())
+{
+    <p><strong>Average Rating in this month:</strong> @averageRate</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Rating Date</th>
+                <th>Rating</th>
+                <th>Rater</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rate in Model)
+            {
+                <tr>
+                    <td>@rate.RateDate.ToString("dd.MM.yyyy")</td>
+                    <td>@rate.Rate</td>
+                    <td>@rate.Rater</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No ratings available for this user.</p>
+}

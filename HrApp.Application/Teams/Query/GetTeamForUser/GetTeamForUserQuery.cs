@@ -3,7 +3,15 @@ using MediatR;
 
 namespace HrApp.Application.Teams.Query.GetTeamForUser;
 
-public class GetTeamForUserQuery(Guid userId) : IRequest<TeamDTO>
+public class GetTeamForUserQuery : IRequest<TeamDTO>
 {
-    public Guid UserId { get; set; } = userId;
+    public Guid? Id { get; set; } = null;
+
+    public GetTeamForUserQuery()
+    {
+    }
+    public GetTeamForUserQuery(Guid id)
+    {
+        Id = id;
+    }
 }

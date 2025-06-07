@@ -1,0 +1,22 @@
+﻿@using HrApp.Application.EmployeeRates.Command.AddTaskRate
+@model AddTaskRatesCommand
+
+<h2>Oceń pracowników</h2>
+
+<form asp-action="AddTaskRate" method="post">
+    @for (int i = 0; i < Model.TaskRates.Count; i++)
+    {
+        <div class="form-group mb-3 d-flex align-items-center gap-3">
+            <span>@Model.TaskRates[i].Email</span>
+
+            <input type="hidden" asp-for="TaskRates[@i].Id" />
+            <input type="hidden" asp-for="TaskRates[@i].Email" />
+
+            <input asp-for="TaskRates[@i].Rate" class="form-control w-auto" type="number" min="0" max="5" />
+            <span asp-validation-for="TaskRates[@i].Rate" class="text-danger"></span>
+
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Zapisz oceny</button>
+</form>

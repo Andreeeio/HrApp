@@ -1,0 +1,51 @@
+﻿@using HrApp.Application.Feedback.DTO;
+@model List<AnonymousFeedbackDTO>
+
+@{
+    ViewData["Title"] = "Anonymous Feedback";
+}
+
+<h2>Anonymous Feedback</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <p>No feedback has been submitted yet.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td >@item.Subject</td>
+                        <td style="max-width: 400px; white-space: pre-wrap; word-break: break-word;">@item.Message</td>
+                        <td>@item.CreatedAt.ToString("g")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

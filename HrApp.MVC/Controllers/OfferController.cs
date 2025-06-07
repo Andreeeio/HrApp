@@ -2,13 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HrApp.Application.Teams.Query.GetAllTeams;
-using HrApp.Application.Offer.Query;
 using HrApp.Application.Offer.Command.CreateOffer;
 using HrApp.Application.Offer.Query.GetAllOffers;
+using HrApp.Application.Offer.Command.CreateCandidate;
+using HrApp.Application.Offer.Command.CreateJobApplication;
+using HrApp.Application.Offer.DTO;
+using HrApp.Application.Offer.Query.ShowCandidates;
+using HrApp.Application.Offer.Command.UpdateJobApOffer;
+using Microsoft.AspNetCore.Authorization;
+using HrApp.Domain.Exceptions;
 
 namespace HrApp.MVC.Controllers;
 
-[Route("offer")]
+[Route("Offer")]
 public class OfferController : Controller
 {
     private readonly ISender _sender;
@@ -25,6 +31,7 @@ public class OfferController : Controller
         return View(offers);
     }
 
+    [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpGet("Create")]
     public async Task<IActionResult> Create()
     {
@@ -33,6 +40,7 @@ public class OfferController : Controller
         return View();
     }
 
+    [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpPost("Create")]
     public async Task<IActionResult> Create(CreateOfferCommand command)
     {
@@ -48,12 +56,77 @@ public class OfferController : Controller
         return RedirectToAction("Index");
     }
 
-    //[HttpGet("Details/{id}")]
-    //public async Task<IActionResult> Details(Guid id)
-    //{
-    //    var offer = await _sender.Send(new GetOfferByIdQuery(id));
-    //    if (offer == null) return NotFound();
+    [HttpGet("Apply/{id}")]
+    public IActionResult Apply(Guid id)
+    {
+        return View(new ApplyForOfferModel { OfferId = id });
+    }
 
-    //    return View(offer);
-    //}
+    [HttpPost("Apply/{id}")]
+    public async Task<IActionResult> Apply(ApplyForOfferModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        try
+        {
+            var candidateId = await _sender.Send(new CreateCandidateCommand
+            {
+                Name = model.Name,
+                Surname = model.Surname,
+                Email = model.Email,
+                HomeNumber = model.HomeNumber,
+                Street = model.Street,
+                City = model.City
+            });
+
+            await _sender.Send(new CreateJobApplicationCommand
+            {
+                OfferId = model.OfferId,
+                CandidateId = candidateId,
+                CvFile = model.CvFile,
+                ApplicationDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                Status = "Received"
+            });
+
+            return RedirectToAction("Index");
+        }
+        catch (InvalidOperationException ex)
+        {
+            ModelState.AddModelError(string.Empty, $"An error occurred while applying for the offer: {ex.Message}");
+            return View(model);
+        }
+        catch (BadRequestException ex)
+        {
+            ModelState.AddModelError(string.Empty, $"An unexpected error occurred: {ex.Message}");
+            return View(model);
+        }
+    }
+
+    [HttpGet("ShowCandidates/{id}")]
+    public async Task<IActionResult> ShowCandidates(Guid id)
+    {
+        var candidates = await _sender.Send(new ShowCandidatesQuery(id));
+        return View(candidates);
+    }
+
+    [Authorize(Roles = "Hr,Ceo")]
+    [HttpGet("Update/{jobApIp}")]
+    public IActionResult Update(Guid jobApIp)
+    {
+        var model = new UpdateJobApOfferCommand(jobApIp);
+        return View(model);
+    }
+
+    [Authorize(Roles = "Hr,Ceo")]
+    [HttpPost("Update/{jobApIp}")]
+    public async Task<IActionResult> Update(Guid jobApIp, UpdateJobApOfferCommand command)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(command);
+        }
+
+        await _sender.Send(command);
+        return RedirectToAction("Index"); 
+    }
 }

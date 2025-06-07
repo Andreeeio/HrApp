@@ -20,7 +20,7 @@ public class GetWorkLogQueryHandler : IRequestHandler<GetWorkLogQuery, List<Work
     public async Task<List<WorkLogDTO>> Handle(GetWorkLogQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling GetWorkLogQuery for user {UserId}", request.UserId);
-        var workLogs = await _repository.GetWorkLogsByUserId(request.UserId);
+        var workLogs = await _repository.GetWorkLogsByUserIdAsync(request.UserId);
         var dto = _mapper.Map<List<WorkLogDTO>>(workLogs);
         return dto;
     }

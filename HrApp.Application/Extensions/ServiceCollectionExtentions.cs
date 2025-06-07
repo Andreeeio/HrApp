@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using HrApp.Application.Assignment.Command.AddAssignment;
+using HrApp.Application.Calendars.Command.CreateCalendarEvent;
 using HrApp.Application.Interfaces;
 using HrApp.Application.Services;
+using HrApp.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,11 +46,26 @@ public static class ServiceCollectionExtentions
 
         }
         );
-        
+
+        services.AddFluentValidationAutoValidation(); 
+        services.AddFluentValidationClientsideAdapters(); 
+        services.AddValidatorsFromAssemblyContaining<AddAssignmentCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<CreateCalendarEventCommandValidator>();
+
+
+        services.AddHttpClient(); 
+
         services.AddHttpContextAccessor();
         services.AddAutoMapper(typeof(ServiceCollectionExtentions).Assembly);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtentions).Assembly));
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtentions).Assembly).AddFluentValidationAutoValidation();
         services.AddTransient<IEmailSender, EmailSender>();
+        services.AddTransient<IDeadlineChecker, DeadlineChecker>();
+        services.AddTransient<ISalaryHistoryGenerator, SalaryHistoryGenerator>();
+        services.AddTransient<IContractChecker, ContractChecker>();
+        services.AddTransient<ICalendarService, CalendarService>();
+        services.AddTransient<IGoogleAuthService, GoogleAuthService>();
+        services.AddTransient<IIpAddressService, IpAddressService>();
+        services.AddTransient<IRaportService, RaportService>();
     }
 }

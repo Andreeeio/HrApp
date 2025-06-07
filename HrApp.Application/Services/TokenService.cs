@@ -14,13 +14,14 @@ public class TokenService(IConfiguration config) : ITokenService
 {
     public readonly SymmetricSecurityKey _key = new(Encoding.UTF8.GetBytes(config["TokenKey"] ?? throw new Exception("token key was not found")));
 
-    public string GetToken(User user)
+    public string GetToken(User user, bool ipVer)
     {
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("2FA_verf", false.ToString())
+            new Claim("2FA_verf", false.ToString()),
+            new Claim("IpVerification", ipVer.ToString())
         };
 
         foreach (var role in user.Roles)
@@ -41,13 +42,14 @@ public class TokenService(IConfiguration config) : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
-    public string GetToken(CurrentUser user)
+    public string GetToken(CurrentUser user, bool ipVer)
     {
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.NameId, user.id),
             new Claim(JwtRegisteredClaimNames.Email, user.email),
-            new Claim("2FA_verf", true.ToString())
+            new Claim("2FA_verf", true.ToString()),
+            new Claim("IpVerification", ipVer.ToString())
         };
 
         foreach (var role in user.roles)

@@ -8,7 +8,11 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
 {
     public void Configure(EntityTypeBuilder<Team> builder)
     {
-        // Relacja jeden do jednego z TeamLeader
+        builder.HasOne(builder => builder.Department)
+            .WithMany(department => department.Teams)
+            .HasForeignKey(team => team.DepartmentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasOne(t => t.TeamLeader)
             .WithOne()
             .HasForeignKey<Team>(t => t.TeamLeaderId)
@@ -18,7 +22,7 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
         builder.HasMany(t => t.Employers)
             .WithOne(tm => tm.Team)
             .HasForeignKey(tm => tm.TeamId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.SetNull);
 
         // Relacja jeden do wielu z Offers
         builder.HasMany(t => t.Offers)

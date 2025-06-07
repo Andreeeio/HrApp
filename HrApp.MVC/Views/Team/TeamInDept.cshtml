@@ -1,26 +1,65 @@
 ﻿@using HrApp.Application.Teams.DTO
+@using HrApp.Domain.Constants
 @model List<TeamDTO>
 
+@{
+    ViewData["Title"] = "Team";
+}
+
 <h1>Teams in the Selected Department</h1>
-<p>
-    <a asp-action="Create" asp-route-id="@ViewBag.IdDept" class="btn btn-outline-secondary">Create New Team</a>
-</p>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()))
+{
+   <p>
+        <a asp-action="Create" asp-route-id="@ViewBag.IdDept" class="btn btn-outline-secondary">Create New Team</a>
+   </p>
+}
+
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Team Name</th>
-            <th>Actions</th>
+            <th style="width: 60%;">Team Name</th>
+            <th style="width: 40%;" colspan="2" class="text-center">Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var team in Model)
         {
             <tr>
-                <td>@team.Name</td>
-                <td>
+                <td style="width: 60%;">@team.Name</td>
+                <td style="width: 20%;" class="text-center">
                     <a asp-controller="Team" asp-action="EmployersInTeam" asp-route-TeamId="@team.Id" asp-route-TeamName="@team.Name">View Employees</a>
-                    <a asp-controller="Team" asp-action="DeleteTeam" asp-route-id="@team.Id">Delete</a>
                 </td>
+                @if (User.IsInRole(Roles.Ceo.ToString()) || (User.IsInRole(Roles.Hr.ToString())))
+                {
+                    <td style="width: 20%;" class="text-center">
+                    <form asp-controller="Team"
+                          asp-action="DeleteTeam"
+                          asp-route-id="@team.Id"
+                          method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this team?');"
+                          style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+                }
             </tr>
         }
     </tbody>

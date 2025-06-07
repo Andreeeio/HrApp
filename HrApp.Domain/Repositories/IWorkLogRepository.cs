@@ -1,17 +1,11 @@
 ﻿using HrApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Domain.Repositories
+namespace HrApp.Domain.Repositories;
+
+public interface IWorkLogRepository
 {
-    public interface IWorkLogRepository
-    {
-        public Task<List<WorkLog>> GetWorkLogsByUserId(Guid userId);
-        public Task<WorkLog> GetWorkLogById(Guid workLogId);
-        public Task AddWorkLog(WorkLog workLog);
-        public Task UpdateWorkLog(WorkLog workLog);
-    }
+    Task<List<WorkLog>> GetWorkLogsByUserIdAsync(Guid userId);
+    Task<WorkLog?> GetWorkLogByIdAsync(Guid workLogId);
+    Task AddWorkLogAsync(WorkLog workLog);
+    Task UpdateWorkLogAsync(WorkLog workLog);
 }

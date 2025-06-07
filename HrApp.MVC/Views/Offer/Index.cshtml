@@ -1,7 +1,10 @@
 ﻿@model List<HrApp.Application.Offer.DTO.OfferDTO>
 
 <h2>Offer list</h2>
-<a asp-action="Create">Create Offer</a>
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <a asp-action="Create">Create Offer</a>
+}
 <table class="table">
     <thead>
         <tr>
@@ -19,7 +22,13 @@
                 <td>@offer.Salary</td>
                 <td>@offer.Description</td>
                 <td>@offer.AddDate</td>
-                <td><a asp-action="Apply">Apply for job</a></td>
+                @if (User.Identity?.IsAuthenticated == true){
+                    <td><a asp-action="ShowCandidates" asp-route-id="@offer.Id">Show Candidates</a></td>
+                }
+                else
+                {
+                    <td><a asp-action="Apply" asp-route-id="@offer.Id">Apply for job</a></td>
+                }
             </tr>
         }
     </tbody>

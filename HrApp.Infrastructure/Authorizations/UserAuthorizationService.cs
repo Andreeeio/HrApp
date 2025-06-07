@@ -1,4 +1,5 @@
-﻿using HrApp.Application.Interfaces;
+﻿using Bogus.Extensions.Extras;
+using HrApp.Application.Interfaces;
 using HrApp.Domain.Constants;
 using HrApp.Domain.Interfaces;
 
@@ -12,6 +13,23 @@ public class UserAuthorizationService(IUserContext userContext) : IUserAuthoriza
         var user = _userContext.GetCurrentUser();
         if(user == null)
             return false;
+
+        string twoFA = user.twoFA;
+
+        if (operation == ResourceOperation.Update)
+        {
+            if (twoFA == "false")
+                return false;
+
+            return true;
+        }
+        if (operation == ResourceOperation.Read)
+        {
+            if (twoFA == "false")
+                return false;
+         
+            return true;
+        }
 
         return false;
     }

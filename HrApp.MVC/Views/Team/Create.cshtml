@@ -1,4 +1,5 @@
-﻿@model HrApp.Application.Teams.Command.AddTeam.AddTeamCommand
+﻿@using HrApp.Application.Teams.Command.AddTeam;
+@model AddTeamCommand
 
 @{
     ViewData["Title"] = "Create";
@@ -33,8 +34,10 @@
     </div>
 </div>
 
+<br />
+
 <div>
-    <a asp-controller="Team" asp-action="TeamInDept" asp-route-id="@ViewBag.DeptId">Back to List</a>
+    <a asp-controller="Team" asp-action="TeamInDept" asp-route-id="@ViewBag.DeptId" class="btn btn-outline-secondary">Back to List</a>
 </div>
 
 @section Scripts {
@@ -42,4 +45,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-

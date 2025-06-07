@@ -4,11 +4,11 @@ namespace HrApp.Domain.Repositories;
 
 public interface ITeamRepository
 {
-    public Task<List<Team>> GetAllTeams();
-    public Task<List<Team>> GetAllTeamsForDepartment(Guid departmentId);
-    public Task<Team?> GetTeamForUser(Guid userid);
-    public Task CreateTeam(Team team);
-    public Task AddEmployer(Guid teamid, Guid userid);
-    public Task RemoveEmployer(Guid teamid, Guid userid);
-    public Task DeleteTeam(Guid teamid);
+    Task<List<Team>> GetAllTeamsAsync();
+    Task<List<Team>> GetAllTeamsForDepartmentAsync(Guid departmentId);
+    Task<Team?> GetTeamForUserAsync(Guid userid);
+    Task CreateTeamAsync(Team team);
+    Task AddEmployerAsync(Guid teamid, Guid userid);
+    Task RemoveEmployerAsync(Guid teamid, Guid userid);
+    Task DeleteTeamAsync(Guid teamid);
 }

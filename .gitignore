@@ -16,6 +16,8 @@ project.lock.json
 *.sln.docstates
 .env
 *.vs
+client_secret.json
+google-service-account.json
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

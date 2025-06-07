@@ -1,30 +1,34 @@
-﻿using HrApp.Domain.Repositories;
+﻿using HrApp.Domain.Exceptions;
+using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Application.Teams.Command.AddEmployer
+namespace HrApp.Application.Teams.Command.AddEmployer;
+
+public class AddEmployerCommandHandler : IRequestHandler<AddEmployerCommand, Guid>
 {
-    public class AddEmployerCommandHandler : IRequestHandler<AddEmployerCommand>
+    IUserRepository _userRepository;
+    private readonly ITeamRepository _teamRepository;
+    private readonly ILogger<AddEmployerCommandHandler> _logger;
+
+    public AddEmployerCommandHandler(ILogger<AddEmployerCommandHandler> logger, IUserRepository userRepository, ITeamRepository teamRepository)
     {
-        private readonly ITeamRepository _repository;
-        private readonly ILogger<AddEmployerCommandHandler> _logger;
+        _userRepository = userRepository;
+        _teamRepository = teamRepository;
+        _logger = logger;
+    }
 
-        public AddEmployerCommandHandler(ILogger<AddEmployerCommandHandler> logger,ITeamRepository repository)
+    public async Task<Guid> Handle(AddEmployerCommand request, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Adding employer {UserEmail} to team {TeamId}",request.UserEmail, request.TeamId);
+
+        var user = await _userRepository.GetUserAsync(request.UserEmail);
+        if (user == null)
         {
-            _repository = repository;
-            _logger = logger;
+            throw new BadRequestException($"User with email {request.UserEmail} not found");
         }
 
-        public async Task Handle(AddEmployerCommand request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Adding employer {UserId} to team {TeamId}", request.UserId, request.TeamId);
-            await _repository.AddEmployer(request.TeamId, request.UserId);
-            return;
-        }
+        await _teamRepository.AddEmployerAsync(request.TeamId, user.Id);
+        return user.Id;
     }
 }

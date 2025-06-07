@@ -2,21 +2,21 @@
 @model Validate2FARequest 
 
 @{
-    ViewData["Title"] = "Weryfikacja 2FA";
+    ViewData["Title"] = "2FA Verification";
 }
 
-<h2>Weryfikacja 2FA</h2>
+<h2>2FA Verification</h2>
 
 <form asp-action="Verf2FA" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
     <div class="form-group">
-        <label asp-for="Code">Kod weryfikacyjny</label>
+        <label asp-for="Code">Verification code</label>
         <input asp-for="Code" class="form-control" />
         <span asp-validation-for="Code" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-2">Zatwierdź</button>
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
 
 @section Scripts {

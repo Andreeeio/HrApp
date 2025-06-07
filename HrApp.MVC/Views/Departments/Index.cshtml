@@ -1,4 +1,5 @@
-﻿@model List<HrApp.Application.Department.DTO.DepartmentDTO>
+﻿@using HrApp.Application.Department.DTO;
+@model List<DepartmentDTO>
 
 @{
     ViewData["Title"] = "Departaments";
@@ -6,9 +7,31 @@
 
 <h1>Index</h1>
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.IsInRole("Ceo"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    }
+    else if (User.IsInRole("Ceo") && User.IsInRole("Hr"))
+    {
+        <a asp-controller="User" asp-action="Import" class="btn btn-success ml-2">Import Users from Excel</a>
+    }
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -21,31 +44,42 @@
             <th>
                 @Html.DisplayNameFor(model => model.First().TeamTag)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
+
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HeadOfDepartmentId)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.TeamTag)
-            </td>
-            <td>
-                <a asp-controller="Team" asp-action="TeamInDept" asp-route-id=@item.Id>Details</a> | 
-                <a asp-controller="Departments" asp-action="DeleteDepartment" asp-route-id=@item.Id>Usuń</a>
-            </td>
-@*             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td> *@
-        </tr>
-}
+        @foreach (var item in Model) 
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HeadOfDepartmentId)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.TeamTag)
+                </td>
+                <td>
+                    <a asp-controller="Team" asp-action="TeamInDept" asp-route-id=@item.Id>Details</a>
+                    @if (User.IsInRole("Ceo"))
+                    {
+                    <a>|</a>
+                        <form asp-controller="Departments"
+                              asp-action="Delete"
+                              asp-route-id="@item.Id"
+                              method="post"
+                              onsubmit="return confirm('Are you sure you want to delete this department?');"
+                              style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline">
+                                Delete
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

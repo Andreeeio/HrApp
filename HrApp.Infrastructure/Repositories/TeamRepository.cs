@@ -14,36 +14,37 @@ public class TeamRepository : ITeamRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<List<Team>> GetAllTeams()
+    public async Task<List<Team>> GetAllTeamsAsync()
     {
         return await dbContext.Team.ToListAsync();
     }
 
-    public async Task<List<Team>> GetAllTeamsForDepartment(Guid departmentId)
+    public async Task<List<Team>> GetAllTeamsForDepartmentAsync(Guid departmentId)
     {
         return await dbContext.Team
             .Where(t => t.DepartmentId == departmentId)
             .ToListAsync();
     }
 
-    public async Task<Team?> GetTeamForUser(Guid userid)
+    public async Task<Team?> GetTeamForUserAsync(Guid userId)
     {
         return await dbContext.Team
             .Include(t => t.Employers)
-            .FirstOrDefaultAsync(t => t.Employers.Any(e => e.Id == userid));
+            .FirstOrDefaultAsync(t => t.Employers.Any(e => e.Id == userId) || t.TeamLeaderId == userId);
     }
 
-    public async Task CreateTeam(Team team)
+    public async Task CreateTeamAsync(Team team)
     {
-        await dbContext.Team.AddAsync(team);
+        dbContext.Team.Add(team);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task AddEmployer(Guid teamid, Guid userid)
+    public async Task AddEmployerAsync(Guid teamid, Guid userid)
     {
         var team = await dbContext.Team
-            .Include(t => t.Employers) // Eager loading listy Employers
+            .Include(t => t.Employers) 
             .FirstOrDefaultAsync(t => t.Id == teamid);
+
         var user = await dbContext.User.FindAsync(userid);
         if (team != null && user != null)
         {
@@ -52,11 +53,12 @@ public class TeamRepository : ITeamRepository
         }
     }
 
-    public async Task RemoveEmployer(Guid teamid, Guid userid)
+    public async Task RemoveEmployerAsync(Guid teamid, Guid userid)
     {
         var team = await dbContext.Team
-    .Include(t => t.Employers) // Eager loading listy Employers
-    .FirstOrDefaultAsync(t => t.Id == teamid);
+            .Include(t => t.Employers) 
+            .FirstOrDefaultAsync(t => t.Id == teamid);
+
         var user = await dbContext.User.FindAsync(userid);
         if (team != null && user != null)
         {
@@ -64,15 +66,15 @@ public class TeamRepository : ITeamRepository
             await dbContext.SaveChangesAsync();
         }
     }
-    public async Task DeleteTeam(Guid teamId)
+    public async Task DeleteTeamAsync(Guid teamId)
     {
         var team = await dbContext.Team
-            .Include(t => t.Employers) // Załaduj powiązanych użytkowników
+            .Include(t => t.Employers)
             .FirstOrDefaultAsync(t => t.Id == teamId);
 
         if (team != null)
         {
-            dbContext.Team.Remove(team); // Usunięcie zespołu
+            dbContext.Team.Remove(team); 
             await dbContext.SaveChangesAsync();
         }
     }

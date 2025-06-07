@@ -1,15 +1,19 @@
 ﻿using HrApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HrApp.Domain.Repositories
+namespace HrApp.Domain.Repositories;
+
+public interface IAssignmentRepository
 {
-    public interface IAssignmentRepository
-    {
-        public Task<List<Assignment>> GetAllAssignmentsForTeam(Guid TeamId);
-        public Task AddAssignment(Assignment assignment);
-    }
+    Task<List<Assignment>> GetApiAssignmentsAsync(string? name,
+        bool? isEnded,
+        Guid? assignedToTeamId,
+        int? difficultyLevel,
+        CancellationToken cancellationToken);
+
+    Task<List<Assignment>> GetAllAssignmentsForTeamAsync(Guid TeamId);
+    Task<List<Assignment>> GetActiveAssignmentsAsync();
+    Task<List<Assignment>> GetAssignmentsAsync(bool onlyFree);
+    Task AddAssignmentAsync(Assignment assignment);
+    Task<Assignment?> GetAssignmentByIdAsync(Guid id);
+    Task SaveChangesAsync();
 }

@@ -1,6 +1,7 @@
 ﻿using HrApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace HrApp.Infrastructure.Presistance.Configuration;
 
@@ -34,15 +35,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey<Authorization>(a => a.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(u => u.TeamLeader)
-            .WithMany()
-            .HasForeignKey(t => t.TeamLeaderId)
-            .OnDelete(DeleteBehavior.NoAction);
-
         builder.HasOne(u => u.Team)
             .WithMany(t => t.Employers)
             .HasForeignKey(u => u.TeamId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasMany(u => u.SalaryHistory)
             .WithOne(s => s.User)
@@ -74,9 +70,18 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(er => er.EmployeeId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(u => u.Rater)
+        builder.HasMany(u => u.Rater)
             .WithOne(er => er.RatedBy)
-            .HasForeignKey<EmployeeRate>(u => u.RatedById)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(u => u.GoogleOAuthTokens)
+            .WithOne(g => g.User)
+            .HasForeignKey(g => g.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.IpAddresses)
+            .WithOne(i => i.User)
+            .HasForeignKey(i => i.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,0 +1,35 @@
+﻿@using HrApp.Application.EmploymentHistories.DTO
+@model List<EmploymentHistoryDTO>
+
+@{
+    ViewData["Title"] = "Employment History";
+}
+
+<h2 class="mb-4">Employment History</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No employment history found for this user.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Position</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Position</td>
+                    <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@(item.EndDate?.ToString("yyyy-MM-dd") ?? "Obecnie")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

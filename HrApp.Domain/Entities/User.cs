@@ -19,7 +19,6 @@ public class User
     public List<EmploymentHistory> EmploymentHistories { get; set; } = default!;
     public List<WorkLog> WorkLogs { get; set; } = default!;
     public virtual Authorization Authorization { get; set; } = default!;
-    public Guid? TeamLeaderId { get; set; }  
     public virtual Team? TeamLeader { get; set; }
     public Guid? TeamId { get; set; }  
     public virtual Team? Team { get; set; } = default!;
@@ -27,7 +26,11 @@ public class User
     public virtual Department Department { get; set; } = default!;
     public List<WorkedHoursRaport> WorkedHoursRaports { get; set; } = default!;
     public virtual Paid Paid { get; set; } = default!;
-    public List<ExellImport> ExellImports { get; set; } = default!;
+    public List<ExcelImport> ExellImports { get; set; } = default!;
     public List<EmployeeRate> EmployeeRates { get; set; } = default!;
-    public virtual EmployeeRate? Rater { get; set; } = default!;
+    public List<EmployeeRate> Rater { get; set; } = default!;
+    public List<WorkLogExportHistory> ExportedWorkLogs { get; set; } = new();
+    public List<WorkLogExportHistory> ReceivedExportedWorkLogs { get; set; } = new();
+    public List<GoogleOAuthToken> GoogleOAuthTokens { get; set; } = default!;
+    public List<UserIpAddress> IpAddresses { get; set; } = default!;
 }

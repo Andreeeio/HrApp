@@ -1,4 +1,5 @@
-﻿@model HrApp.Application.Users.DTO.UserDTO
+﻿@using HrApp.Application.Users.DTO
+@model UserDTO
 
 @{
     ViewData["Title"] = "Details";
@@ -6,8 +7,19 @@
 
 <h1>@Model.Email Details</h1>
 
+<div class="d-flex mb-5 gap-2">
+    <div>
+        <a asp-controller="SalaryHistory" asp-action="GetSalaryHistory" asp-route-userId="@Model.Id" class="btn btn-outline-secondary">Salary history</a>
+    </div>
+    <div>
+        <a asp-controller="EmploymentHistory" asp-action="GetEmpHist" asp-route-userId="@Model.Id" class="btn btn-outline-secondary">Employment History</a>
+    </div>
+    <div>
+        <a asp-controller="WorkLog" asp-action="GetWorkLogs" asp-route-userId="@Model.Id" class="btn btn-outline-secondary">Work logs</a>
+    </div>
+</div>
+
 <div>
-    <h4>UserDto</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -37,6 +49,5 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

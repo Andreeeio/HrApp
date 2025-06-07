@@ -1,59 +1,74 @@
-﻿@model IEnumerable<HrApp.Application.Assignment.DTO.AssignmentDTO>
+﻿@using HrApp.Application.Assignment.DTO
+@using HrApp.Domain.Constants
+@model IEnumerable<AssignmentDTO>
 
 @{
     ViewData["Title"] = "Assignments";
+    var isTeamView = ViewBag.TeamId != null;
+    var title = ViewBag.Title;
 }
 
-<h1>Assignments</h1>
+<h1>@(title)</h1>
 
-<p>
-    <a asp-controller="Assignment" asp-action="Create" class="btn btn-primary">Create</a>
-</p>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()))
+{
+    <p>
+        @if (isTeamView)
+        {
+            <a asp-controller="Assignment" asp-action="Create" asp-route-TeamId="@ViewBag.TeamId" class="btn btn-primary">Create</a>
+        }
+        else
+        {
+            <a asp-controller="Assignment" asp-action="Create" class="btn btn-primary">Create</a>
+        }
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DifficultyLevel)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+            <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+            <th>@Html.DisplayNameFor(model => model.DifficultyLevel)</th>
+            <th colspan="2">Edit data</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DifficultyLevel)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
+                    @if(User.IsInRole("Ceo") || User.IsInRole("Hr"))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-assignmentId="@item.Id">Edit</a>
+                        </td>
+                        <td>
+                            <a asp-action="AddAssignmentToTeam" asp-route-id="@item.Id">Assign to Team</a>
+                        </td>
+                    }
+                    else if(User.IsInRole("TeamLeader"))
+                    {
+                        <td>
+                            <a asp-route-TeamId="@item.AssignedToTeamId"
+                               asp-action="Complete"
+                               asp-route-AssignmentId="@item.Id">End task</a>
+                        </td>
+                    }               
+            </tr>
+        }
     </tbody>
 </table>

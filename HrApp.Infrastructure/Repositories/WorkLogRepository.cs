@@ -17,26 +17,26 @@ namespace HrApp.Infrastructure.Repositories
         {
             this.dbContext = dbContext;
         }
-        public Task<List<WorkLog>> GetWorkLogsByUserId(Guid userId)
+        public Task<List<WorkLog>> GetWorkLogsByUserIdAsync(Guid userId)
         {
             return dbContext.WorkLog
                 .Where(w => w.UserId == userId)
                 .ToListAsync();
         }
-        public Task<WorkLog> GetWorkLogById(Guid workLogId)
+        public async Task<WorkLog?> GetWorkLogByIdAsync(Guid workLogId)
         {
-            return dbContext.WorkLog
+            return await dbContext.WorkLog
                 .FirstOrDefaultAsync(w => w.Id == workLogId);
         }
-        public async Task AddWorkLog(WorkLog workLog)
+        public async Task AddWorkLogAsync(WorkLog workLog)
         {
-            dbContext.WorkLog.Add(workLog); // Użyj DbSet<WorkLog>
+            dbContext.WorkLog.Add(workLog);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateWorkLog(WorkLog workLog)
+        public async Task UpdateWorkLogAsync(WorkLog workLog)
         {
-            dbContext.WorkLog.Update(workLog); // Użyj DbSet<WorkLog>
+            dbContext.WorkLog.Update(workLog);
             await dbContext.SaveChangesAsync();
         }
 
