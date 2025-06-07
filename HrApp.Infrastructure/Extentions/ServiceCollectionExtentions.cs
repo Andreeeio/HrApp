@@ -16,11 +16,15 @@ public static class ServiceCollectionExtentions
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("HrApp");
+        var connectionString = configuration.GetConnectionString("HrApp1");
         services.AddDbContext<HrAppContext>(options => options.UseSqlServer(connectionString));
-
+        
         services.AddHangfire(config =>
-            config.UseRedisStorage("localhost:6379"));
+        {
+            var redisConn = configuration.GetConnectionString("Redis")
+                            ?? Environment.GetEnvironmentVariable("REDIS_URL");
+            config.UseRedisStorage(redisConn);
+        });
 
         services.AddHangfireServer();
 
