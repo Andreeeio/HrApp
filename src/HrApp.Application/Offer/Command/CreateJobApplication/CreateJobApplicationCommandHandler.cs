@@ -55,7 +55,7 @@ namespace HrApp.Application.Offer.Command.CreateJobApplication
                 if (!File.Exists(filePath))
                     throw new BadRequestException("Wystąpił błąd podczas zapisu pliku CV. Spróbuj ponownie.");
                 
-                request.CvLink = "/uploads/cvs/" + uniqueFileName;
+                request.CvLink = "/uploads/offer/cvs/" + uniqueFileName;
             }
 
             var jobApplication = _mapper.Map<Domain.Entities.JobApplication>(request);
