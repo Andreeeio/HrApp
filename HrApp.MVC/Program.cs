@@ -25,7 +25,7 @@ var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Ti
 recurringJobs.AddOrUpdate<IDeadlineChecker>(
     "check-deadlines",
     x => x.Check(),
-    "19 9 * * *",
+    "0 7 * * *",
     new RecurringJobOptions
     {
         TimeZone = timezone
