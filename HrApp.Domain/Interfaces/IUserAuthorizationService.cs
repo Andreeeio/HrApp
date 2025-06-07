@@ -4,5 +4,5 @@ namespace HrApp.Domain.Interfaces;
 
 public interface IUserAuthorizationService
 {
-    bool Authorize(ResourceOperation operation);
+    public bool Authorize(ResourceOperation operation);
 }

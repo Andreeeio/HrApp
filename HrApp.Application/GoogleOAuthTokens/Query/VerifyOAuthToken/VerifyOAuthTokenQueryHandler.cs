@@ -6,21 +6,13 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.GoogleOAuthTokens.Query.VerifyOAuthToken;
 
-public class VerifyOAuthTokenQueryHandler : IRequestHandler<VerifyOAuthTokenQuery, bool>
+public class VerifyOAuthTokenQueryHandler(ILogger<VerifyOAuthTokenQueryHandler> logger,
+    IUserContext userContext,
+    IGoogleOAuthTokenRepository googleOAuthTokenRepository) : IRequestHandler<VerifyOAuthTokenQuery, bool>
 {
-    private readonly ILogger<VerifyOAuthTokenQueryHandler> _logger;
-    private readonly IUserContext _userContext;
-    private readonly IGoogleOAuthTokenRepository _googleOAuthTokenRepository;
-
-    public VerifyOAuthTokenQueryHandler(ILogger<VerifyOAuthTokenQueryHandler> logger,
-        IUserContext userContext,
-        IGoogleOAuthTokenRepository googleOAuthTokenRepository)
-    {
-        _logger = logger;
-        _userContext = userContext;
-        _googleOAuthTokenRepository = googleOAuthTokenRepository;
-    }
-
+    private readonly ILogger<VerifyOAuthTokenQueryHandler> _logger = logger;
+    private readonly IUserContext _userContext = userContext;
+    private readonly IGoogleOAuthTokenRepository _googleOAuthTokenRepository = googleOAuthTokenRepository;
     public async Task<bool> Handle(VerifyOAuthTokenQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling VerifyOAuthTokenQuery for user");

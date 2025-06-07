@@ -1,8 +1,15 @@
-﻿namespace HrApp.Application.Salary.DTO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class PaidDTO
+namespace HrApp.Application.Salary.DTO
 {
-    public Guid Id { get; set; }
-    public Guid UserId { get; set; }
-    public float BaseSalary { get; set; }
+    public class PaidDTO
+    {
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public float BaseSalary { get; set; }
+    }
 }

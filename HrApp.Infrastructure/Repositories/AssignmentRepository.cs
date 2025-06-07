@@ -17,7 +17,7 @@ public class AssignmentRepository : IAssignmentRepository
 
     public async Task AddAssignmentAsync(Assignment assignment)
     {
-        _dbContext.Assignment.Add(assignment);
+        await _dbContext.Assignment.AddAsync(assignment);
         await _dbContext.SaveChangesAsync();
     }
 

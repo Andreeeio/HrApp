@@ -7,21 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Users.Command.EditUser;
 
-public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
+public class EditUserCommandHandler(ILogger<EditUserCommandHandler> logger,
+    IUserRepository userRepository) : IRequestHandler<EditUserCommand>
 {
-    private readonly ILogger<EditUserCommandHandler> _logger;
-    private readonly IUserRepository _userRepository;
-
-    public EditUserCommandHandler(ILogger<EditUserCommandHandler> logger,
-        IUserRepository userRepository)
-    {
-        _logger = logger;
-        _userRepository = userRepository;
-    }
-
     public async Task Handle(EditUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserAsync(request.Id);
+        var user = await userRepository.GetUserAsync(request.Id);
         if (user == null)
             throw new BadRequestException("User not found");
 
@@ -29,7 +20,7 @@ public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
         user.LastName = request.LastName;
         user.Email = request.Email;
 
-        await _userRepository.SaveChangesAsync();
-        _logger.LogInformation("User updated: {UserId}", request.Id);
+        await userRepository.SaveChangesAsync(); 
+        logger.LogInformation("User updated: {UserId}", request.Id);
     }
 }

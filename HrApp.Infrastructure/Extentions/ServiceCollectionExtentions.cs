@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Hangfire.Redis.StackExchange;
+using HrApp.Application.Interfaces;
 using HrApp.Domain.Interfaces;
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Authorizations;

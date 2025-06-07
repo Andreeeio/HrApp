@@ -10,30 +10,19 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.EmploymentHistories.Query.GetEmploymentHistoryForUser;
 
-public class GetEmploymentHistoryForUserQueryHandler: IRequestHandler<GetEmploymentHistoryForUserQuery, List<EmploymentHistoryDTO>>
+public class GetEmploymentHistoryForUserQueryHandler(ILogger<GetEmploymentHistoryForUserQueryHandler> logger,
+    IEmploymentHistoryRepository employmentHistoryRepository,
+    IUserContext userContext,
+    IUserRepository userRepository,
+    ITeamAuthorizationService teamAuthorizationService,
+    IMapper mapper) : IRequestHandler<GetEmploymentHistoryForUserQuery, List<EmploymentHistoryDTO>>
 {
-    private readonly ILogger<GetEmploymentHistoryForUserQueryHandler> _logger;
-    private readonly IEmploymentHistoryRepository _employmentHistoryRepository;
-    private readonly IUserContext _userContext;
-    public readonly IUserRepository _userRepository;
-    private readonly ITeamAuthorizationService _teamAuthorizationService;
-    private readonly IMapper _mapper;
-
-    public GetEmploymentHistoryForUserQueryHandler(ILogger<GetEmploymentHistoryForUserQueryHandler> logger,
-        IEmploymentHistoryRepository employmentHistoryRepository,
-        IUserContext userContext,
-        IUserRepository userRepository,
-        ITeamAuthorizationService teamAuthorizationService,
-        IMapper mapper)
-    {
-        _logger = logger;
-        _employmentHistoryRepository = employmentHistoryRepository;
-        _userContext = userContext;
-        _userRepository = userRepository;
-        _teamAuthorizationService = teamAuthorizationService;
-        _mapper = mapper;
-    }
-
+    private readonly ILogger<GetEmploymentHistoryForUserQueryHandler> _logger = logger;
+    private readonly IEmploymentHistoryRepository _employmentHistoryRepository = employmentHistoryRepository;
+    private readonly IUserContext _userContext = userContext;
+    public readonly IUserRepository _userRepository = userRepository;
+    private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
+    private readonly IMapper _mapper = mapper;
     public async Task<List<EmploymentHistoryDTO>> Handle(GetEmploymentHistoryForUserQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling GetEmploymentHistoryForUserQuery for user {UserId}", request.UserId);

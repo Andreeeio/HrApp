@@ -21,8 +21,9 @@ public class CreateOfferCommandHandler : IRequestHandler<CreateOfferCommand>
 
     public async Task Handle(CreateOfferCommand request, CancellationToken cancellationToken)
     {
-        var offer = _mapper.Map<Domain.Entities.Offer>(request);
+        var offer = _mapper.Map<HrApp.Domain.Entities.Offer>(request);
         await _repository.CreateOfferAsync(offer);
         _logger.LogInformation($"Created offer {offer.Id} for team {offer.TeamId}");
+        return;
     }
 }

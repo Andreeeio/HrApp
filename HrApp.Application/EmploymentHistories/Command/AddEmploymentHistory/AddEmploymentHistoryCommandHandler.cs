@@ -10,30 +10,19 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.EmploymentHistories.Command.AddEmploymentHistory;
 
-public class AddEmploymentHistoryCommandHandler: IRequestHandler<AddEmploymentHistoryCommand>
+public class AddEmploymentHistoryCommandHandler(ILogger<AddEmploymentHistoryCommandHandler> logger,
+    IUserContext userContext,
+    ITeamAuthorizationService teamAuthorizationService,
+    IUserRepository userRepository,
+    IEmploymentHistoryRepository employmentHistoryRepository,
+    IMapper mapper) : IRequestHandler<AddEmploymentHistoryCommand>
 {
-    private readonly ILogger<AddEmploymentHistoryCommandHandler> _logger;
-    private readonly IUserContext _userContext;
-    private readonly ITeamAuthorizationService _teamAuthorizationService;
-    private readonly IUserRepository _userRepository;
-    private readonly IEmploymentHistoryRepository _employmentHistoryRepository;
-    private readonly IMapper _mapper;
-
-    public AddEmploymentHistoryCommandHandler(ILogger<AddEmploymentHistoryCommandHandler> logger,
-        IUserContext userContext,
-        ITeamAuthorizationService teamAuthorizationService,
-        IUserRepository userRepository,
-        IEmploymentHistoryRepository employmentHistoryRepository,
-        IMapper mapper)
-    {
-        _logger = logger;
-        _userContext = userContext;
-        _teamAuthorizationService = teamAuthorizationService;
-        _userRepository = userRepository;
-        _employmentHistoryRepository = employmentHistoryRepository;
-        _mapper = mapper;
-    }
-
+    private readonly ILogger<AddEmploymentHistoryCommandHandler> _logger = logger;
+    private readonly IUserContext _userContext = userContext;
+    private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IEmploymentHistoryRepository _employmentHistoryRepository = employmentHistoryRepository;
+    private readonly IMapper _mapper = mapper;
     public async Task Handle(AddEmploymentHistoryCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling AddEmploymentHistoryCommand for user {Email}", request.Email);

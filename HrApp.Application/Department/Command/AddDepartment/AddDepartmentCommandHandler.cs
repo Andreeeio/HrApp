@@ -13,15 +13,12 @@ public class AddDepartmentCommandHandler : IRequestHandler<AddDepartmentCommand>
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public AddDepartmentCommandHandler(ILogger<AddDepartmentCommandHandler> logger, 
-        IDepartmentRepository departmentRepository, 
-        IUserRepository userRepository, 
-        IMapper mapper)
+    public AddDepartmentCommandHandler(ILogger<AddDepartmentCommandHandler> logger, IDepartmentRepository repositoryd,IUserRepository repositoryu, IMapper mapper)
     {
         _logger = logger;
-        _departmentRepository = departmentRepository;
+        _departmentRepository = repositoryd;
         _mapper = mapper;
-        _userRepository = userRepository;
+        _userRepository = repositoryu;
     }
     public async Task Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
     {

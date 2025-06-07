@@ -9,21 +9,19 @@ namespace HrApp.Application.Department.Query.GetAllDepartments;
 public class GetAllDepartmentsQueryHandler : IRequestHandler<GetAllDepartmentsQuery, List<DepartmentDTO>>
 {
     private readonly ILogger<GetAllDepartmentsQueryHandler> _logger;
-    private readonly IDepartmentRepository _departmentRepository;
+    private readonly IDepartmentRepository _repository;
     private readonly IMapper _mapper;
-    public GetAllDepartmentsQueryHandler(ILogger<GetAllDepartmentsQueryHandler> logger,
-        IDepartmentRepository departmentRepository, 
-        IMapper mapper)
+    public GetAllDepartmentsQueryHandler(ILogger<GetAllDepartmentsQueryHandler> logger,IDepartmentRepository repository, IMapper mapper)
     {
         _logger = logger;
-        _departmentRepository = departmentRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task<List<DepartmentDTO>> Handle(GetAllDepartmentsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting all departments");
-        var departments = await _departmentRepository.GetAllDepartmentsAsync();
+        var departments = await _repository.GetAllDepartmentsAsync();
         var dto = _mapper.Map<List<DepartmentDTO>>(departments);
 
         return dto;

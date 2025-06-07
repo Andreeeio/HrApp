@@ -7,36 +7,36 @@ namespace HrApp.Infrastructure.Repositories;
 
 public class SalaryRepository : ISalaryRepository
 {
-    private readonly HrAppContext _dbContext;
+    private readonly HrAppContext _dbcontext;
     public SalaryRepository(HrAppContext context)
     {
-        _dbContext = context;
+        _dbcontext = context;
     }
 
     public Task AddPaidAsync(Paid paid)
     {
-        _dbContext.Paid.AddAsync(paid);
-        return _dbContext.SaveChangesAsync();
+        _dbcontext.Paid.AddAsync(paid);
+        return _dbcontext.SaveChangesAsync();
     }
 
     public async Task<Paid?> GetPaidByUserIdAsync(Guid userid)
     {
-        return await _dbContext.Paid.FirstOrDefaultAsync(x => x.UserId == userid);
+        return await _dbcontext.Paid.FirstOrDefaultAsync(x => x.UserId == userid);
     }
 
     public async Task<Paid?> GetPaidByIdAsync(Guid paidid)
     {
-        return await _dbContext.Paid.FirstOrDefaultAsync(x => x.Id == paidid);
+        return await _dbcontext.Paid.FirstOrDefaultAsync(x => x.Id == paidid);
     }
 
     public async Task UpdatePaidAsync(Paid paid)
     {
-        _dbContext.Paid.Update(paid);
-        await _dbContext.SaveChangesAsync();
+        _dbcontext.Paid.Update(paid);
+        await _dbcontext.SaveChangesAsync();
     }
 
     public async Task<List<Paid>> GetAllPaidAsync()
     {
-        return await _dbContext.Paid.ToListAsync();
+        return await _dbcontext.Paid.ToListAsync();
     }
 }

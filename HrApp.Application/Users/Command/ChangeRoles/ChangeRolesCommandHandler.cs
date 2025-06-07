@@ -8,24 +8,15 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Users.Command.ChangeRoles;
 
-public class ChangeRolesCommandHandler : IRequestHandler<ChangeRolesCommand>
+public class ChangeRolesCommandHandler(ILogger<ChangeRolesCommandHandler> logger,
+    IUserContext userContext,
+    IUserAuthorizationService userAuthorizationService,
+    IUserRepository userRepository) : IRequestHandler<ChangeRolesCommand>
 {
-    private readonly ILogger<ChangeRolesCommandHandler> _logger;
-    private readonly IUserContext _userContext;
-    private readonly IUserAuthorizationService _userAuthorizationService;
-    private readonly IUserRepository _userRepository;
-
-    public ChangeRolesCommandHandler(ILogger<ChangeRolesCommandHandler> logger,
-        IUserContext userContext,
-        IUserAuthorizationService userAuthorizationService,
-        IUserRepository userRepository)
-    {
-        _logger = logger;
-        _userContext = userContext;
-        _userAuthorizationService = userAuthorizationService;
-        _userRepository = userRepository;
-    }
-
+    private readonly ILogger<ChangeRolesCommandHandler> _logger = logger;
+    private readonly IUserContext _userContext = userContext;
+    private readonly IUserAuthorizationService _userAuthorizationService = userAuthorizationService;
+    private readonly IUserRepository _userRepository = userRepository;
     public async Task Handle(ChangeRolesCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling ChangeRolesCommand");

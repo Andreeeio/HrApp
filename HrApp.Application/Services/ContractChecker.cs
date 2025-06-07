@@ -6,24 +6,15 @@ using System.Text;
 
 namespace HrApp.Application.Services;
 
-public class ContractChecker : IContractChecker
+public class ContractChecker(ILogger<ContractChecker> logger,
+    IEmploymentHistoryRepository employmentHistoryRepository,
+    IUserRepository userRepository,
+    IEmailSender emailSender) : IContractChecker
 {
-    private readonly ILogger<ContractChecker> _logger;
-    private readonly IEmploymentHistoryRepository _employmentHistoryRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IEmailSender _emailSender;
-
-    public ContractChecker(ILogger<ContractChecker> logger,
-        IEmploymentHistoryRepository employmentHistoryRepository,
-        IUserRepository userRepository,
-        IEmailSender emailSender)
-    {
-        _logger = logger;
-        _employmentHistoryRepository = employmentHistoryRepository;
-        _userRepository = userRepository;
-        _emailSender = emailSender;
-    }
-
+    private readonly ILogger<ContractChecker> _logger = logger;
+    private readonly IEmploymentHistoryRepository _employmentHistoryRepository = employmentHistoryRepository;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IEmailSender _emailSender = emailSender;
     public async Task Check()
     {
         _logger.LogInformation("Handling Expiring contracts");

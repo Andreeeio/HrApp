@@ -6,18 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(HrAppContext dbContext) : IUserRepository
 {
-    private readonly HrAppContext _dbContext;
-
-    public UserRepository(HrAppContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<User?> GetUserAsync(string email)
     {
-        var user = await _dbContext.User.Include(u => u.Roles)
+        var user = await dbContext.User.Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Email == email);
 
         return user;
@@ -25,7 +18,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserAsync(Guid id)
     {
-        var user = await _dbContext.User
+        var user = await dbContext.User
             .Include(u => u.Roles)
             .Include(u => u.Paid)
             .FirstOrDefaultAsync(u => u.Id == id);
@@ -35,27 +28,27 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> IfUserExistAsync(string email)
     {
-        var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
         return user != null;
     }
 
     public async Task<bool> IfUserExistAsync(Guid id)
     {
-        var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await dbContext.User.FirstOrDefaultAsync(u => u.Id == id);
         return user != null;
     }
 
     public async Task CreateUserAsync(User user)
     {
-        var role = await _dbContext.Role.FirstOrDefaultAsync(x => x.Name == "user");
+        var role = await dbContext.Role.FirstOrDefaultAsync(x => x.Name == "user");
         user.Roles = [role!];
-        _dbContext.User.Add(user);
-        await _dbContext.SaveChangesAsync();
+        dbContext.User.Add(user);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<List<User>> GetUserInTeamAsync(Guid? teamId)
     {
-        var users = await _dbContext.User
+        var users = await dbContext.User
             .Include(u => u.Roles)
             .Include(p => p.Paid)
             .Where(u => u.TeamId == teamId)
@@ -66,14 +59,15 @@ public class UserRepository : IUserRepository
 
     public async Task DeleteUserAsync(Guid id)
     {
-        await _dbContext.User
+        await dbContext.User
             .Where(u => u.Id == id)
             .ExecuteDeleteAsync();
+        return;
     }
 
     public async Task<List<Role>> GetUserRolesAsync(string email)
     {
-        var user = await _dbContext.User
+        var user = await dbContext.User
             .Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Email == email);
         if (user == null)
@@ -84,11 +78,11 @@ public class UserRepository : IUserRepository
 
     public async Task AddRolesForUserAsync(string email, List<string> roleNames)
     {
-        var user = await _dbContext.User
+        var user = await dbContext.User
             .Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Email == email);
 
-        var rolesToAdd = await _dbContext.Role
+        var rolesToAdd = await dbContext.Role
             .Where(r => roleNames.Contains(r.Name)) 
             .ToListAsync();
 
@@ -96,12 +90,12 @@ public class UserRepository : IUserRepository
 
         user.Roles.AddRange(rolesToAdd);
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<List<User>> GetUserWithRolesAsync(List<string> roles)
     {
-        return await _dbContext.User
+        return await dbContext.User
             .Include(u => u.Roles) 
             .Where(u => u.Roles.Any(r => roles.Contains(r.Name)))
             .ToListAsync();
@@ -109,7 +103,7 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetAllUsersAsync()
     {
-        return await _dbContext.User
+        return await dbContext.User
             .Where(u => !u.Roles.Any(r => r.Name == Roles.User.ToString() || r.Name == Roles.Ceo.ToString()))
             .Include(u => u.Roles)
             .Include(u => u.Paid)
@@ -118,6 +112,6 @@ public class UserRepository : IUserRepository
 
     public async Task SaveChangesAsync()
     {
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 }

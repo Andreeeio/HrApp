@@ -1,6 +1,13 @@
-﻿namespace HrApp.Application.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public interface ISalaryHistoryGenerator
+namespace HrApp.Application.Interfaces
 {
-    Task GenerateSalaryHistoryAsync();
+   public interface ISalaryHistoryGenerator
+    {
+        Task GenerateSalaryHistoryAsync();
+    }
 }

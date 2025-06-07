@@ -8,27 +8,17 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.UserIpAddresses.Command.AddUserIpAddress;
 
-public class AddUserIpAddressCommandHandler : IRequestHandler<AddUserIpAddressCommand, string>
+public class AddUserIpAddressCommandHandler(ILogger<AddUserIpAddressCommandHandler> logger,
+    IUserContext userContext,
+    IIpAddressService ipAddressService,
+    ITokenService tokenService,
+    IUserIpAddressRepository userIpAddressRepository) : IRequestHandler<AddUserIpAddressCommand, string>
 {
-    private readonly ILogger<AddUserIpAddressCommandHandler> _logger;
-    private readonly IUserContext _userContext;
-    private readonly IIpAddressService _ipAddressService;
-    private readonly IUserIpAddressRepository _userIpAddressRepository;
-    private readonly ITokenService _tokenService;
-
-    public AddUserIpAddressCommandHandler(ILogger<AddUserIpAddressCommandHandler> logger,
-        IUserContext userContext,
-        IIpAddressService ipAddressService,
-        ITokenService tokenService,
-        IUserIpAddressRepository userIpAddressRepository)
-    {
-        _logger = logger;
-        _userContext = userContext;
-        _ipAddressService = ipAddressService;
-        _tokenService = tokenService;
-        _userIpAddressRepository = userIpAddressRepository;
-    }
-
+    private readonly ILogger<AddUserIpAddressCommandHandler> _logger = logger;
+    private readonly IUserContext _userContext = userContext;
+    private readonly IIpAddressService _ipAddressService = ipAddressService;
+    private readonly IUserIpAddressRepository _userIpAddressRepository = userIpAddressRepository;
+    private readonly ITokenService _tokenService = tokenService;
     public async Task<string> Handle(AddUserIpAddressCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling AddUserIpAddressCommand");

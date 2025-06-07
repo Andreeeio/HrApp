@@ -4,6 +4,7 @@ using HrApp.Domain.Exceptions;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -56,5 +57,7 @@ public class FirstLoginUserCommandHandler : IRequestHandler<FirstLoginUserComman
 
         var token = _tokenService.GetToken(user, false);
         return token;
+
+
     }
 }

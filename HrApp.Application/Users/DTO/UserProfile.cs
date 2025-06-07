@@ -10,11 +10,8 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<AddUserCommand, User>();
-
         CreateMap<User, UserDTO>();
-
         CreateMap<User, AddTaskRateCommand>();
-
         CreateMap<User, UserRaport>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(u => u.Id))

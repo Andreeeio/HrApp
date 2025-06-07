@@ -17,8 +17,7 @@ public class AuthorizationRepository : IAuthorizationRepository
     public async Task<Authorization?> GetUserAuthorizationAsync(Guid userId)
     {
         var authorization = await _dbContext.Authorization
-            .FirstOrDefaultAsync(a => a.UserId == userId && a.IsActive == true);
-
+            .FirstOrDefaultAsync(a => a.UserId == userId && a.IsActive == true) ;
         return authorization;
     }
 
@@ -31,6 +30,8 @@ public class AuthorizationRepository : IAuthorizationRepository
     {
         await _dbContext.SaveChangesAsync();
     }
+
+
 
     public async Task RemoveAuthorizationAsync(Authorization authorization)
     {

@@ -7,45 +7,45 @@ namespace HrApp.Infrastructure.Repositories;
 
 public class DepartmentRepository : IDepartmentRepository
 {
-    private readonly HrAppContext _dbContext;
+    private readonly HrAppContext dbContext;
 
     public DepartmentRepository(HrAppContext dbContext)
     {
-        _dbContext = dbContext;
+        this.dbContext = dbContext;
     }
     public async Task<List<Department>> GetAllDepartmentsAsync()
     {
-        return await _dbContext.Department.ToListAsync();
+        return await dbContext.Department.ToListAsync();
     }
 
     public async Task CreateDepartmentAsync(Department department)
     {
-        _dbContext.Department.Add(department);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.Department.AddAsync(department);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteDepartmentAsync(Guid departmentId)
     {
-        var department = await _dbContext.Department
+        var department = await dbContext.Department
             .Include(d => d.Teams) 
             .ThenInclude(t => t.Employers) 
             .FirstOrDefaultAsync(d => d.Id == departmentId);
 
         if (department != null)
         {
-            _dbContext.Department.Remove(department); 
-            await _dbContext.SaveChangesAsync();
+            dbContext.Department.Remove(department); 
+            await dbContext.SaveChangesAsync();
         }
     }
 
     public async Task<Department?> GetDepartmentByIdAsync(Guid departmentId)
     {
-        return await _dbContext.Department
+        return await dbContext.Department
             .FirstOrDefaultAsync(d => d.Id == departmentId);
     }
 
     public async Task<int> CountDepartmentAsync()
     {
-        return await _dbContext.Department.CountAsync();
+        return await dbContext.Department.CountAsync();
     }
 }

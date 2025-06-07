@@ -10,24 +10,15 @@ using System.Text.Json;
 
 namespace HrApp.Application.GoogleOAuthTokens.Query.ExchangeCodeForToken;
 
-public class ExchangeCodeForTokenQueryHandler : IRequestHandler<ExchangeCodeForTokenQuery>
+public class ExchangeCodeForTokenQueryHandler(ILogger<ExchangeCodeForTokenQueryHandler> logger,
+    IUserContext userContext,
+    IGoogleOAuthTokenRepository googleOAuthTokenRepository,
+    IConfiguration configuration) : IRequestHandler<ExchangeCodeForTokenQuery>
 {
-    private readonly ILogger<ExchangeCodeForTokenQueryHandler> _logger;
-    private readonly IUserContext _userContext;
-    private readonly IGoogleOAuthTokenRepository _googleOAuthTokenRepository;
-    private readonly IConfiguration _configuration;
-
-    public ExchangeCodeForTokenQueryHandler(ILogger<ExchangeCodeForTokenQueryHandler> logger,
-        IUserContext userContext,
-        IGoogleOAuthTokenRepository googleOAuthTokenRepository,
-        IConfiguration configuration)
-    {
-        _logger = logger;
-        _userContext = userContext;
-        _googleOAuthTokenRepository = googleOAuthTokenRepository;
-        _configuration = configuration;
-    }
-
+    private readonly ILogger<ExchangeCodeForTokenQueryHandler> _logger = logger;
+    private readonly IUserContext _userContext = userContext;
+    private readonly IGoogleOAuthTokenRepository _googleOAuthTokenRepository = googleOAuthTokenRepository;
+    private readonly IConfiguration _configuration = configuration;
     public async Task Handle(ExchangeCodeForTokenQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling ExchangeCodeForTokenQuery for user");

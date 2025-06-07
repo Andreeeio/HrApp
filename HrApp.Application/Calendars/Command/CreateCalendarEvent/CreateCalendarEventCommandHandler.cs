@@ -18,33 +18,21 @@ using Newtonsoft.Json;
 
 namespace HrApp.Application.Calendars.Command.CreateCalendarEvent;
 
-public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarEventCommand>
+public class CreateCalendarEventCommandHandler(ILogger<CreateCalendarEventCommandHandler> logger,
+    IUserContext userContext,
+    IGoogleOAuthTokenRepository googleOAuthTokenRepository,
+    ITeamAuthorizationService teamAuthorizationService,
+    ICalendarRepository calendarRepository,
+    IMapper mapper,
+    IConfiguration configuration) : IRequestHandler<CreateCalendarEventCommand>
 {
-    private readonly ILogger<CreateCalendarEventCommandHandler> _logger;
-    private readonly IUserContext _userContext;
-    private readonly IGoogleOAuthTokenRepository _googleOAuthTokenRepository;
-    private readonly ITeamAuthorizationService _teamAuthorizationService;
-    private readonly ICalendarRepository _calendarRepository;
-    private readonly IMapper _mapper;
-    private readonly IConfiguration _configuration;
-
-    public CreateCalendarEventCommandHandler(ILogger<CreateCalendarEventCommandHandler> logger,
-        IUserContext userContext,
-        IGoogleOAuthTokenRepository googleOAuthTokenRepository,
-        ITeamAuthorizationService teamAuthorizationService,
-        ICalendarRepository calendarRepository,
-        IMapper mapper,
-        IConfiguration configuration)
-    {
-        _logger = logger;
-        _userContext = userContext;
-        _googleOAuthTokenRepository = googleOAuthTokenRepository;
-        _teamAuthorizationService = teamAuthorizationService;
-        _calendarRepository = calendarRepository;
-        _mapper = mapper;
-        _configuration = configuration;
-    }
-
+    private readonly ILogger<CreateCalendarEventCommandHandler> _logger = logger;
+    private readonly IUserContext _userContext = userContext;
+    private readonly IGoogleOAuthTokenRepository _googleOAuthTokenRepository = googleOAuthTokenRepository;
+    private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
+    private readonly ICalendarRepository _calendarRepository = calendarRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IConfiguration _configuration = configuration;
     public async Task Handle(CreateCalendarEventCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling CreateCalendarEventCommand for user");

@@ -9,30 +9,19 @@ using System.Text;
 
 namespace HrApp.Application.Users.Query.LoginUser;
 
-public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery,(string, int)>
+public class LoginUserQueryHandler(ILogger<LoginUserQueryHandler> logger,
+    IUserRepository userRepository,
+    ITokenService tokenService,
+    IIpAddressService ipAddressService,
+    IUserIpAddressRepository userIpAddressRepository,
+    IAuthorizationRepository authorizationRepository) : IRequestHandler<LoginUserQuery,(string, int)>
 {
-    private readonly ILogger<LoginUserQueryHandler> _logger;
-    private readonly IUserRepository _userRepository;
-    private readonly ITokenService _tokenService;
-    private readonly IIpAddressService _ipAddressService;
-    private readonly IUserIpAddressRepository _userIpAddressRepository;
-    private readonly IAuthorizationRepository _authorizationRepository;
-
-    public LoginUserQueryHandler(ILogger<LoginUserQueryHandler> logger,
-        IUserRepository userRepository,
-        ITokenService tokenService,
-        IIpAddressService ipAddressService,
-        IUserIpAddressRepository userIpAddressRepository,
-        IAuthorizationRepository authorizationRepository)
-    {
-        _logger = logger;
-        _userRepository = userRepository;
-        _tokenService = tokenService;
-        _ipAddressService = ipAddressService;
-        _userIpAddressRepository = userIpAddressRepository;
-        _authorizationRepository = authorizationRepository;
-    }
-
+    private readonly ILogger<LoginUserQueryHandler> _logger = logger;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly ITokenService _tokenService = tokenService;
+    private readonly IIpAddressService _ipAddressService = ipAddressService;
+    private readonly IUserIpAddressRepository _userIpAddressRepository = userIpAddressRepository;
+    private readonly IAuthorizationRepository _authorizationRepository = authorizationRepository;
     public async Task<(string,int)> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("User tring to log in");

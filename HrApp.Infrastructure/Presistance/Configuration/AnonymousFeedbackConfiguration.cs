@@ -21,5 +21,6 @@ public class AnonymousFeedbackConfiguration : IEntityTypeConfiguration<Anonymous
         builder.Property(a => a.Message)
             .IsRequired()
             .HasMaxLength(2000);
+
     }
 }

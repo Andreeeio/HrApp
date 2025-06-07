@@ -12,24 +12,15 @@ using System.Text;
 
 namespace HrApp.Application.Users.Command.AddUser;
 
-public class AddUserCommandHandler : IRequestHandler<AddUserCommand>
-{
-    private readonly ILogger<AddUserCommandHandler> _logger;
-    private readonly IUserRepository _userRepository;
-    private readonly IEmailSender _emailSender;
-    private readonly IMapper _mapper;
-
-    public AddUserCommandHandler(ILogger<AddUserCommandHandler> logger,
+public class AddUserCommandHandler(ILogger<AddUserCommandHandler> logger,
     IUserRepository userRepository,
     IEmailSender emailSender,
-    IMapper mapper)
-    {
-        _logger = logger;
-        _userRepository = userRepository;
-        _emailSender = emailSender;
-        _mapper = mapper;
-    }
-
+    IMapper mapper) : IRequestHandler<AddUserCommand>
+{
+    private readonly ILogger<AddUserCommandHandler> _logger = logger;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IEmailSender _emailSender = emailSender;
+    private readonly IMapper _mapper = mapper;
     public async Task Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
         if(await _userRepository.IfUserExistAsync(request.Email))

@@ -10,15 +10,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Seeder;
 
-public class HrAppSeeder : IHrAppSeeder
+public class HrAppSeeder(HrAppContext dbContext) : IHrAppSeeder
 {
-    private readonly HrAppContext _dbContext;
+    private readonly HrAppContext _dbContext = dbContext;
     private const string Locale = "pl";
-
-    public HrAppSeeder(HrAppContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
 
     public async Task Seed()
     {

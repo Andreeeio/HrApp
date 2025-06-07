@@ -12,23 +12,14 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Calendars.Query.GetGoogleCalendarEvents;
 
-public class GetGoogleCalendarEventsQueryHandler : IRequestHandler<GetGoogleCalendarEventsQuery, List<CalendarDTO>>
+public class GetGoogleCalendarEventsQueryHandler(ILogger<GetGoogleCalendarEventsQueryHandler> logger,
+    ICalendarService googleAuthService,
+    IMapper mapper) : IRequestHandler<GetGoogleCalendarEventsQuery, List<CalendarDTO>>
 {
-    private readonly ILogger<GetGoogleCalendarEventsQueryHandler> _logger;
-    private readonly ICalendarService _googleAuthService;
-    private readonly IMapper _mapper;
-    private readonly string CalendarId;
-
-    public GetGoogleCalendarEventsQueryHandler(ILogger<GetGoogleCalendarEventsQueryHandler> logger,
-        ICalendarService googleAuthService,
-        IMapper mapper)
-    {
-        _logger = logger;
-        _googleAuthService = googleAuthService;
-        _mapper = mapper;
-        CalendarId = googleAuthService.CalendarId ?? throw new FatalErrorException("Google Calendar ID is not configured");
-    }
-
+    private readonly ILogger<GetGoogleCalendarEventsQueryHandler> _logger = logger;
+    private readonly ICalendarService _googleAuthService = googleAuthService;
+    private readonly IMapper _mapper = mapper;
+    private readonly string CalendarId = googleAuthService.CalendarId;
     public async Task<List<CalendarDTO>> Handle(GetGoogleCalendarEventsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling GetGoogleCalendarEventsQuery for user");

@@ -7,18 +7,17 @@ namespace HrApp.Application.WorkLog.Command.AddWorkLog;
 public class AddWorkLogCommandHandler : IRequestHandler<AddWorkLogCommand>
 {
     private readonly ILogger<AddWorkLogCommandHandler> _logger;
-    private readonly IWorkLogRepository _workLogRepository;
-
-    public AddWorkLogCommandHandler(ILogger<AddWorkLogCommandHandler> logger, IWorkLogRepository workLogRepository)
+    private readonly IWorkLogRepository _repository;
+    public AddWorkLogCommandHandler(ILogger<AddWorkLogCommandHandler> logger, IWorkLogRepository repository)
     {
         _logger = logger;
-        _workLogRepository = workLogRepository;
+        _repository = repository;
     }
     public async Task Handle(AddWorkLogCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Adding a new WorkLog for UserId: {UserId} at {StartTime}", request.UserId, request.StartTime);
 
-        var workLog = new Domain.Entities.WorkLog
+        var workLog = new HrApp.Domain.Entities.WorkLog
         {
             Id = Guid.NewGuid(),
             UserId = request.UserId,
@@ -27,7 +26,7 @@ public class AddWorkLogCommandHandler : IRequestHandler<AddWorkLogCommand>
             Hours = 0 
         };
 
-        await _workLogRepository.AddWorkLogAsync(workLog);
+        await _repository.AddWorkLogAsync(workLog);
 
         _logger.LogInformation("Successfully added WorkLog with Id: {WorkLogId}", workLog.Id);
     }

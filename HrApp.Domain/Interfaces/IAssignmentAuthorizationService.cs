@@ -5,5 +5,5 @@ namespace HrApp.Domain.Interfaces;
 
 public interface IAssignmentAuthorizationService
 {
-    Task<bool> Authorize(ResourceOperation operation, Assignment assignment);
+    public Task<bool> Authorize(ResourceOperation operation, Assignment assignment);
 }

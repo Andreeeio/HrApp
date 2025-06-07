@@ -2,28 +2,34 @@
 using HrApp.Domain.Repositories;
 using HrApp.Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace HrApp.Infrastructure.Repositories;
-
-public class WorkLogExportHistoryRepository : IWorkLogExportHistoryRepository
+namespace HrApp.Infrastructure.Repositories
 {
-    private readonly HrAppContext _dbContext;
-
-    public WorkLogExportHistoryRepository(HrAppContext dbContext)
+    public class WorkLogExportHistoryRepository : IWorkLogExportHistoryRepository
     {
-        _dbContext = dbContext;
-    }
+        private readonly HrAppContext _dbContext;
 
-    public async Task AddAsync(WorkLogExportHistory history)
-    {
-        _dbContext.WorkLogExportHistory.Add(history);
-        await _dbContext.SaveChangesAsync();
-    }
+        public WorkLogExportHistoryRepository(HrAppContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
-    public async Task<List<WorkLogExportHistory>> GetByExportedForUserId(Guid userId)
-    {
-        return await _dbContext.WorkLogExportHistory
-            .Where(h => h.ExportedForUserId == userId)
-            .ToListAsync();
+        public async Task AddAsync(WorkLogExportHistory history)
+        {
+            _dbContext.WorkLogExportHistory.Add(history);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<WorkLogExportHistory>> GetByExportedForUserId(Guid userId)
+        {
+            return await _dbContext.WorkLogExportHistory
+                .Where(h => h.ExportedForUserId == userId)
+                .ToListAsync();
+        }
     }
 }

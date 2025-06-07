@@ -6,15 +6,9 @@ using Microsoft.Identity.Client;
 
 namespace HrApp.Infrastructure.Repositories;
 
-public class SalaryHistoryRepository : ISalaryHistoryRepository
+public class SalaryHistoryRepository(HrAppContext dbContext) : ISalaryHistoryRepository
 {
-    private readonly HrAppContext _dbContext;
-
-    public SalaryHistoryRepository(HrAppContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
+    private readonly HrAppContext _dbContext = dbContext;
     public async Task<List<SalaryHistory>> GetSalaryHistoryForUserAsync(Guid userId, int? howMany = null)
     {
         var salaryHistory = _dbContext.SalaryHistory

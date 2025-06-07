@@ -7,32 +7,31 @@ namespace HrApp.Infrastructure.Repositories;
 
 public class FeedbackRepository : IFeedbackRepository
 {
-    private readonly HrAppContext _dbContext;
-
-    public FeedbackRepository(HrAppContext dbContext)
+    private readonly HrAppContext _context;
+    public FeedbackRepository(HrAppContext context)
     {
-        _dbContext = dbContext;
+        _context = context;
     }
-
     public async Task AddAnonymousFeedbackAsync(AnonymousFeedback feedback)
     {
-        _dbContext.AnonymousFeedbacks.Add(feedback);
-        await _dbContext.SaveChangesAsync();
+        await _context.AnonymousFeedbacks.AddAsync(feedback);
+        await _context.SaveChangesAsync();
     }
     public async Task DeleteFeedbackAsync(Guid id)
     {
-        var feedback = await _dbContext.AnonymousFeedbacks.FindAsync(id);
+        var feedback = await _context.AnonymousFeedbacks.FindAsync(id);
         if (feedback != null)
         {
-            _dbContext.AnonymousFeedbacks.Remove(feedback);
-            await _dbContext.SaveChangesAsync();
+            _context.AnonymousFeedbacks.Remove(feedback);
+            await _context.SaveChangesAsync();
         }
     }
     public async Task<List<AnonymousFeedback>> GetAnonymousFeedbacksForTeamAsync(Guid teamId)
     {
-        return await _dbContext.AnonymousFeedbacks
+        return await _context.AnonymousFeedbacks
             .Where(f => f.TeamId == teamId)
             .OrderByDescending(f => f.CreatedAt)
             .ToListAsync();
     }
+
 }

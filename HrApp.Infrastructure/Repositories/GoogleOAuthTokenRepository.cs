@@ -5,14 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Repositories;
 
-public class GoogleOAuthTokenRepository: IGoogleOAuthTokenRepository
+public class GoogleOAuthTokenRepository(HrAppContext dbContext) : IGoogleOAuthTokenRepository
 {
-    private readonly HrAppContext _dbContext;
-
-    public GoogleOAuthTokenRepository(HrAppContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly HrAppContext _dbContext = dbContext;
 
     public async Task AddNewTokenAsync(GoogleOAuthToken newToken, GoogleOAuthToken? oldToken)
     {

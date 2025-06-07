@@ -10,14 +10,9 @@ using System.Text;
 
 namespace HrApp.Application.Services;
 
-public class TokenService : ITokenService
+public class TokenService(IConfiguration config) : ITokenService
 {
-    public readonly SymmetricSecurityKey _key;
-
-    public TokenService(IConfiguration config)
-    {
-        _key = new(Encoding.UTF8.GetBytes(config["TokenKey"] ?? throw new Exception("token key was not found")));
-    }
+    public readonly SymmetricSecurityKey _key = new(Encoding.UTF8.GetBytes(config["TokenKey"] ?? throw new Exception("token key was not found")));
 
     public string GetToken(User user, bool ipVer)
     {

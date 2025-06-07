@@ -1,11 +1,19 @@
-﻿namespace HrApp.Application.Offer.DTO;
+﻿using HrApp.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class JobApplicationDTO
+namespace HrApp.Application.Offer.DTO
 {
-    public Guid Id { get; set; }
-    public Guid OfferID { get; set; }
-    public Guid CandidateId { get; set; }
-    public DateOnly ApplicationDate { get; set; }
-    public string Status { get; set; } = default!;
-    public string CvLink { get; set; } = default!;
+    public class JobApplicationDTO
+    {
+        public Guid Id { get; set; }
+        public Guid OfferID { get; set; }
+        public Guid CandidateId { get; set; }
+        public DateOnly ApplicationDate { get; set; }
+        public string Status { get; set; } = default!;
+        public string CvLink { get; set; } = default!;
+    }
 }

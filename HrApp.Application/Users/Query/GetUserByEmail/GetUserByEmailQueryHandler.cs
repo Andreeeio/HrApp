@@ -12,14 +12,12 @@ public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, U
     private readonly IUserRepository _repository;
     private readonly ILogger<GetUserByEmailQueryHandler> _logger;
     private readonly IMapper _mapper;
-
     public GetUserByEmailQueryHandler(ILogger<GetUserByEmailQueryHandler> logger, IUserRepository userRepository, IMapper mapper)
     {
         _repository = userRepository;
         _logger = logger;
         _mapper = mapper;
     }
-
     public async Task<UserDTO?> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
     {
         var user = await _repository.GetUserAsync(request.Email);

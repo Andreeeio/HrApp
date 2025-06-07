@@ -8,18 +8,13 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Users.Query.GetRoleForUser;
 
-public class GetRoleForUserCommandHandler : IRequestHandler<GetRoleForUserCommand, List<string>>
+public class GetRoleForUserCommandHandler(ILogger<GetRoleForUserCommandHandler> logger,
+    IUserRepository userRepository,
+    IMapper mapper) : IRequestHandler<GetRoleForUserCommand, List<string>>
 {
-    private readonly ILogger<GetRoleForUserCommandHandler> _logger;
-    private readonly IUserRepository _userRepository;
-
-    public GetRoleForUserCommandHandler(ILogger<GetRoleForUserCommandHandler> logger,
-        IUserRepository userRepository)
-    {
-        _logger = logger;
-        _userRepository = userRepository;
-    }
-
+    private readonly ILogger<GetRoleForUserCommandHandler> _logger = logger;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IMapper _mapper = mapper;
     public async Task<List<string>> Handle(GetRoleForUserCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Geting roles for user");

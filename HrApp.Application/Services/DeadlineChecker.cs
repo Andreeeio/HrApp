@@ -4,21 +4,13 @@ using HrApp.Domain.Repositories;
 
 namespace HrApp.Application.Services;
 
-public class DeadlineChecker : IDeadlineChecker
+public class DeadlineChecker(IEmailSender emailSender,
+    IAssignmentRepository assignmentRepository,
+    IUserRepository userRepository) : IDeadlineChecker
 {
-    private readonly IEmailSender _emailSender;
-    private readonly IAssignmentRepository _assignmentRepository;
-    IUserRepository _userRepository;
-
-    public DeadlineChecker(IEmailSender emailSender,
-        IAssignmentRepository assignmentRepository,
-        IUserRepository userRepository)
-    {
-        _emailSender = emailSender;
-        _assignmentRepository = assignmentRepository;
-        _userRepository = userRepository;
-    }
-
+    private readonly IEmailSender _emailSender = emailSender;
+    private readonly IAssignmentRepository _assignmentRepository = assignmentRepository;
+    IUserRepository _userRepository = userRepository;
     public async Task Check()
     {
         var assignments = await _assignmentRepository.GetActiveAssignmentsAsync();

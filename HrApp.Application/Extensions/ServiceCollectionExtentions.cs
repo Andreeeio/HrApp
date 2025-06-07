@@ -4,6 +4,7 @@ using HrApp.Application.Assignment.Command.AddAssignment;
 using HrApp.Application.Calendars.Command.CreateCalendarEvent;
 using HrApp.Application.Interfaces;
 using HrApp.Application.Services;
+using HrApp.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

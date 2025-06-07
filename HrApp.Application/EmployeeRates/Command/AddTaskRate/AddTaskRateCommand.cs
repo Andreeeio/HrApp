@@ -1,4 +1,6 @@
-﻿namespace HrApp.Application.EmployeeRates.Command.AddTaskRate;
+﻿using MediatR;
+
+namespace HrApp.Application.EmployeeRates.Command.AddTaskRate;
 
 public class AddTaskRateCommand
 {

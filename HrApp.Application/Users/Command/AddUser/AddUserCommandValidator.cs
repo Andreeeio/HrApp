@@ -23,6 +23,8 @@ public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
             .NotEmpty().WithMessage("Date of birth is required.")
             .LessThan(DateOnly.FromDateTime(DateTime.Today)).WithMessage("Date of birth must be in the past.")
             .Must(BeAtLeast18YearsOld).WithMessage("User must be at least 18 years old.");
+
+
     }
 
     private bool BeAtLeast18YearsOld(DateOnly dateOfBirth)
@@ -34,4 +36,5 @@ public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
 
         return age >= 18;
     }
+
 }
