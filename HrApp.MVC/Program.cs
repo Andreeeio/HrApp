@@ -22,6 +22,7 @@ var scope = app.Services.CreateScope();
 var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
 var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
 
+/*
 recurringJobs.AddOrUpdate<IDeadlineChecker>(
     "check-deadlines",
     x => x.Check(),
@@ -57,7 +58,7 @@ recurringJobs.AddOrUpdate<IRaportService>(
     {
         TimeZone = timezone
     });
-
+*/
 Env.Load();
 
 // Configure the HTTP request pipeline.

@@ -18,7 +18,7 @@ public static class ServiceCollectionExtentions
     {
         var connectionString = configuration.GetConnectionString("HrApp1");
         services.AddDbContext<HrAppContext>(options => options.UseSqlServer(connectionString));
-        
+        /*
         services.AddHangfire(config =>
         {
             var redisConn = configuration.GetConnectionString("Redis")
@@ -27,7 +27,7 @@ public static class ServiceCollectionExtentions
         });
 
         services.AddHangfireServer();
-
+        */
         services.AddScoped<IHrAppSeeder, HrAppSeeder>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
