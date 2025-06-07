@@ -47,7 +47,7 @@ namespace HrApp.Application.Services
                 {
                     Id = Guid.NewGuid(),
                     UserId = paid.UserId,
-                    Salary = finalSalary,
+                    Salary = (float)finalSalary,
                     MonthNYear = new DateOnly(now.Year, now.Month, 1)
                 };
 

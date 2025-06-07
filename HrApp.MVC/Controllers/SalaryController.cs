@@ -61,7 +61,7 @@ public class SalaryController : Controller
             {
                 Id = paid.Id,
                 UserId = paid.UserId,
-                BaseSalary = paid.BaseSalary,
+                BaseSalary = (float)paid.BaseSalary,
                 Email = user.Email,
             };
             return View("EditPaid", command);
