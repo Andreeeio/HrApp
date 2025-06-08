@@ -7,9 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Repositories;
 
-public class OverallRaportRepository(HrAppContext dbContext) : IOverallRaportRepository
+public class OverallRaportRepository : IOverallRaportRepository
 {
-    private readonly HrAppContext _dbContext = dbContext;
+    private readonly HrAppContext _dbContext;
+
+    public OverallRaportRepository(HrAppContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
 
     public async Task<List<User>> GetUserToCreateRaportAsync()
     {

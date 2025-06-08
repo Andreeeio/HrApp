@@ -1,5 +1,4 @@
 ﻿using ClosedXML.Excel;
-using DotNetEnv;
 using HrApp.Application.Interfaces;
 using HrApp.Application.Users.Command.AddUser;
 using HrApp.Domain.Constants;
@@ -9,8 +8,6 @@ using HrApp.Domain.Interfaces;
 using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Users.Command.ImportUsersFromExcel;

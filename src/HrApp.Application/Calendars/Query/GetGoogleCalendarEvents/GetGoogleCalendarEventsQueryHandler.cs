@@ -1,25 +1,31 @@
 ﻿using AutoMapper;
-using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
-using Google.Apis.Services;
 using HrApp.Application.Calendars.DTO;
 using HrApp.Application.Interfaces;
 using HrApp.Domain.Exceptions;
-using HrApp.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Calendars.Query.GetGoogleCalendarEvents;
 
-public class GetGoogleCalendarEventsQueryHandler(ILogger<GetGoogleCalendarEventsQueryHandler> logger,
-    ICalendarService googleAuthService,
-    IMapper mapper) : IRequestHandler<GetGoogleCalendarEventsQuery, List<CalendarDTO>>
+public class GetGoogleCalendarEventsQueryHandler : IRequestHandler<GetGoogleCalendarEventsQuery, List<CalendarDTO>>
 {
-    private readonly ILogger<GetGoogleCalendarEventsQueryHandler> _logger = logger;
-    private readonly ICalendarService _googleAuthService = googleAuthService;
-    private readonly IMapper _mapper = mapper;
-    private readonly string CalendarId = googleAuthService.CalendarId;
+    private readonly ILogger<GetGoogleCalendarEventsQueryHandler> _logger;
+    private readonly ICalendarService _googleAuthService;
+    private readonly IMapper _mapper;
+    private readonly string CalendarId;
+
+    public GetGoogleCalendarEventsQueryHandler(ILogger<GetGoogleCalendarEventsQueryHandler> logger,
+        ICalendarService googleAuthService,
+        IMapper mapper)
+    {
+        _logger = logger;
+        _googleAuthService = googleAuthService;
+        _mapper = mapper;
+        CalendarId = googleAuthService.CalendarId ?? throw new FatalErrorException("Google Calendar ID is not configured");
+    }
+
     public async Task<List<CalendarDTO>> Handle(GetGoogleCalendarEventsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling GetGoogleCalendarEventsQuery for user");

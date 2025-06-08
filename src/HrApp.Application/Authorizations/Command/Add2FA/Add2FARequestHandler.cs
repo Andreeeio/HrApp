@@ -55,8 +55,5 @@ public class Add2FARequestHandler : IRequestHandler<Add2FARequest>
         };
         
         await _authorizationRepository.AddAuthorizationAsync(authorization);
-
-        _logger.LogInformation("Verf code is {verfCode}", verfCod);
-        await _emailSender.SendEmailAsync(user.email, "2FA Code", $"Your 2FA code is {verfCod}");
     }
 }

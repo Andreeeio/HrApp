@@ -136,7 +136,7 @@ public class UserController : Controller
         }
         catch (BadRequestException ex)
         {
-            ModelState.AddModelError(string.Empty, ex.Message);
+            TempData["ErrorMessage"] = ex.Message;
             return View(request);
         }
         catch (FirstLoginException ex)
@@ -353,6 +353,11 @@ public class UserController : Controller
         catch(InvalidOperationException ex)
         {
             ModelState.AddModelError("file", ex.Message);
+            return View();
+        }
+        catch
+        {
+            ModelState.AddModelError("file", "Invalid file");
             return View();
         }
 

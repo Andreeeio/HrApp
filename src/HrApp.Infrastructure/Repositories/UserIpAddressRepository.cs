@@ -5,9 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Repositories;
 
-public class UserIpAddressRepository(HrAppContext dbContext) : IUserIpAddressRepository
+public class UserIpAddressRepository : IUserIpAddressRepository
 {
-    private readonly HrAppContext _dbContext = dbContext;
+    private readonly HrAppContext _dbContext;
+
+    public UserIpAddressRepository(HrAppContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     public async Task AddUserIpAddressAsync(UserIpAddress ipAddress)
     {
         _dbContext.UserIpAddress.Add(ipAddress);

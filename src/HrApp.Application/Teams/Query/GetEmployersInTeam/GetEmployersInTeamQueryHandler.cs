@@ -9,13 +9,21 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.Teams.Query.GetEmployersInTeam;
 
-public class GetEmployersInTeamQueryHandler(ILogger<GetEmployersInTeamQueryHandler> logger,
-    IUserRepository userRepository,
-    IMapper mapper) : IRequestHandler<GetEmployersInTeamQuery, List<UserDTO>>
+public class GetEmployersInTeamQueryHandler : IRequestHandler<GetEmployersInTeamQuery, List<UserDTO>>
 {
-    private readonly ILogger<GetEmployersInTeamQueryHandler> _logger = logger;
-    private readonly IUserRepository _userRepository = userRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly ILogger<GetEmployersInTeamQueryHandler> _logger;
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
+
+    public GetEmployersInTeamQueryHandler(ILogger<GetEmployersInTeamQueryHandler> logger,
+        IUserRepository userRepository,
+        IMapper mapper)
+    {
+        _logger = logger;
+        _userRepository = userRepository;
+        _mapper = mapper;
+    }
+
     public async Task<List<UserDTO>> Handle(GetEmployersInTeamQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting all employers in team {TeamId}", request.TeamId);

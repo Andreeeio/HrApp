@@ -5,9 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HrApp.Infrastructure.Repositories;
 
-public class EmploymentHistoryRepository(HrAppContext dbContext) : IEmploymentHistoryRepository
+public class EmploymentHistoryRepository : IEmploymentHistoryRepository
 {
-    private readonly HrAppContext _dbContext = dbContext;
+    private readonly HrAppContext _dbContext;
+
+    public EmploymentHistoryRepository(HrAppContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     public async Task<List<EmploymentHistory>> GetExpiringContractsAsync(DateOnly dateFrom, DateOnly dateTo)
     {
         var empH = await _dbContext.EmploymentHistory

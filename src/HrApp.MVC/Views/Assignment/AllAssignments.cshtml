@@ -58,14 +58,6 @@
                 <td><a asp-action="Edit" asp-route-assignmentId="@item.Id">Edit</a></td>
                 <td><a asp-action="AddAssignmentToTeam" asp-route-id="@item.Id">Assign to Team</a></td>
             }
-            else if (User.IsInRole("TeamLeader"))
-            {
-                <td colspan="2">
-                    <a asp-route-TeamId="@item.AssignedToTeamId"
-                       asp-action="Complete"
-                       asp-route-AssignmentId="@item.Id">End Task</a>
-                </td>
-            }
         </tr>
     }
     </tbody>

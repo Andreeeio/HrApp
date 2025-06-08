@@ -44,7 +44,7 @@ public class CreateNewCodeCommandHandler: IRequestHandler<CreateNewCodeCommand>
 
         await _authorizationRepository.SaveChangesAsync();
 
-        _logger.LogInformation("Verf code is {verfCode}", verfCod);
+        _logger.LogInformation("Verf code sent");
         await _emailSender.SendEmailAsync(user.email, "2FA Code", $"Your 2FA code is {verfCod}");
     }
 }

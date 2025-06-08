@@ -9,17 +9,27 @@ using Microsoft.Extensions.Logging;
 
 namespace HrApp.Application.EmployeeRates.Command.AddTaskRate;
 
-public class AddTaskRatesCommandHandler(ILogger<AddTaskRatesCommandHandler> logger,
+public class AddTaskRatesCommandHandler : IRequestHandler<AddTaskRatesCommand>
+{
+    private readonly ILogger<AddTaskRatesCommandHandler> _logger;
+    private readonly IUserContext _userContext;
+    private readonly ITeamAuthorizationService _teamAuthorizationService;
+    private readonly IEmployeeRateRepository _employeeRateRepository;
+    private readonly IMapper _mapper;
+
+    public AddTaskRatesCommandHandler(ILogger<AddTaskRatesCommandHandler> logger,
     IUserContext userContext,
     ITeamAuthorizationService teamAuthorizationService,
     IEmployeeRateRepository employeeRateRepository,
-    IMapper mapper) : IRequestHandler<AddTaskRatesCommand>
-{
-    private readonly ILogger<AddTaskRatesCommandHandler> _logger = logger;
-    private readonly IUserContext _userContext = userContext;
-    private readonly ITeamAuthorizationService _teamAuthorizationService = teamAuthorizationService;
-    private readonly IEmployeeRateRepository _employeeRateRepository = employeeRateRepository;
-    private readonly IMapper _mapper = mapper;
+    IMapper mapper)
+    {
+        _logger = logger;
+        _userContext = userContext;
+        _teamAuthorizationService = teamAuthorizationService;
+        _employeeRateRepository = employeeRateRepository;
+        _mapper = mapper;
+    }
+
     public async Task Handle(AddTaskRatesCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Adding task rates for users in team");

@@ -9,6 +9,7 @@ public class EmploymentHistoryProfile : Profile
     public EmploymentHistoryProfile()
     {
         CreateMap<EmploymentHistory,EmploymentHistoryDTO>();
+        
         CreateMap<AddEmploymentHistoryCommand, EmploymentHistory>();
     }
 }

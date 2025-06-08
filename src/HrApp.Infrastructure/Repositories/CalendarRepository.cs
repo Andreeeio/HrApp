@@ -4,9 +4,15 @@ using HrApp.Infrastructure.Presistance;
 
 namespace HrApp.Infrastructure.Repositories;
 
-public class CalendarRepository(HrAppContext dbContext) : ICalendarRepository
+public class CalendarRepository : ICalendarRepository
 {
-    private readonly HrAppContext _dbContext = dbContext;
+    private readonly HrAppContext _dbContext;
+
+    public CalendarRepository(HrAppContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     public async Task AddCalendarEventAsync(Calendar calendar)
     {
         if (calendar.Creator != null)

@@ -5,11 +5,18 @@ using HrApp.Domain.Repositories;
 
 namespace HrApp.Application.Services;
 
-public class RaportService(IOverallRaportRepository overallRaportRepository,
-    IMapper mapper) : IRaportService
+public class RaportService : IRaportService
 {
-    private readonly IOverallRaportRepository _overallRaportRepository = overallRaportRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IOverallRaportRepository _overallRaportRepository;
+    private readonly IMapper _mapper;
+
+    public RaportService(IOverallRaportRepository overallRaportRepository,
+        IMapper mapper)
+    {
+        _overallRaportRepository = overallRaportRepository;
+        _mapper = mapper;
+    }
+
     public async Task GenerateRaport()
     {
         var users = await _overallRaportRepository.GetUserToCreateRaportAsync();
