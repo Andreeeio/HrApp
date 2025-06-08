@@ -20,8 +20,9 @@ public static class ServiceCollectionExtentions
         var connectionString = configuration.GetConnectionString("HrApp");
         services.AddDbContext<HrAppContext>(options => options.UseSqlServer(connectionString));
 
+        var docker = configuration["Docker:DockerLink"];
         services.AddHangfire(config =>
-            config.UseRedisStorage("localhost:6379"));
+            config.UseRedisStorage(docker));
 
         services.AddHangfireServer();
 
