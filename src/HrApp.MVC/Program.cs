@@ -41,7 +41,7 @@ recurringJobs.AddOrUpdate<ISalaryHistoryGenerator>(
     });
 
 recurringJobs.AddOrUpdate<IContractChecker>(
-    "generate-salary-history",
+    "check-contract",
     x => x.Check(),
     "0 0 1 * *",
     new RecurringJobOptions
@@ -50,7 +50,7 @@ recurringJobs.AddOrUpdate<IContractChecker>(
     });
 
 recurringJobs.AddOrUpdate<IRaportService>(
-    "generate-salary-history",
+    "create-raport",
     x => x.GenerateRaport(),
     "0 23 30 12 *",  
     new RecurringJobOptions
@@ -85,32 +85,6 @@ app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
-
-app.MapControllerRoute(
-    name: "user",
-    pattern: "{controller=User}/{action=Index}")
-    .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "user",
-    pattern: "{controller=User}/{action=CreateUser}")
-    .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "user",
-    pattern: "{controller=User}/{action=LoginUser}")
-    .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "team",
-    pattern: "{controller=Team}/{action=TeamInDept}/{id}")
-    .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "team",
-    pattern: "{controller=Team}/action={id}/employers")
     .WithStaticAssets();
 
 app.Run();
