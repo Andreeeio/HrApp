@@ -1,5 +1,6 @@
 ﻿@using HrApp.Domain.Entities
-@model HrApp.Application.WorkLog.DTO.WorkLogDTO
+@using HrApp.Application.WorkLog.DTO
+@model WorkLogDTO
 
 @{
     ViewData["Title"] = "User Panel";
@@ -37,19 +38,19 @@
                     {
                         <form asp-controller="WorkLog" asp-action="StartWorkLog" method="post">
                             <input type="hidden" name="userId" value="@ViewBag.UserId" />
-                            <button type="submit" class="btn btn-success">Rozpocznij pracę</button>
+                            <button type="submit" class="btn btn-success">Start work</button>
                         </form>
                     }
                     else if (Model.EndTime == null)
                     {
                         <form asp-controller="WorkLog" asp-action="EndWorkLog" method="post">
                             <input type="hidden" name="userId" value="@ViewBag.UserId" />
-                            <button type="submit" class="btn btn-danger">Zakończ pracę</button>
+                            <button type="submit" class="btn btn-danger">End work</button>
                         </form>
                     }
                     else
                     {
-                        <p>Praca zakończona. Przepracowane godziny: @Model.Hours</p>
+                        <p>Work ended. Worked hours: @Model.Hours</p>
                     }
                 </div>
             </div>

@@ -1,12 +1,9 @@
 ﻿using HrApp.Application.EmployeeRates.Command.AddTaskRate;
 using HrApp.Application.EmployeeRates.Query.GetEmployeeToRate;
 using HrApp.Application.EmployeeRates.Query.GetRatesForUser;
-using HrApp.Application.Teams.Query.GetEmployersInTeam;
-using HrApp.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace HrApp.MVC.Controllers;
 

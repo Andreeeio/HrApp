@@ -63,6 +63,7 @@ public class AssignmentController : Controller
 
     [Authorize(Roles = "Hr, Ceo")]
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(AddAssignmentCommand command)
     {
         if (!ModelState.IsValid)
@@ -71,7 +72,6 @@ public class AssignmentController : Controller
         }
 
         await _sender.Send(command);
-
 
         try
         {
@@ -191,7 +191,7 @@ public class AssignmentController : Controller
         {
             await _sender.Send(command);
 
-            return RedirectToAction("ShowAssignedAssignments");
+            return RedirectToAction("AllAssignments");
         }
         catch (BadRequestException ex)
         {

@@ -47,6 +47,7 @@ public class CalendarController : Controller
 
     [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpPost("Add")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddEvent(CreateCalendarEventCommand command)
     {
         if (!ModelState.IsValid)

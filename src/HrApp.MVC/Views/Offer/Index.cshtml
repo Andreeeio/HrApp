@@ -1,4 +1,9 @@
-﻿@model List<HrApp.Application.Offer.DTO.OfferDTO>
+﻿@using HrApp.Application.Offer.DTO
+@model List<OfferDTO>
+
+@{
+    ViewData["Title"] = "Offers";
+}
 
 <h2>Offer list</h2>
 @if (User.Identity?.IsAuthenticated == true)

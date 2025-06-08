@@ -42,6 +42,7 @@ public class OfferController : Controller
 
     [Authorize(Roles = "TeamLeader,Hr,Ceo")]
     [HttpPost("Create")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateOfferCommand command)
     {
         command.AddDate = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -63,6 +64,7 @@ public class OfferController : Controller
     }
 
     [HttpPost("Apply/{id}")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Apply(ApplyForOfferModel model)
     {
         if (!ModelState.IsValid) return View(model);
