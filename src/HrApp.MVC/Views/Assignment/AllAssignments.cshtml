@@ -1,19 +1,72 @@
-﻿@{
+﻿@using HrApp.Application.Assignment.DTO;
+@using HrApp.Domain.Constants
+@model List<AssignmentDTO>
+
+
+@{
     ViewData["Title"] = "Chose Assignments";
 }
 
-<h1>Chose</h1>
-
-<hr />
-
-<div class="text-center my-4">
-    <a asp-action="ShowFreeAssignments" asp-controller="Assignment" class="btn btn-outline-primary mx-2">
-        Tasks without team
-    </a>
-    <a asp-action="ShowAssignedAssignments" asp-controller="Assignment" class="btn btn-outline-success mx-2">
-        Tasks with team
-    </a>
-</div>
-
 @{
+    var currentFilter = ViewBag.Filter as string ?? "all";
+    var title = ViewBag.Title as string;
 }
+
+<h1>@title</h1>
+
+@if (User.IsInRole(Roles.Ceo.ToString()) || User.IsInRole(Roles.Hr.ToString()))
+{
+    <p>
+        <a asp-controller="Assignment" asp-action="Create" class="btn btn-primary">Create</a>
+    </p>
+}
+
+<form method="get" asp-action="AllAssignments">
+    <label>Show assignments:</label>
+    <select name="filter" onchange="this.form.submit()" class="form-select">
+        @foreach (var option in (IEnumerable<SelectListItem>)ViewBag.FilterOptions)
+        {
+            <option value="@option.Value" selected="@(option.Selected ? "selected" : null)">
+                @option.Text
+            </option>
+        }
+    </select>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Difficulty</th>
+            <th colspan="2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            <td>@item.StartDate.ToShortDateString()</td>
+            <td>@item.EndDate.ToShortDateString()</td>
+            <td>@item.DifficultyLevel</td>
+            @if (User.IsInRole("Ceo") || User.IsInRole("Hr"))
+            {
+                <td><a asp-action="Edit" asp-route-assignmentId="@item.Id">Edit</a></td>
+                <td><a asp-action="AddAssignmentToTeam" asp-route-id="@item.Id">Assign to Team</a></td>
+            }
+            else if (User.IsInRole("TeamLeader"))
+            {
+                <td colspan="2">
+                    <a asp-route-TeamId="@item.AssignedToTeamId"
+                       asp-action="Complete"
+                       asp-route-AssignmentId="@item.Id">End Task</a>
+                </td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>

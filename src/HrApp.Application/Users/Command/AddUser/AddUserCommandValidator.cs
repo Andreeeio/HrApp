@@ -8,11 +8,14 @@ public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
     {
         RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("First name is required.")
-            .MaximumLength(50).WithMessage("First name cannot exceed 50 characters.");
+            .MaximumLength(50).WithMessage("First name cannot exceed 50 characters.")
+            .Matches("^[a-zA-Z]+$").WithMessage("First name can contain only letters.");
+
 
         RuleFor(x => x.LastName)
             .NotEmpty().WithMessage("Last name is required.")
-            .MaximumLength(50).WithMessage("Last name cannot exceed 50 characters.");
+            .MaximumLength(50).WithMessage("Last name cannot exceed 50 characters.")
+            .Matches("^[a-zA-Z]+$").WithMessage("Last name can contain only letters.");
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("Email is required.")

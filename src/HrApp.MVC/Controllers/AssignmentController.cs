@@ -14,6 +14,7 @@ using HrApp.Application.Assignment.Command.EditAssignment;
 using HrApp.Domain.Exceptions;
 using HrApp.Application.Assignment.Command.CompleteAssignment;
 using Microsoft.AspNetCore.Authorization;
+using HrApp.Application.Assignment.DTO;
 
 namespace HrApp.MVC.Controllers;
 
@@ -81,7 +82,7 @@ public class AssignmentController : Controller
         catch(BadRequestException ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            return RedirectToAction("ShowFreeAssignments");
+            return RedirectToAction("AllAssignments");
         }
     }
 
@@ -131,25 +132,34 @@ public class AssignmentController : Controller
     }
 
     [HttpGet("AllAssignments")]
-    public IActionResult AllAssignments()
+    public async Task<IActionResult> AllAssignments(string filter = "active")
     {
-        return View();
-    }
+        List<AssignmentDTO> assignments;
+        string title;
 
-    [HttpGet("ShowFreeAssignments")]
-    public async Task<IActionResult> ShowFreeAssignments()
-    {
-        var assignments = await _sender.Send(new GetFreeAssignmentsQuery());
-        ViewBag.Title = "Free Assignments";
-        return View("Index", assignments);
-    }
+        ViewBag.FilterOptions = new List<SelectListItem>
+        {
+            new SelectListItem { Text = "Free Assignments", Value = "free", Selected = filter == "free" },
+            new SelectListItem { Text = "Active Assignments", Value = "assigned", Selected = filter == "active" },
+        };
 
-    [HttpGet("ShowAssignedAssignments")]
-    public async Task<IActionResult> ShowAssignedAssignments()
-    {
-        var assignments = await _sender.Send(new GetActiveAssignmentsQuery());
-        ViewBag.Title = "Assigned Assignments";
-        return View("Index", assignments);
+        switch (filter)
+        {
+            case "free":
+                assignments = await _sender.Send(new GetFreeAssignmentsQuery());
+                title = "Free Assignments";
+                break;
+            case "active":
+            default:
+                assignments = await _sender.Send(new GetActiveAssignmentsQuery());
+                title = "All Assignments";
+                break;
+        }
+
+        ViewBag.Title = title;
+        ViewBag.Filter = filter;
+
+        return View("AllAssignments", assignments);
     }
 
     [Authorize(Roles = "Hr, Ceo")]
